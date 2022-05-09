@@ -1,0 +1,18 @@
+.navBar {
+  margin: 0;
+  padding: 1rem;
+  box-shadow: 0px 2px 4px 0px #0000000d;
+  &__brand {
+    img {
+      width: 40px;
+    }
+  }
+  &__menu {
+    a {
+      display: block;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      color: #9c9c9c;
+    }
+  }
+}
