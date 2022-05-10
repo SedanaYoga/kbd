@@ -1,3 +1,8 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "../../styles/global";
+
 .navBar {
   margin: 0;
   padding: 1rem;
@@ -13,6 +18,51 @@
       padding: 0.5rem 1rem;
       text-decoration: none;
       color: #9c9c9c;
+      transition: color 0.15s ease-in-out;
+      &:hover {
+        color: #1d1d1d;
+      }
+    }
+    .authButton {
+      line-height: 1.5;
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+      user-select: none;
+      margin-left: 1rem;
+      color: $dark-1;
+      font-weight: 500;
+      &.login {
+        background-color: $secondary;
+        border: 1px solid $dark-1;
+      }
+      &.register {
+        background-color: $primary;
+      }
+      &:hover {
+        filter: drop-shadow(3px 3px 3px rgba($dark-1, 0.1));
+      }
+      @include media-breakpoint-down(lg) {
+        margin-top: 1rem;
+      }
+    }
+    .active {
+      position: relative;
+      color: #1d1d1d;
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: -17px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 75%;
+        height: 7px;
+        background: #ffc700;
+        border-radius: 5px 5px 0 0;
+        @include media-breakpoint-down(lg) {
+          display: none;
+        }
+      }
     }
   }
 }
