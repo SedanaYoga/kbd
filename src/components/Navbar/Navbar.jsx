@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import styles from './Navbar.module.scss'
 import { capitalizeFirst } from '../../helper/textHelper'
+import BtnComp from '../BtnComp/BtnComp'
 
 const menu = {
   main: ['home', 'about us', 'browse'],
@@ -46,13 +47,20 @@ const NavBar = () => {
             </div>
             <div className='d-flex flex-lg-row flex-column flex-grow-1 justify-content-end'>
               {menu.auth.map((authMenu, index) => (
-                <Link key={index} href={`/${authMenu.replace(' ', '')}`}>
-                  <a
-                    className={`btn ${authMenu === 'register' ? styles.register : styles.login
-                      } ${styles.authButton}`}
+                <Link
+                  key={index}
+                  href={`/${authMenu.replace(' ', '')}`}
+                  passHref
+                >
+                  {/* <a> */}
+                  <BtnComp
+                    type={`${authMenu === 'register' ? 'primary' : 'secondary'
+                      }`}
+                    margin='0 0 0 1rem'
                   >
                     {capitalizeFirst(authMenu)}
-                  </a>
+                  </BtnComp>
+                  {/* </a> */}
                 </Link>
               ))}
             </div>

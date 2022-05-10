@@ -1,0 +1,44 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import '../../styles/global';
+
+.btn {
+  margin: 0;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  color: $dark1;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  @include media-breakpoint-down(lg) {
+    margin: 1rem 0 0 0 !important;
+  }
+  &.primary {
+    background: $primary;
+    &:hover {
+      background: $primary;
+      color: $secondary;
+    }
+    &:active {
+      background-color: $primaryBtnActive;
+    }
+  }
+  &.secondary {
+    background: $secondary;
+    border: 1px solid $dark1;
+    &:hover {
+      border: 1px solid $primary;
+      color: $primary;
+    }
+    &:active {
+      background-color: $secondaryBtnActive;
+      border: 1px solid $primaryBtnActive;
+    }
+  }
+  &.link {
+    background: none;
+  }
+}
