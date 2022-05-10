@@ -1,7 +1,7 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-@import "../../styles/global";
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import '../../styles/global';
 
 .navBar {
   margin: 0;
@@ -21,6 +21,20 @@
       transition: color 0.15s ease-in-out;
       &:hover {
         color: #1d1d1d;
+      }
+    }
+    &_main {
+      a {
+        @include media-breakpoint-down(lg) {
+          background-color: $secondary;
+          font-weight: 500;
+          width: 100%;
+          height: auto;
+          margin-top: 1rem;
+          border: 1px solid black;
+          border-radius: 5px;
+          text-align: center;
+        }
       }
     }
     .authButton {
@@ -43,6 +57,7 @@
         filter: drop-shadow(3px 3px 3px rgba($dark-1, 0.1));
       }
       @include media-breakpoint-down(lg) {
+        margin-left: 0;
         margin-top: 1rem;
       }
     }
@@ -50,7 +65,7 @@
       position: relative;
       color: #1d1d1d;
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         bottom: -17px;
         left: 50%;
