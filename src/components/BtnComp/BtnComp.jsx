@@ -2,7 +2,10 @@ import React from 'react'
 import styles from './BtnComp.module.scss'
 
 const BtnComp = React.forwardRef(
-  ({ onClick, href, children, type, margin, fontSize, padding }, ref) => {
+  (
+    { onClick, href, children, style, type, margin, fontSize, padding, borad },
+    ref,
+  ) => {
     let btnCl = `btn`
     switch (type) {
       case 'primary':
@@ -28,8 +31,9 @@ const BtnComp = React.forwardRef(
           padding,
           fontSize,
           margin,
-        }}
-      >
+          borderRadius: borad === 'pill' ? '50px' : '4px',
+          ...style,
+        }}>
         {children}
       </a>
     )
@@ -43,4 +47,5 @@ BtnComp.defaultProps = {
   margin: '0',
   padding: '10px 14px',
   fontSize: '1rem',
+  borderRadius: '4px',
 }

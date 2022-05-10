@@ -1,0 +1,31 @@
+.heroContainer {
+  z-index: 3;
+  height: calc(100vh - 48px);
+  h1 {
+    font-weight: 700;
+    font-size: 3rem;
+  }
+  p {
+    font-size: 1.25rem;
+    margin: 1rem 0 3rem;
+  }
+  .heroImage {
+    width: 100%;
+    display: table;
+    white-space: nowrap;
+    div {
+      vertical-align: middle;
+      padding: 10px;
+      display: table-cell;
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+}
+.bgImage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -2;
+}

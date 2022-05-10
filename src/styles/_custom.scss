@@ -14,15 +14,15 @@ $gray-900: #212529 !default;
 $black: #000 !default;
 
 $grays: (
-  "100": $gray-100,
-  "200": $gray-200,
-  "300": $gray-300,
-  "400": $gray-400,
-  "500": $gray-500,
-  "600": $gray-600,
-  "700": $gray-700,
-  "800": $gray-800,
-  "900": $gray-900,
+  '100': $gray-100,
+  '200': $gray-200,
+  '300': $gray-300,
+  '400': $gray-400,
+  '500': $gray-500,
+  '600': $gray-600,
+  '700': $gray-700,
+  '800': $gray-800,
+  '900': $gray-900,
 ) !default;
 
 $blue: #0d6efd !default;
@@ -37,22 +37,24 @@ $teal: #20c997 !default;
 $cyan: #0dcaf0 !default;
 
 $colors: (
-  "blue": $blue,
-  "indigo": $indigo,
-  "purple": $purple,
-  "pink": $pink,
-  "red": $red,
-  "orange": $orange,
-  "yellow": $yellow,
-  "green": $green,
-  "teal": $teal,
-  "cyan": $cyan,
-  "white": $white,
-  "gray": $gray-600,
-  "gray-dark": $gray-800,
+  'blue': $blue,
+  'indigo': $indigo,
+  'purple': $purple,
+  'pink': $pink,
+  'red': $red,
+  'orange': $orange,
+  'yellow': $yellow,
+  'green': $green,
+  'teal': $teal,
+  'cyan': $cyan,
+  'white': $white,
+  'gray': $gray-600,
+  'gray-dark': $gray-800,
 ) !default;
 
 $primary: #ffc700 !default;
+$primary: #ffc700 !default;
+$primaryDark: #eb9c03;
 $secondary: #fff !default;
 $success: $green !default;
 $info: $cyan !default;
@@ -64,22 +66,23 @@ $button: #6a1313;
 $google: #4285f4;
 
 $theme-colors: (
-  "primary": $primary,
-  "button": $button,
-  "google": $google,
-  "secondary": $secondary,
-  "success": $success,
-  "info": $info,
-  "warning": $warning,
-  "danger": $danger,
-  "light": $light,
-  "dark": $dark,
+  'primary': $primary,
+  'primaryDark': $primaryDark,
+  'button': $button,
+  'google': $google,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'dark': $dark,
 ) !default;
 
 // Font family for body
-$font-family-sans-serif: "Rubik", system-ui, -apple-system, "Segoe UI", Roboto,
-  "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-family-sans-serif: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto,
+  'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif,
+  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !default;
 
 // Default body background
 $body-bg: #f5f5f5;
@@ -146,20 +149,20 @@ li {
   }
 }
 
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/utilities";
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/utilities';
 
 $utilities: map-merge(
   $utilities,
   (
-    "font-weight":
+    'font-weight':
       map-merge(
-        map-get($utilities, "font-weight"),
+        map-get($utilities, 'font-weight'),
         (
           values:
             map-merge(
-              map-get(map-get($utilities, "font-weight"), "values"),
+              map-get(map-get($utilities, 'font-weight'), 'values'),
               (
                 semibold: $font-weight-semibold,
               )
@@ -169,4 +172,4 @@ $utilities: map-merge(
   )
 );
 
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';

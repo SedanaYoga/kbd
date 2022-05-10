@@ -1,6 +1,6 @@
-import React from "react";
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
+import React from 'react'
+import Navbar from '../Navbar/Navbar'
+import Footer from '../Footer/Footer'
 
 const UserLayout = ({ children }) => {
   return (
@@ -9,7 +9,7 @@ const UserLayout = ({ children }) => {
       {children}
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default UserLayout;
+export default UserLayout

@@ -24,22 +24,19 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav '>
           <Nav
-            className={`me-auto w-100 d-flex justify-content-between ${styles.navBar__menu}`}
-          >
+            className={`me-auto w-100 d-flex justify-content-between ${styles.navBar__menu}`}>
             <div
-              className={`${styles.navBar__menu_main} d-flex flex-lg-row flex-column gap-lg-2 mt-3 mt-lg-0 gap-0 flex-grow-1 justify-content-end align-items-end`}
-            >
+              className={`${styles.navBar__menu_main} d-flex flex-lg-row flex-column gap-lg-2 mt-3 mt-lg-0 gap-0 flex-grow-1 justify-content-end align-items-end`}>
               {menu.main.map((mainMenu, index) => (
                 <Link
                   key={index}
-                  href={`/${mainMenu === 'home' ? '' : mainMenu}`}
-                >
+                  href={`/${mainMenu === 'home' ? '' : mainMenu}`}>
                   <a
-                    className={`${currentPath === `/${mainMenu === 'home' ? '' : mainMenu}`
+                    className={`${
+                      currentPath === `/${mainMenu === 'home' ? '' : mainMenu}`
                         ? styles.active
                         : ''
-                      }`}
-                  >
+                    }`}>
                     {mainMenu}
                   </a>
                 </Link>
@@ -50,17 +47,15 @@ const NavBar = () => {
                 <Link
                   key={index}
                   href={`/${authMenu.replace(' ', '')}`}
-                  passHref
-                >
-                  {/* <a> */}
+                  passHref>
                   <BtnComp
-                    type={`${authMenu === 'register' ? 'primary' : 'secondary'
-                      }`}
+                    type={`${
+                      authMenu === 'register' ? 'primary' : 'secondary'
+                    }`}
                     margin='0 0 0 1rem'
-                  >
+                    padding='0.5rem 1rem'>
                     {capitalizeFirst(authMenu)}
                   </BtnComp>
-                  {/* </a> */}
                 </Link>
               ))}
             </div>
