@@ -4,6 +4,7 @@ import { Col, Container, Row } from 'react-bootstrap'
 import BtnComp from '../components/BtnComp/BtnComp'
 import UserLayout from '../components/Layouts/UserLayout'
 import styles from '../styles/pages/Home.module.scss'
+import SliderComp from '../components/SliderComp/SliderComp'
 
 export default function Home() {
   return (
@@ -15,16 +16,18 @@ export default function Home() {
           content='Kintamani-Bali Dog adoption platform'
         />
       </Head>
-      <>
+      <section>
         <Container className={styles.heroContainer}>
-          <Row className='h-100'>
-            <Col className='col-lg-6 d-flex flex-row align-items-center justify-content-start'>
+          <Row className='h-100 d-flex flex-lg-row flex-column'>
+            <Col className='pe-lg-5 col-lg-5 d-flex flex-row flex-grow-1 align-items-center justify-content-start'>
               <div>
                 <h1>
                   Find Your Forever{' '}
                   <span className='text-primaryDark'>Soulmate</span>
                 </h1>
-                <p>For adventure seekers, active and lively humans like you.</p>
+                <p className='pe-lg-5'>
+                  For adventure seekers, active and lively humans like you.
+                </p>
                 <div>
                   <Link href='/browse'>
                     <BtnComp
@@ -40,7 +43,7 @@ export default function Home() {
                 </div>
               </div>
             </Col>
-            <Col className='col-lg-6 d-flex flex-row align-items-center justify-content-start'>
+            <Col className='col-lg-7 d-flex flex-row align-items-center justify-content-start'>
               <div className={styles.heroImage}>
                 <div>
                   <img src='/images/hero-images/1.png' alt='hero-1' />
@@ -55,7 +58,36 @@ export default function Home() {
             </Col>
           </Row>
         </Container>
-      </>
+      </section>
+      <section className={styles.dogSlider}>
+        <Container>
+          <article>
+            <div className={styles.caption}>
+              <h1>
+                Hi hooman! I’m <span>Kintamani</span> Dogs
+              </h1>
+              <p>
+                I am an ancient landrace breed that thrived on the streets of
+                Bali. I am very territorial, vocal, and energetic. love to run
+                and play. However, I am also very devoted to you, my owner.
+              </p>
+            </div>
+            <div className={styles.slider}>
+              <SliderComp>
+                {[...Array(4).keys()].map((key) => (
+                  <div className={styles.sliderImage}>
+                    <img
+                      key={key}
+                      src={`/images/meet-dogs/${key + 1}.png`}
+                      alt={`dogs-${key + 1}`}
+                    />
+                  </div>
+                ))}
+              </SliderComp>
+            </div>
+          </article>
+        </Container>
+      </section>
     </div>
   )
 }
