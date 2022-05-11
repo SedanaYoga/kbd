@@ -73,11 +73,10 @@ export default function Home() {
               </p>
             </div>
             <div className={styles.slider}>
-              <SliderComp>
+              <SliderComp className={styles.sliderContainer}>
                 {[...Array(4).keys()].map((key) => (
-                  <div className={styles.sliderImage}>
+                  <div key={key} className={styles.sliderImage}>
                     <img
-                      key={key}
                       src={`/images/meet-dogs/${key + 1}.png`}
                       alt={`dogs-${key + 1}`}
                     />

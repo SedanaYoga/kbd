@@ -172,6 +172,13 @@ $utilities: map-merge(
   )
 );
 
+.slick-slide {
+  margin: 0 1rem;
+}
+.slick-list {
+  margin: 0 -1rem;
+}
+
 @import '~bootstrap/scss/bootstrap';
 @import '~slick-carousel/slick/slick.scss';
 @import '~slick-carousel/slick/slick-theme.scss';

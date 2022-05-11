@@ -30,10 +30,13 @@ const NavBar = () => {
               {menu.main.map((mainMenu, index) => (
                 <Link
                   key={index}
-                  href={`/${mainMenu === 'home' ? '' : mainMenu}`}>
+                  href={`/${
+                    mainMenu === 'home' ? '' : mainMenu.replace(' ', '')
+                  }`}>
                   <a
                     className={`${
-                      currentPath === `/${mainMenu === 'home' ? '' : mainMenu}`
+                      currentPath ===
+                      `/${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
                         ? styles.active
                         : ''
                     }`}>
