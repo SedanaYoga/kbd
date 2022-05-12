@@ -32,7 +32,7 @@ export default function AboutUs() {
           <Col className='w-100 mt-4 d-flex justify-content-lg-end justify-content-center'>
             <img
               className='heroImage'
-              src='/images/about_us.png'
+              src='/images/bg/back-3.png'
               alt='about us'
             />
           </Col>

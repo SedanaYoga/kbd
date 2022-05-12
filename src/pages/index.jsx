@@ -5,6 +5,8 @@ import BtnComp from '../components/BtnComp/BtnComp'
 import UserLayout from '../components/Layouts/UserLayout'
 import styles from '../styles/pages/Home.module.scss'
 import SliderComp from '../components/SliderComp/SliderComp'
+import PuppyGrid from '../components/PuppyGrid/PuppyGrid'
+import puppies from '../puppiesData'
 
 export default function Home() {
   return (
@@ -59,6 +61,7 @@ export default function Home() {
           </Row>
         </Container>
       </section>
+
       <section className={styles.dogSlider}>
         <Container>
           <article>
@@ -85,6 +88,13 @@ export default function Home() {
               </SliderComp>
             </div>
           </article>
+        </Container>
+      </section>
+
+      <section>
+        <Container>
+          <h1>Meet Our Cutie Pup 🐶</h1>
+          <PuppyGrid puppies={puppies} />
         </Container>
       </section>
     </div>
