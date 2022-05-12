@@ -1,27 +1,66 @@
-.footerContainer {
-  height: auto;
-  background: white;
-  .sosmedUl {
-    padding: 0;
-    li {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      .dummyLogo {
-        width: 16px;
-        height: 16px;
-        background: gray;
-        border-radius: 50%;
-        margin-right: 10px;
+@import '../../styles/global.scss';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+.footer {
+  height: 419px;
+  background: url('../../assets/svg/footer-bg.svg') no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  @include media-breakpoint-down(lg) {
+    height: auto;
+  }
+  &Container {
+    padding-top: 10rem;
+    color: $secondary;
+    &Left {
+      @include betweenFlexColumn;
+      align-items: flex-start;
+      h2 {
+        font-weight: 700;
       }
     }
-  }
-  .dummyMap {
-    width: 300px;
-    height: 170px;
-    background: gray;
-    border-radius: 10px;
+    &Middle {
+      @include centerFlexColumn;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding-left: 5rem;
+      h5 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      .sosmedUl {
+        padding: 0;
+        li {
+          @include centerFlexRow;
+          justify-content: flex-start;
+          margin-bottom: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          a {
+            color: $secondary;
+            text-decoration: none;
+
+            svg {
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+    &Right {
+      h5 {
+        margin-bottom: 1rem;
+      }
+      .dummyMap {
+        width: 300px;
+        height: 170px;
+        background: gray;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+    }
   }
 }

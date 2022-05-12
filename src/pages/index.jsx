@@ -91,10 +91,17 @@ export default function Home() {
         </Container>
       </section>
 
-      <section>
-        <Container>
-          <h1>Meet Our Cutie Pup 🐶</h1>
+      <section className={styles.meetPuppies}>
+        <Container className={styles.meetPuppiesContainer}>
+          <h1>
+            Meet Our Cutie <span>Pup 🐶</span>
+          </h1>
           <PuppyGrid puppies={puppies} />
+          <div className={styles.meetPuppiesSeeMore}>
+            <Link href='/browse'>
+              <a>See more puppies</a>
+            </Link>
+          </div>
         </Container>
       </section>
     </div>

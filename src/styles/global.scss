@@ -7,3 +7,28 @@ $secondaryBtnActive: #f3f3f3;
 
 $tagColor: #cccccc;
 $tagColorBorder: #9c9c9c;
+
+@mixin centerFlexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@mixin centerFlexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+@mixin betweenFlexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+@mixin betweenFlexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}

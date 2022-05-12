@@ -81,3 +81,27 @@
     );
   }
 }
+
+.meetPuppies {
+  margin: 7rem 0;
+  &Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      font-weight: 700;
+      span {
+        color: $primaryBtnActive;
+      }
+    }
+  }
+  &SeeMore {
+    margin-top: 1rem;
+    a {
+      color: rgba(black, 0.6);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  }
+}
