@@ -104,6 +104,32 @@ export default function Home() {
           </div>
         </Container>
       </section>
+
+      <section className={styles.whyUs}>
+        <Container className={styles.whyUsContainer}>
+          <h1>Why Us?</h1>
+          <Row lg={3} md={1}>
+            <Col className={styles.whyUsCard}>
+              <img src='/images/why-us/best-breed.png' alt='best-breed' />
+              <h2>
+                <span>Best</span> Breed
+              </h2>
+            </Col>
+            <Col className={styles.whyUsCard}>
+              <img src='/images/why-us/stambum.png' alt='stambum' />
+              <h2>
+                <span>Stambum</span> Certificate
+              </h2>
+            </Col>
+            <Col className={styles.whyUsCard}>
+              <img src='/images/why-us/vaccinated.png' alt='vaccinated' />
+              <h2>
+                Complete <span>Vaccine</span>
+              </h2>
+            </Col>
+          </Row>
+        </Container>
+      </section>
     </div>
   )
 }
