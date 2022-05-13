@@ -7,6 +7,8 @@ import styles from '../styles/pages/Home.module.scss'
 import SliderComp from '../components/SliderComp/SliderComp'
 import PuppyGrid from '../components/PuppyGrid/PuppyGrid'
 import puppies from '../puppiesData'
+import testi from '../testiData'
+import Slider from 'react-slick'
 
 export default function Home() {
   return (
@@ -130,10 +132,45 @@ export default function Home() {
           </Row>
         </Container>
       </section>
+
+      <section className={styles.testi}>
+        <Container className={styles.testiContainer}>
+          <h1>What they say...</h1>
+          <div className={styles.testiSlider}>
+            <SliderTesti>
+              {testi.map(({ comment, imgUrl, name, id, year }) => (
+                <div key={id} className={styles.testiSliderCard}>
+                  <h5>{`"${comment}"`}</h5>
+                  <div className={styles.testiSliderCardBottom}>
+                    <img src={imgUrl} alt={`testi - ${name}`} />
+                    <p>{`${name}, ${year}`}</p>
+                  </div>
+                </div>
+              ))}
+            </SliderTesti>
+          </div>
+        </Container>
+      </section>
     </div>
   )
 }
 
 Home.getLayout = function getLayout(page) {
   return <UserLayout>{page}</UserLayout>
+}
+
+function SliderTesti({ children }) {
+  const settings = {
+    className: 'center',
+    centerMode: true,
+    infinite: true,
+    centerPadding: '60px',
+    slidesToShow: 3,
+    speed: 500,
+  }
+  return (
+    <div>
+      <Slider {...settings}>{children}</Slider>
+    </div>
+  )
 }

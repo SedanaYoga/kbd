@@ -1,11 +1,11 @@
 import Slider from 'react-slick'
 
-const SliderComp = ({ children, className }) => {
+const SliderComp = ({ children, className, variableWidth, centerMode }) => {
   const setting = {
     dots: false,
     arrows: false,
     infinite: children.length > 3,
-    variableWidth: true,
+    variableWidth: variableWidth,
     speed: 1000,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -13,6 +13,7 @@ const SliderComp = ({ children, className }) => {
     speed: 500,
     autoplaySpeed: 4000,
     easing: 'ease-in-out',
+    centerMode: centerMode,
   }
   return (
     <div className={className}>
@@ -22,3 +23,8 @@ const SliderComp = ({ children, className }) => {
 }
 
 export default SliderComp
+
+SliderComp.defaultProps = {
+  variableWidth: true,
+  centerMode: false,
+}
