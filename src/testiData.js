@@ -19,8 +19,7 @@ export default [
     id: '3',
     name: 'Wildan',
     year: 2020,
-    comment:
-      'Almond eyes, playfull, perfect guard, what a perfect dog. Also will bring more medal for my Kaygo.',
+    comment: 'Almond eyes, playfull, perfect guard, what a perfect dog.',
     imgUrl: '/images/user.png',
   },
 ]
