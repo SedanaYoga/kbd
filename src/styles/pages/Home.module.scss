@@ -128,37 +128,25 @@
 
 .testi {
   margin: 10rem 0;
+  padding: 0 1rem;
   width: 100%;
-  &Container {
+  height: auto;
+  &SliderCard {
+    margin: 3rem 0;
+    padding: 2rem 2rem;
+    background-color: $secondary;
+    border-radius: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    min-height: 250px;
     width: 100%;
-    position: relative;
-    h1 {
-      font-weight: 700;
-    }
     @include centerFlexColumn;
-  }
-  &Slider {
-    width: 100%;
-    &Container {
-      width: 100%;
-      background-color: red;
+    h5 {
+      font-size: 1rem;
+      text-align: center;
     }
-
-    &Card {
-      padding: 3rem 2rem;
-      margin: 1rem;
-      background-color: $secondary;
-      border-radius: 20px;
-      box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.2);
+    &Bottom {
+      margin-top: 1.5rem;
       @include centerFlexColumn;
-      h5 {
-        text-align: center;
-      }
-      width: 522px !important;
-      &Bottom {
-        margin-top: 1.5rem;
-        @include centerFlexColumn;
-      }
     }
   }
 }

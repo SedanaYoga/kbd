@@ -8,7 +8,7 @@ import SliderComp from '../components/SliderComp/SliderComp'
 import PuppyGrid from '../components/PuppyGrid/PuppyGrid'
 import puppies from '../puppiesData'
 import testi from '../testiData'
-import Slider from 'react-slick'
+import SliderSwiper from '../components/SliderSwiper/SliderSwiper'
 
 export default function Home() {
   return (
@@ -134,21 +134,19 @@ export default function Home() {
       </section>
 
       <section className={styles.testi}>
-        <Container className={styles.testiContainer}>
-          <h1>What they say...</h1>
-          <div className={styles.testiSlider}>
-            <SliderTesti>
-              {testi.map(({ comment, imgUrl, name, id, year }) => (
-                <div key={id} className={styles.testiSliderCard}>
-                  <h5>{`"${comment}"`}</h5>
-                  <div className={styles.testiSliderCardBottom}>
-                    <img src={imgUrl} alt={`testi - ${name}`} />
-                    <p>{`${name}, ${year}`}</p>
-                  </div>
+        <Container>
+          <h1 className='text-center fw-bold mb-5'>What they say...</h1>
+          <SliderSwiper>
+            {testi.map(({ comment, imgUrl, name, id, year }) => (
+              <div key={id} className={styles.testiSliderCard}>
+                <h5>{`"${comment}"`}</h5>
+                <div className={styles.testiSliderCardBottom}>
+                  <img src={imgUrl} alt={`testi - ${name}`} />
+                  <p>{`${name}, ${year}`}</p>
                 </div>
-              ))}
-            </SliderTesti>
-          </div>
+              </div>
+            ))}
+          </SliderSwiper>
         </Container>
       </section>
     </div>
@@ -157,20 +155,4 @@ export default function Home() {
 
 Home.getLayout = function getLayout(page) {
   return <UserLayout>{page}</UserLayout>
-}
-
-function SliderTesti({ children }) {
-  const settings = {
-    className: 'center',
-    centerMode: true,
-    infinite: true,
-    centerPadding: '60px',
-    slidesToShow: 3,
-    speed: 500,
-  }
-  return (
-    <div>
-      <Slider {...settings}>{children}</Slider>
-    </div>
-  )
 }
