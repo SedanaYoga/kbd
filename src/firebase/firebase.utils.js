@@ -16,6 +16,7 @@ import {
   collection,
   where,
 } from 'firebase/firestore'
+import { timeStampToDateString } from '../helper/dateHelper'
 
 const puppiesCollectionRef = collection(db, 'puppies')
 const usersCollectionRef = collection(db, 'users')
@@ -103,7 +104,11 @@ export const getPuppiesData = async () => {
   try {
     const puppies = await getDocs(puppiesCollectionRef)
     const puppiesData = puppies.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id }
+      return {
+        ...doc.data(),
+        dob: timeStampToDateString(doc.data().dob),
+        id: doc.id,
+      }
     })
     return puppiesData
   } catch (err) {

@@ -1,5 +1,5 @@
-export const timeStampToDateString = (string) => {
-  return string.toDate().toDateString()
+export const timeStampToDateString = (timestamp) => {
+  return timestamp.toDate().toDateString()
 }
 
 export const diffTwoDateInMonths = (date1, date2) => {

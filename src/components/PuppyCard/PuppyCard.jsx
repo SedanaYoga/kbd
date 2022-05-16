@@ -23,10 +23,7 @@ const PuppyCard = React.forwardRef(
               <div className={styles[color]}></div>
             </div>
             <div className={styles.cardTagAge}>
-              <div>{`${diffTwoDateInMonths(
-                new Date(),
-                timeStampToDateString(dob),
-              )} months`}</div>
+              <div>{`${diffTwoDateInMonths(new Date(), dob)} months`}</div>
             </div>
           </div>
           <div className={styles.medal}>
