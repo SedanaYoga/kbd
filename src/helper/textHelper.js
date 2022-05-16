@@ -5,3 +5,7 @@ export const capitalizeFirst = (str) => {
   }
   return arr.join(' ')
 }
+
+export const setBreedIcon = (breed) => {
+  return breed === 'normal' ? '🥇' : breed === 'premium' ? '🥈' : '🥉'
+}

@@ -15,7 +15,7 @@ const BtnComp = React.forwardRef(
         btnCl = `${styles.btn} ${styles.secondary}`
         break
       case 'link':
-        btnCl = `${styles.btj} ${styles.link}`
+        btnCl = `${styles.btn} ${styles.link}`
         break
       default:
         break

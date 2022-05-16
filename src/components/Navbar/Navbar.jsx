@@ -12,7 +12,7 @@ const menu = {
 }
 const NavBar = () => {
   const router = useRouter()
-  const currentPath = router.pathname
+  const currentPath = router.pathname.split('/')[1]
   return (
     <Navbar expand='lg' className={styles.navBar}>
       <Container>
@@ -36,7 +36,7 @@ const NavBar = () => {
                   <a
                     className={`${
                       currentPath ===
-                      `/${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
+                      `${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
                         ? styles.active
                         : ''
                     }`}>

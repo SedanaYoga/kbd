@@ -1,0 +1,62 @@
+@import '../global.scss';
+
+.main {
+  margin-top: 3rem;
+  &Left {
+    @include centerFlexColumn;
+    &Container {
+      position: relative;
+      width: 500px;
+      border-radius: 20px;
+    }
+  }
+  &Right {
+    margin-top: 3rem;
+    &Header {
+      h1 {
+        font-weight: bold;
+        font-size: 3rem;
+        border-bottom: 1px solid $tagColor;
+        padding-bottom: 0.5rem;
+      }
+      & > div {
+        padding-top: 1rem;
+        @include centerFlexRow();
+        justify-content: flex-start;
+        overflow: hidden;
+        font-weight: 500;
+        span {
+          padding: 5px 10px;
+          background: $tagColor;
+          border-radius: 8px 0 0 8px;
+          border-right: 2px solid $tagColorBorder;
+        }
+        p {
+          padding: 5px 10px;
+          background: $tagColor;
+          margin: 0;
+          border-radius: 0 8px 8px 0;
+        }
+      }
+    }
+    &CardContainer {
+      margin-top: 2rem;
+      & > div {
+        & > div {
+          padding: 1rem;
+          border: 1.5px solid $primary;
+          border-radius: 8px;
+          p {
+            margin-bottom: 2rem;
+          }
+          h5 {
+            margin: 0;
+          }
+        }
+      }
+    }
+    &Buttons {
+      margin-top: 3rem;
+    }
+  }
+}

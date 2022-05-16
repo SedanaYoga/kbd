@@ -1,9 +1,6 @@
 import { CgGenderMale } from 'react-icons/cg'
 import { CgGenderFemale } from 'react-icons/cg'
-import {
-  diffTwoDateInMonths,
-  timeStampToDateString,
-} from '../../helper/dateHelper'
+import { diffTwoDateInMonths } from '../../helper/dateHelper'
 import styles from './PuppyCard.module.scss'
 import React from 'react'
 
@@ -12,7 +9,11 @@ const PuppyCard = React.forwardRef(
     return (
       <a href={href} onClick={onClick} ref={ref}>
         <div className={styles.card}>
-          <img src={imgUrl} alt={`puppies ${id}`} className={styles.cardImg} />
+          <img
+            src={imgUrl[0]}
+            alt={`puppies ${id}`}
+            className={styles.cardImg}
+          />
           <div className={styles.cardTag}>
             <div className={styles.cardTagSex}>
               <div>

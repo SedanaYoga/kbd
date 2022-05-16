@@ -12,6 +12,9 @@ import SliderSwiper from '../components/SliderSwiper/SliderSwiper'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPuppiesFb } from '../redux/slices/puppiesSlice'
 import { useEffect } from 'react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/thumbs'
 
 export default function Home() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
@@ -36,6 +39,7 @@ export default function Home() {
               content='Kintamani-Bali Dog adoption platform'
             />
           </Head>
+
           <section>
             <Container className={styles.heroContainer}>
               <Row className='h-100 d-flex flex-lg-row flex-column'>
