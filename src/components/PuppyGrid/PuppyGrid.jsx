@@ -1,49 +1,19 @@
 import { Row, Col } from 'react-bootstrap'
-import styles from '../../components/PuppyGrid/PuppyGrid.module.scss'
-import { CgGenderMale } from 'react-icons/cg'
-import { CgGenderFemale } from 'react-icons/cg'
-import { diffTwoDateInMonths } from '../../helper/textHelper'
+import styles from './PuppyGrid.module.scss'
+import PuppyCard from '../PuppyCard/PuppyCard'
+import Link from 'next/link'
 
-const PuppyList = ({ puppies }) => {
+const PuppyList = ({ puppies, endSlice = puppies.length }) => {
   return (
     <div className={styles.puppyGrid}>
       <Row xs={2} md={3} lg={4} className={styles.cardContainer}>
-        {puppies
-          .slice(0, 12)
-          .map(({ imgUrl, breedQuality, sex, id, color, dob }) => (
-            <Col key={id}>
-              <div className={styles.card}>
-                <img
-                  src={imgUrl}
-                  alt={`puppies ${id}`}
-                  className={styles.cardImg}
-                />
-                <div className={styles.cardTag}>
-                  <div className={styles.cardTagSex}>
-                    <div>
-                      {sex === 'male' ? <CgGenderMale /> : <CgGenderFemale />}
-                    </div>
-                  </div>
-                  <div className={styles.cardTagColor}>
-                    <div className={styles[color]}></div>
-                  </div>
-                  <div className={styles.cardTagAge}>
-                    <div>{`${diffTwoDateInMonths(
-                      new Date(),
-                      dob,
-                    )} months`}</div>
-                  </div>
-                </div>
-                <div className={styles.medal}>
-                  {breedQuality === 'normal'
-                    ? '🥇'
-                    : breedQuality === 'premium'
-                    ? '🥈'
-                    : '🥉'}
-                </div>
-              </div>
-            </Col>
-          ))}
+        {puppies.slice(0, endSlice).map((puppy) => (
+          <Col key={puppy.id}>
+            <Link href={`/browse/${puppy.id}`}>
+              <PuppyCard {...puppy} />
+            </Link>
+          </Col>
+        ))}
       </Row>
     </div>
   )

@@ -6,11 +6,23 @@ import UserLayout from '../components/Layouts/UserLayout'
 import styles from '../styles/pages/Home.module.scss'
 import SliderComp from '../components/SliderComp/SliderComp'
 import PuppyGrid from '../components/PuppyGrid/PuppyGrid'
-import puppies from '../puppiesData'
 import testi from '../testiData'
 import SliderSwiper from '../components/SliderSwiper/SliderSwiper'
+import { useEffect, useState } from 'react'
+import { getPuppiesData } from '../firebase/firebase.utils'
 
 export default function Home() {
+  const [puppies, setPuppies] = useState([])
+
+  useEffect(() => {
+    const setPuppiesData = async () => {
+      const result = await getPuppiesData()
+      console.log(result)
+      setPuppies(result)
+    }
+    setPuppiesData()
+  }, [])
+
   return (
     <div>
       <Head>
@@ -98,7 +110,7 @@ export default function Home() {
           <h1>
             Meet Our Cutie <span>Pup 🐶</span>
           </h1>
-          <PuppyGrid puppies={puppies} />
+          <PuppyGrid puppies={puppies} endSlice={8} />
           <div className={styles.meetPuppiesSeeMore}>
             <Link href='/browse'>
               <a>See more puppies</a>

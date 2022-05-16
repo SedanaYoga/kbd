@@ -1,9 +1,25 @@
 import Head from 'next/head'
-import { Container, Row, Col } from 'react-bootstrap'
-import Link from 'next/link'
+import { Container } from 'react-bootstrap'
+// import Link from 'next/link'
 import UserLayout from '../../components/Layouts/UserLayout'
+import styles from '../../styles/pages/Browse.module.scss'
+import { useState, useEffect } from 'react'
+import { getPuppiesData } from '../../firebase/firebase.utils'
+import { BsChevronDown } from 'react-icons/bs'
+import PuppyGrid from '../../components/PuppyGrid/PuppyGrid'
 
 export default function Browse() {
+  const [puppies, setPuppies] = useState([])
+
+  useEffect(() => {
+    const setPuppiesData = async () => {
+      const result = await getPuppiesData()
+      console.log(result)
+      setPuppies(result)
+    }
+    setPuppiesData()
+  }, [])
+
   return (
     <div>
       <Head>
@@ -14,33 +30,37 @@ export default function Browse() {
         />
       </Head>
       <Container className='full-with-footer'>
-        <div>
-          <h1 className='w-100 mt-3 text-center fw-bold'>All Puppies</h1>
-          <Row className=' mt-3'>
-            <Col className='col-lg-3 col-12 mb-3 border'>This is a Filter</Col>
-            <Col className='col-lg-9 col-12 mb-3 ps-4'>
-              <div className='row row-cols-3 '>
-                {/* <div className='col' key='123'> */}
-                <div className='col'>
-                  <Link href='/browse/123'>
-                    <div className=' mb-3 cardPuppy bg-light shadow-sm p-3 d-flex flex-column justify-content-center align-items-center'>
-                      <div className='puppyImageBrowse d-flex justify-content-center align-items-center bg-dark rounded-pill overflow-hidden'>
-                        <img
-                          src='images/kin-browse/kin-1.jpg'
-                          height={200}
-                          alt='Charly'
-                        />
-                      </div>
-                      <h3>Male</h3>
-                      <p className='text-center'>Male</p>
-                      <p className='text-center'>6 Mei 2022</p>
-                    </div>
-                  </Link>
-                </div>
+        <section className={styles.browse}>
+          <h1>All Puppies</h1>
+
+          <div className={styles.browseFilter}>
+            <div className={styles.browseFilterSex}>
+              <div className={styles.browseFilterSexMale}>Male</div>
+              <div className={styles.browseFilterSexFemale}>Female</div>
+            </div>
+            <div className={styles.browseFilterAge}>
+              All Age <BsChevronDown />{' '}
+            </div>
+            <div className={styles.browseFilterColor}>
+              <div className={styles.browseFilterColorWhite}>
+                <span></span> White
               </div>
-            </Col>
-          </Row>
-        </div>
+              <div className={styles.browseFilterColorBlack}>
+                <span></span> Black
+              </div>
+              <div className={styles.browseFilterColorBrown}>
+                <span></span> Brown
+              </div>
+              <div className={styles.browseFilterColorBridle}>
+                <span></span> Bridle
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.browsePuppies}>
+            <PuppyGrid puppies={puppies} />
+          </div>
+        </section>
       </Container>
     </div>
   )
