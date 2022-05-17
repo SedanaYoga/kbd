@@ -1,16 +1,37 @@
+import React, {useState, useMemo, useEffect} from "react"
 import { useTable } from "react-table/dist/react-table.development"
 import styles from './component/Table.module.scss'
 import { Button, Container, Table } from "react-bootstrap"
-import React, {useState, useMemo} from "react"
 import { Column } from "./component/TableData.component"
-import dataUser from "./static/userdata.json"
+import { InputUser } from './component/InputUser.component'
+import {collection, getDocs} from 'firebase/firestore'
+import { Admin } from './admin.component'
+import { db } from "../../firebase/firebase.init"
 
 export const Users = () => {
-    // const [inputform, setForm] = useState(false);
+    const [users, setUsers] = useState([])
+    const usersCollectionRef = collection(db, 'users')
+    const [inputform, setForm] = useState(false);
+
+    useEffect(() => {
+        const getUsers = async () => {
+            const data = await getDocs(usersCollectionRef);
+            const transformData = data.docs.map((doc) => ({...doc.data(), id: doc.id}))
+            const newTransformdata = transformData.map((data) => ({
+                ...data,
+                createdAt: data.createdAt.toDate().toString().slice(0, 25),
+                lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25)
+            }));
+            setUsers(newTransformdata);
+        }
+
+        getUsers()
+    }, []);
+
 
     const columns = useMemo(() => Column, [])
-    const data = useMemo(() => dataUser, [])
-
+    const data = useMemo(() => users, [users])
+    
     const TableInstance = useTable({
         columns,
         data
@@ -23,11 +44,11 @@ export const Users = () => {
 
     return (
         <>
-        {/* <Button variant='secondary' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
+        <Button variant='secondary' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
           +Add User
-        </Button> */}
-        {/* <InputUser show={inputform} onHide={() => setForm(false)}/> */}
-        {/* <Admin/> */}
+        </Button>
+        <InputUser show={inputform} onHide={() => setForm(false)}/>
+        <Admin/> 
         <Container>
             
             <div className={`${styles.tableTitle}`}>
@@ -63,8 +84,6 @@ export const Users = () => {
                 }
             </tbody>
             </Table>
-            
-            {/*Ini dihilangin nanti ketika masuk production*/}
         </Container>
        </>
 

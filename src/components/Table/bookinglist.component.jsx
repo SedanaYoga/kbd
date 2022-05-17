@@ -3,30 +3,31 @@ import { useTable } from 'react-table/dist/react-table.development'
 import { BookingColumn } from './component/TableData.component'
 import {Container, Table} from 'react-bootstrap'
 import styles from './component/Table.module.scss'
-import booking from './static/booking.json'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../../firebase/firebase.init'
 
 export const Booking = () => {
 
-    // const [booking, setBooking] = useState([])
-    // const bookingCollectionRef = collection(db, "booked")
+    const [booking, setBooking] = useState([])
+    const bookingCollectionRef = collection(db, "booked")
 
-    // useEffect(() => {
-    //     const getBooking = async () => {
-    //         const data = await getDocs(bookingCollectionRef)
-    //         const transformData = data.docs.map((doc) => ({...doc.data(), id: doc.id}))
-    //         const newTransformdata = transformData.map((data) => ({
-    //             ...data,
-    //             appt_time: data.appt_time.toDate().toString().slice(0, 25),
-    //         }));
-    //         setBooking(newTransformdata);
-    //         // console.log(newTransformdata)
-    //     }
+    useEffect(() => {
+        const getBooking = async () => {
+            const data = await getDocs(bookingCollectionRef)
+            const transformData = data.docs.map((doc) => ({...doc.data(), id: doc.id}))
+            const newTransformdata = transformData.map((data) => ({
+                ...data,
+                appt_time: data.appt_time.toDate().toString().slice(0, 25),
+            }));
+            setBooking(newTransformdata);
+            // console.log(newTransformdata)
+        }
 
-    //     getBooking()
-    // }, [])
+        getBooking()
+    }, [])
 
     const columns = useMemo(() => BookingColumn, [])
-    const data = useMemo(() => booking, [])
+    const data = useMemo(() => booking, [booking])
     
 
 
