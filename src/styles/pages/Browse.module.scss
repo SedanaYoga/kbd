@@ -1,0 +1,87 @@
+@import '../global.scss';
+
+.browse {
+  h1 {
+    font-weight: 700;
+    margin-top: 2rem;
+    text-align: center;
+  }
+  &Filter {
+    margin-top: 3rem;
+    @include centerFlexRow();
+    gap: 10px;
+    &Sex {
+      @include centerFlexRow();
+      background: $inputColor;
+      border-radius: 8px;
+      overflow: hidden;
+      & > div {
+        padding: 5px 10px;
+        cursor: pointer;
+        .active {
+          background: $dark1;
+          color: white;
+        }
+      }
+      &Male {
+        border-right: 2px solid $inputBorderColor;
+        background: $dark1;
+        color: white;
+      }
+      /* &Female { */
+      /* } */
+    }
+    &Age {
+      padding: 5px 10px;
+      background: $inputColor;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    &Color {
+      @include centerFlexRow();
+      gap: 10px;
+      & > div {
+        @include centerFlexRow();
+        padding: 5px 10px;
+        background: $inputColor;
+        border-radius: 8px;
+        cursor: pointer;
+        & > span {
+          width: 20px;
+          height: 20px;
+          border-radius: 10px;
+          margin-right: 5px;
+          .active {
+            background: black;
+            color: white;
+          }
+        }
+      }
+      &White {
+        background: black !important;
+        color: white;
+        span {
+          background: white;
+        }
+      }
+      &Black {
+        span {
+          background: black;
+        }
+      }
+      &Brown {
+        span {
+          background: $brownDog;
+        }
+      }
+      &Bridle {
+        span {
+          background: $brownDog;
+        }
+      }
+    }
+  }
+  &Puppies {
+    margin-bottom: 5rem;
+  }
+}

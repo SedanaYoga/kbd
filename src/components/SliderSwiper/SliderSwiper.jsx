@@ -7,6 +7,7 @@ export default ({ children }) => {
     centeredSlides: true,
     loop: true,
     spaceBetween: 20,
+    className: 'testimonial-slider',
   }
 
   return (

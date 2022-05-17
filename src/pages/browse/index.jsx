@@ -1,48 +1,65 @@
 import Head from 'next/head'
-import { Container, Row, Col } from 'react-bootstrap'
-import Link from 'next/link'
+import { Container } from 'react-bootstrap'
+// import Link from 'next/link'
 import UserLayout from '../../components/Layouts/UserLayout'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
+import styles from '../../styles/pages/Browse.module.scss'
+import { BsChevronDown } from 'react-icons/bs'
+import PuppyGrid from '../../components/PuppyGrid/PuppyGrid'
+import { useSelector } from 'react-redux'
 
 export default function Browse() {
+  const { isLoading, puppies } = useSelector((state) => state.puppies)
+
   return (
-    <div>
-      <Head>
-        <title>Browse Puppy - Kinta-Bali Dog</title>
-        <meta
-          name='description'
-          content='Browse puppy - select puppies Kinta-Bali Dog Site'
-        />
-      </Head>
-      <Container className='full-with-footer'>
+    <>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
         <div>
-          <h1 className='w-100 mt-3 text-center fw-bold'>All Puppies</h1>
-          <Row className=' mt-3'>
-            <Col className='col-lg-3 col-12 mb-3 border'>This is a Filter</Col>
-            <Col className='col-lg-9 col-12 mb-3 ps-4'>
-              <div className='row row-cols-3 '>
-                {/* <div className='col' key='123'> */}
-                <div className='col'>
-                  <Link href='/browse/123'>
-                    <div className=' mb-3 cardPuppy bg-light shadow-sm p-3 d-flex flex-column justify-content-center align-items-center'>
-                      <div className='puppyImageBrowse d-flex justify-content-center align-items-center bg-dark rounded-pill overflow-hidden'>
-                        <img
-                          src='images/kin-browse/kin-1.jpg'
-                          height={200}
-                          alt='Charly'
-                        />
-                      </div>
-                      <h3>Male</h3>
-                      <p className='text-center'>Male</p>
-                      <p className='text-center'>6 Mei 2022</p>
-                    </div>
-                  </Link>
+          <Head>
+            <title>Browse Puppy - Kinta-Bali Dog</title>
+            <meta
+              name='description'
+              content='Browse puppy - select puppies Kinta-Bali Dog Site'
+            />
+          </Head>
+          <Container className='full-with-footer'>
+            <section className={styles.browse}>
+              <h1>All Puppies</h1>
+
+              <div className={styles.browseFilter}>
+                <div className={styles.browseFilterSex}>
+                  <div className={styles.browseFilterSexMale}>Male</div>
+                  <div className={styles.browseFilterSexFemale}>Female</div>
+                </div>
+                <div className={styles.browseFilterAge}>
+                  All Age <BsChevronDown />{' '}
+                </div>
+                <div className={styles.browseFilterColor}>
+                  <div className={styles.browseFilterColorWhite}>
+                    <span></span> White
+                  </div>
+                  <div className={styles.browseFilterColorBlack}>
+                    <span></span> Black
+                  </div>
+                  <div className={styles.browseFilterColorBrown}>
+                    <span></span> Brown
+                  </div>
+                  <div className={styles.browseFilterColorBridle}>
+                    <span></span> Bridle
+                  </div>
                 </div>
               </div>
-            </Col>
-          </Row>
+
+              <div className={styles.browsePuppies}>
+                <PuppyGrid puppies={puppies} />
+              </div>
+            </section>
+          </Container>
         </div>
-      </Container>
-    </div>
+      )}
+    </>
   )
 }
 

@@ -85,7 +85,7 @@ $font-family-sans-serif: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto,
   'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !default;
 
 // Default body background
-$body-bg: #f5f5f5;
+$body-bg: #fff;
 
 // Heading 1 Font Size
 $h1-font-size: calc(2rem + 1.5vw);
@@ -111,7 +111,7 @@ li {
 }
 
 .full-with-footer {
-  min-height: calc(100vh - (70px + 298px));
+  min-height: calc(100vh - (58px + 419px));
 }
 .puppyImageBrowse {
   width: 200px;
@@ -178,18 +178,76 @@ $utilities: map-merge(
 .slick-list {
   margin: 0 -1rem;
 }
-.swiper {
-  padding: 0 1rem !important;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+
+.testimonial-slider {
+  .swiper {
+    padding: 0 1rem !important;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .swiper-slide {
+    transition: all 0.3s ease;
+    &.swiper-slide-active {
+      transform: scale(1.2) !important;
+      z-index: 2;
+    }
+  }
 }
 
-.swiper-slide {
-  transition: all 0.3s ease;
-  &.swiper-slide-active {
-    transform: scale(1.2) !important;
-    z-index: 2;
+// Slider with Thumbs
+
+.product-images-slider {
+  width: 100%;
+  .swiper-slide {
+    padding-top: 100%;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+    position: relative;
+    border-radius: 20px;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  .swiper-button-prev {
+    left: 30;
+    color: rgb(255, 255, 255);
+  }
+
+  .swiper-button-next {
+    right: 30;
+    color: rgb(255, 255, 255);
+  }
+}
+
+.product-images-slider-thumbs {
+  .swiper-slide {
+    cursor: pointer;
+
+    &-thumb-active {
+      border-radius: 10px;
+      border: 2px solid black;
+    }
+  }
+
+  &-wrapper {
+    width: 100%;
+    padding-top: 100%;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      border-radius: 8px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
   }
 }
 

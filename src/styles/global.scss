@@ -1,12 +1,17 @@
 $primary: #ffc700;
 $secondary: #fff;
 $dark1: #1d1d1d;
+$dark2: #6e6e6e;
+$brownDog: #864d19;
 
 $primaryBtnActive: #eb9c03;
 $secondaryBtnActive: #f3f3f3;
 
 $tagColor: #cccccc;
 $tagColorBorder: #9c9c9c;
+
+$inputColor: #f6f6f6;
+$inputBorderColor: #c9c9c9;
 
 @mixin centerFlexColumn {
   display: flex;
@@ -31,4 +36,11 @@ $tagColorBorder: #9c9c9c;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+
+@mixin centerAbsolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
