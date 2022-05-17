@@ -46,16 +46,19 @@ const Book = () => {
   const bookingSubmitHandler = async (e) => {
     e.preventDefault()
     console.log('Submitting')
-    const { appt_date, appt_time } = input
-    const valueToSubmit = {
-      apptTime: new Date(moment(appt_date + ' ' + appt_time)),
-      adoptPrice: calcTotalPrice(pricing, puppy).toString(),
-      status: 'pending',
-      puppyId: puppy.id,
-      requesterId: 'abc123',
-    }
-    await addBookedData(valueToSubmit)
-    router.push('/')
+    // const { appt_date, appt_time } = input
+    // const valueToSubmit = {
+    //   apptTime: new Date(moment(appt_date + ' ' + appt_time)),
+    //   adoptPrice: calcTotalPrice(pricing, puppy).toString(),
+    //   status: 'pending',
+    //   puppyId: puppy.id,
+    //   requesterId: 'abc123',
+    // }
+    // await addBookedData(valueToSubmit)
+    router.push({
+      pathname: '/browse',
+      query: { msg: 'bookSuccess' },
+    })
   }
 
   return (
@@ -83,7 +86,8 @@ const Book = () => {
                         margin: '1.5rem 0px 0.5rem',
                         paddingBottom: '0.5rem',
                         borderBottom: '1px solid gray',
-                      }}>
+                      }}
+                    >
                       Estimated Adoption Price Tag:{' '}
                       <span className='fw-semibold'>{puppy.displayId}</span>
                     </p>
@@ -94,7 +98,8 @@ const Book = () => {
                             <td
                               style={{
                                 paddingLeft: '0px',
-                              }}>{`${camelToNormalUpperCase(
+                              }}
+                            >{`${camelToNormalUpperCase(
                               price.id,
                             )}: ${capitalizeFirst(
                               puppy[priceRelatedData[index]],
@@ -111,13 +116,15 @@ const Book = () => {
                     <Table
                       style={{
                         margin: '1rem 0px 0.5rem',
-                      }}>
+                      }}
+                    >
                       <tbody>
                         <tr>
                           <td style={{ paddingLeft: '0px' }}>Total price</td>
                           <td
                             className='text-end'
-                            style={{ paddingRight: '0px' }}>
+                            style={{ paddingRight: '0px' }}
+                          >
                             {strToCurrency(calcTotalPrice(pricing, puppy))}
                           </td>
                         </tr>
@@ -152,7 +159,8 @@ const Book = () => {
                         type='submit'
                         variant='dark'
                         size='lg'
-                        className='w-100'>
+                        className='w-100'
+                      >
                         Book for Appointment
                       </Button>
                     </Form>

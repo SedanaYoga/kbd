@@ -7,8 +7,8 @@ import styles from '../styles/pages/Home.module.scss'
 import SliderComp from '../components/SliderComp/SliderComp'
 import PuppyGrid from '../components/PuppyGrid/PuppyGrid'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
-import testi from '../testiData'
 import SliderSwiper from '../components/SliderSwiper/SliderSwiper'
+import testi from '../testiData'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPuppiesFb } from '../redux/slices/puppiesSlice'
 import { getPricingFb } from '../redux/slices/pricingSlice'
@@ -62,7 +62,8 @@ export default function Home() {
                           }}
                           type='primary'
                           padding='.6rem 3rem'
-                          borad='pill'>
+                          borad='pill'
+                        >
                           Meet our Best Puppies!
                         </BtnComp>
                       </Link>
