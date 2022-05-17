@@ -13,6 +13,7 @@ const menu = {
 const NavBar = () => {
   const router = useRouter()
   const currentPath = router.pathname.split('/')[1]
+  console.log(currentPath)
   return (
     <Navbar expand='lg' className={styles.navBar}>
       <Container>

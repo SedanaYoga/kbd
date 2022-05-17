@@ -90,7 +90,7 @@ export default function Puppy() {
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>
                   </BtnComp>
-                  <Link href={`/book/123`}>
+                  <Link href={`/book/${id}`}>
                     <BtnComp borad='pill' padding='10px 60px'>
                       Book this Pupppy
                     </BtnComp>

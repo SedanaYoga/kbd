@@ -6,6 +6,20 @@ export const capitalizeFirst = (str) => {
   return arr.join(' ')
 }
 
+export const camelToNormalUpperCase = (str) => {
+  return str.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) {
+    return str.toUpperCase()
+  })
+}
+
 export const setBreedIcon = (breed) => {
   return breed === 'normal' ? '🥇' : breed === 'premium' ? '🥈' : '🥉'
+}
+
+export const strToCurrency = (string) => {
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'IDR',
+  })
+  return formatter.format(string)
 }

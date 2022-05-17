@@ -21,6 +21,9 @@ import { timeStampToDateString } from '../helper/dateHelper'
 const puppiesCollectionRef = collection(db, 'puppies')
 const usersCollectionRef = collection(db, 'users')
 const bookedCollectionRef = collection(db, 'booked')
+const pricingCollectionRef = collection(db, 'pricing')
+const breedQualityRef = doc(pricingCollectionRef, 'breedQuality')
+const colorRef = doc(pricingCollectionRef, 'color')
 
 export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
@@ -198,4 +201,28 @@ export const setLastLoginAt = async (email) => {
       lastLoginAt: new Date(),
     })
   })
+}
+
+export const getPricing = async () => {
+  try {
+    const pricing = await getDocs(pricingCollectionRef)
+    const pricingData = pricing.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      }
+    })
+    return pricingData
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
+export const updatePricing = async (pricingData) => {
+  try {
+    const pricingRef = doc(pricingCollectionRef, pricingData.id)
+    await updateDoc(pricingRef, pricingData)
+  } catch (err) {
+    console.log(err.message)
+  }
 }

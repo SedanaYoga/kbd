@@ -11,6 +11,7 @@ import testi from '../testiData'
 import SliderSwiper from '../components/SliderSwiper/SliderSwiper'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPuppiesFb } from '../redux/slices/puppiesSlice'
+import { getPricingFb } from '../redux/slices/pricingSlice'
 import { useEffect } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -23,6 +24,7 @@ export default function Home() {
   useEffect(() => {
     if (puppies.length === 0) {
       dispatch(getPuppiesFb())
+      dispatch(getPricingFb())
     }
   }, [])
 
