@@ -2,27 +2,44 @@ import Head from 'next/head'
 import { Button, Container, Form } from 'react-bootstrap'
 import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/slices/userSlice';
+import { loginWithEmailAndPassword, setLastLoginAt } from '../firebase/firebase.utils'
+import { useRouter } from 'next/router'
 
 export default function Login() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { isLoading, user } = useSelector((state) => state.user)
+  const [loginError, setLoginError] = useState('')
+
   const [input, setInput] = useState({
     email: '',
     password: '',
   })
+
+  useEffect(() => {
+    if(user) router.replace('/')
+  })
+
   const handleChange = ({ target: { name, value } }) => {
     setInput({ ...input, [name]: value })
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    // // login with email and password
-    // const result = await loginWithEmailAndPassword(input.email, input.password)
-    // if (result.error) {
-    //   console.log(result.error)
-    // } else {
-    //   // Code for logging lastLoginAt to the firestore
-    //   await setLastLoginAt(result.email)
-    // }
+
+    // login with email and password
+    const result = await loginWithEmailAndPassword(input.email, input.password)
+    if (result.error) {
+      console.log(result.error)
+    } else {
+      // Code for logging lastLoginAt to the firestore
+      await setLastLoginAt(result.email)
+      dispatch(login(result))
+      router.push('/')
+    }
   }
 
   return (

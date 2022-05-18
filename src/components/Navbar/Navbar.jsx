@@ -5,6 +5,9 @@ import { Navbar, Nav, Container } from 'react-bootstrap'
 import styles from './Navbar.module.scss'
 import { capitalizeFirst } from '../../helper/textHelper'
 import BtnComp from '../BtnComp/BtnComp'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/slices/userSlice'
 
 const menu = {
   main: ['home', 'about us', 'browse'],
@@ -12,7 +15,9 @@ const menu = {
 }
 const NavBar = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const currentPath = router.pathname.split('/')[1]
+  const { user } = useSelector((state) => state.user)
 
   return (
     <Navbar expand='lg' className={styles.navBar}>
@@ -51,23 +56,27 @@ const NavBar = () => {
               ))}
             </div>
             <div className='d-flex flex-lg-row flex-column flex-grow-1 justify-content-end'>
-              {menu.auth.map((authMenu, index) => (
-                <Link
-                  key={index}
-                  href={`/${authMenu.replace(' ', '')}`}
-                  passHref
-                >
-                  <BtnComp
-                    type={`${
-                      authMenu === 'register' ? 'primary' : 'secondary'
-                    }`}
-                    margin='0 0 0 1rem'
-                    padding='0.5rem 1rem'
+              { !user ? 
+                menu.auth.map((authMenu, index) => (
+                  <Link
+                    key={index}
+                    href={`/${authMenu.replace(' ', '')}`}
+                    passHref
                   >
-                    {capitalizeFirst(authMenu)}
-                  </BtnComp>
-                </Link>
-              ))}
+                    <BtnComp
+                      type={`${
+                        authMenu === 'register' ? 'primary' : 'secondary'
+                      }`}
+                      margin='0 0 0 1rem'
+                      padding='0.5rem 1rem'
+                    >
+                      {capitalizeFirst(authMenu)}
+                    </BtnComp>
+                  </Link>
+                ))
+                :
+                <button onClick={() => dispatch(logout())}>logout</button>
+              }
             </div>
           </Nav>
         </Navbar.Collapse>

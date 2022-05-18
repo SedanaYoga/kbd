@@ -71,7 +71,7 @@ export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
     console.log(user)
-    return { email: user.user.email }
+    return { email: user.user.email, uid:user.user.uid, token:user.user.stsTokenManager.accessToken }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }
