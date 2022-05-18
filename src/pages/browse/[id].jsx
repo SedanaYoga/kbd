@@ -11,14 +11,37 @@ import { useSelector } from 'react-redux'
 import { diffTwoDateInMonths } from '../../helper/dateHelper'
 import { capitalizeFirst, setBreedIcon } from '../../helper/textHelper'
 import styles from '../../styles/pages/PuppyPage.module.scss'
+import { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { getPuppiesFb } from '../../redux/slices/puppiesSlice'
+import { getPricingFb } from '../../redux/slices/pricingSlice'
 
 export default function Puppy() {
   const router = useRouter()
   const { id } = router.query
-  const { isLoading, puppies } = useSelector((state) => state.puppies)
-  const { displayId, color, breedQuality, sex, dob, imgUrl } = puppies.find(
-    (puppy) => puppy.id === id,
-  )
+  const { puppies } = useSelector((state) => state.puppies)
+  const [puppy, setPuppy] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const dispatch = useDispatch()
+
+  const getPuppy = useCallback(async () => {
+    // Case 1: if puppies are not in Redux => fetch puppies and pricing
+    if (puppies.length === 0) {
+      setIsLoading(true)
+      dispatch(getPuppiesFb())
+      dispatch(getPricingFb())
+      // Case 2: if puppy are already in Redux => filter and set puppy state
+    } else {
+      setIsLoading(false)
+      const puppyData = puppies.find((p) => p.id === id)
+      setPuppy(puppyData)
+    }
+  }, [puppies, puppy, id])
+
+  useEffect(() => {
+    getPuppy()
+  }, [getPuppy])
 
   return (
     <>
@@ -27,7 +50,7 @@ export default function Puppy() {
       ) : (
         <div>
           <Head>
-            <title>{displayId} - Kinta-Bali Dog</title>
+            <title>{puppy?.displayId} - Kinta-Bali Dog</title>
             <meta
               name='description'
               content='Puppy page - puppy detail and booking Kinta-Bali Dog Site'
@@ -37,41 +60,50 @@ export default function Puppy() {
             <Row xs={1} xl={2} className={styles.main}>
               <Col className={styles.mainLeft}>
                 <div className={styles.mainLeftContainer}>
-                  <SliderWithThumbs images={imgUrl} />
+                  <SliderWithThumbs
+                    images={puppy?.imgUrl ? puppy?.imgUrl : []}
+                  />
                 </div>
               </Col>
 
               <Col className={styles.mainRight}>
                 <div className={styles.mainRightHeader}>
                   <h1>
-                    {displayId}
-                    {setBreedIcon(breedQuality)}
+                    {puppy?.displayId}
+                    {setBreedIcon(puppy?.breedQuality)}
                   </h1>
                   <div>
                     <span>
-                      {sex === 'male' ? <CgGenderMale /> : <CgGenderFemale />}
+                      {puppy?.sex === 'male' ? (
+                        <CgGenderMale />
+                      ) : (
+                        <CgGenderFemale />
+                      )}
                     </span>
-                    <p>{`${diffTwoDateInMonths(new Date(), dob)} months`}</p>
+                    <p>{`${diffTwoDateInMonths(
+                      new Date(),
+                      puppy?.dob,
+                    )} months`}</p>
                   </div>
                 </div>
                 <Row xs={2} md={3} className={styles.mainRightCardContainer}>
                   <div className='col'>
                     <div>
                       <p>Coat Color</p>
-                      <h5>{capitalizeFirst(color)}</h5>
+                      <h5>{capitalizeFirst(puppy?.color)}</h5>
                     </div>
                   </div>
                   <div className='col'>
                     <div>
                       <p>Breed Quality</p>
-                      <h5>{capitalizeFirst(breedQuality)}</h5>
+                      <h5>{capitalizeFirst(puppy?.breedQuality)}</h5>
                     </div>
                   </div>
                   <div className='col'>
                     <div>
                       <p>DoB</p>
                       <h5>
-                        {new Date(dob).toLocaleDateString('en-US', {
+                        {new Date(puppy?.dob).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -85,7 +117,8 @@ export default function Puppy() {
                     type='secondary'
                     borad='pill'
                     padding='10px 30px'
-                    margin='0 1rem 0 0'>
+                    margin='0 1rem 0 0'
+                  >
                     <span className={styles.mainRightButtonsWa}>
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>
@@ -139,7 +172,8 @@ function WaIcon() {
           y1='5.25'
           x2='3.5'
           y2='21'
-          gradientUnits='userSpaceOnUse'>
+          gradientUnits='userSpaceOnUse'
+        >
           <stop stopColor='#5BD066' />
           <stop offset='1' stopColor='#27B43E' />
         </linearGradient>

@@ -3,19 +3,21 @@ import { Container } from 'react-bootstrap'
 import UserLayout from '../../components/Layouts/UserLayout'
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 import styles from '../../styles/pages/Browse.module.scss'
-import { BsChevronDown, BsFillCheckCircleFill } from 'react-icons/bs'
+import { BsChevronDown } from 'react-icons/bs'
 import PuppyGrid from '../../components/PuppyGrid/PuppyGrid'
 import Modal from '../../components/Modal/Modal'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
+import useGetPuppies from '../../hooks/useGetPuppies'
 
 export default function Browse() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
   const [showModal, setShowModal] = useState(false)
   const router = useRouter()
   const query = router.query
-  console.log(query.msg)
+
+  useGetPuppies(puppies)
 
   useEffect(() => {
     if (query.msg === 'bookSuccess') {

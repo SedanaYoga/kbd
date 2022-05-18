@@ -13,7 +13,7 @@ const menu = {
 const NavBar = () => {
   const router = useRouter()
   const currentPath = router.pathname.split('/')[1]
-  console.log(currentPath)
+
   return (
     <Navbar expand='lg' className={styles.navBar}>
       <Container>
@@ -25,22 +25,26 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav '>
           <Nav
-            className={`me-auto w-100 d-flex justify-content-between ${styles.navBar__menu}`}>
+            className={`me-auto w-100 d-flex justify-content-between ${styles.navBar__menu}`}
+          >
             <div
-              className={`${styles.navBar__menu_main} d-flex flex-lg-row flex-column gap-lg-2 mt-3 mt-lg-0 gap-0 flex-grow-1 justify-content-end align-items-end`}>
+              className={`${styles.navBar__menu_main} d-flex flex-lg-row flex-column gap-lg-2 mt-3 mt-lg-0 gap-0 flex-grow-1 justify-content-end align-items-end`}
+            >
               {menu.main.map((mainMenu, index) => (
                 <Link
                   key={index}
                   href={`/${
                     mainMenu === 'home' ? '' : mainMenu.replace(' ', '')
-                  }`}>
+                  }`}
+                >
                   <a
                     className={`${
                       currentPath ===
                       `${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
                         ? styles.active
                         : ''
-                    }`}>
+                    }`}
+                  >
                     {mainMenu}
                   </a>
                 </Link>
@@ -51,13 +55,15 @@ const NavBar = () => {
                 <Link
                   key={index}
                   href={`/${authMenu.replace(' ', '')}`}
-                  passHref>
+                  passHref
+                >
                   <BtnComp
                     type={`${
                       authMenu === 'register' ? 'primary' : 'secondary'
                     }`}
                     margin='0 0 0 1rem'
-                    padding='0.5rem 1rem'>
+                    padding='0.5rem 1rem'
+                  >
                     {capitalizeFirst(authMenu)}
                   </BtnComp>
                 </Link>

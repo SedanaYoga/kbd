@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import { Col, Container, Row } from 'react-bootstrap'
-import UserLayout from '../components/Layouts/UserLayout'
-import styles from '../styles/pages/AboutUs.module.scss'
+import UserLayout from '../../components/Layouts/UserLayout'
+import styles from '../../styles/pages/AboutUs.module.scss'
 
 export default function AboutUs() {
   return (
     <div>
-      <title>About Us - Kinta-Bali Dog</title>
       <Head>
+        <title>About Us - Kinta-Bali Dog</title>
         <meta
           name='description'
           content='About us - more about Kinta-Bali Dog Site'
@@ -29,7 +29,7 @@ export default function AboutUs() {
             </div>
           </section>
           <section className={styles.kennel}>
-            <Row>
+            <Row xs={2} bsPrefix='row g-0'>
               <Col className={styles.kennelImage}>
                 <img src='/images/bg/back-4.png' alt='A Loving Kennel Image' />
               </Col>
