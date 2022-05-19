@@ -1,0 +1,69 @@
+@import '../global.scss';
+
+.profile {
+  @include centerFlexColumn;
+  height: 600px;
+  &Title {
+    font-weight: 700;
+    span {
+      color: $primaryBtnActive;
+    }
+  }
+  &SubPage {
+    @include centerFlexRow;
+    gap: 1rem;
+    margin: 1rem 0 2rem;
+    & > div {
+      cursor: pointer;
+    }
+    div:first-child {
+      padding-right: 1rem;
+      border-right: 1px solid black;
+    }
+  }
+  &Pic {
+    @include centerFlexRow;
+    margin-bottom: 3rem;
+    p,
+    h3 {
+      margin: 0;
+    }
+    &Left {
+      margin-right: 2rem;
+      img {
+        width: 120px;
+      }
+    }
+    &Right {
+      h3,
+      p {
+        margin: 0;
+      }
+      h3 {
+        font-size: 1.25rem;
+      }
+      p {
+        margin-bottom: 1rem;
+      }
+      &Buttons {
+        @include centerFlexRow;
+        justify-content: flex-start;
+        gap: 1rem;
+      }
+    }
+  }
+  &Data {
+    @include centerFlexColumn;
+    gap: 10px;
+    margin-bottom: 1rem;
+    input {
+      width: 100%;
+      height: 2.5rem;
+      padding: 0 10px;
+    }
+    &Name {
+      @include centerFlexRow;
+      gap: 1rem;
+    }
+  }
+}
