@@ -117,8 +117,7 @@ export default function Puppy() {
                     type='secondary'
                     borad='pill'
                     padding='10px 30px'
-                    margin='0 1rem 0 0'
-                  >
+                    margin='0 1rem 0 0'>
                     <span className={styles.mainRightButtonsWa}>
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>
@@ -172,8 +171,7 @@ function WaIcon() {
           y1='5.25'
           x2='3.5'
           y2='21'
-          gradientUnits='userSpaceOnUse'
-        >
+          gradientUnits='userSpaceOnUse'>
           <stop stopColor='#5BD066' />
           <stop offset='1' stopColor='#27B43E' />
         </linearGradient>
