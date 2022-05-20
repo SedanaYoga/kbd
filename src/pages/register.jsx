@@ -2,9 +2,18 @@ import Head from 'next/head'
 import { Button, Container, Form } from 'react-bootstrap'
 import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux';
+import { signUpWithEmailAndPassword } from '../firebase/firebase.utils'
+import { woFirebaseWord } from '../helper/authHelper'
+import Notif from '../components/Notif/Notif.component'
+import { login } from '../redux/slices/userSlice';
 
 export default function Register() {
+  const router = useRouter();
+  const dispatch = useDispatch()
+  const { isLoading, user } = useSelector((state) => state.user)
   const [input, setInput] = useState({
     username: '',
     email: '',
@@ -13,6 +22,11 @@ export default function Register() {
     firstName: '',
     lastName: '',
   })
+  const [registerError, setRegisterError] = useState('')
+
+  useEffect(() => {
+    if(user) router.replace('/')
+  })
 
   const handleChange = ({ target: { name, value } }) => {
     setInput({ ...input, [name]: value })
@@ -20,7 +34,19 @@ export default function Register() {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    console.log('hello')
+    if (input.password !== input.confirmPassword) {
+      setRegisterError('Password does not match')
+    } else {
+      const result = await signUpWithEmailAndPassword(input)
+      if (result.error) {
+        setRegisterError(woFirebaseWord(result.error))
+      } else {
+        console.log(result)
+        setRegisterError('')
+        dispatch(login(result))
+        router.push('/')
+      }
+    }
   }
 
   return (
@@ -34,6 +60,7 @@ export default function Register() {
       </Head>
 
       <Container className='full-with-footer'>
+        {registerError !== '' && <Notif message={registerError} />}
         <div className='pt-5'>
           <h2>Create New Account</h2>
           <p>
