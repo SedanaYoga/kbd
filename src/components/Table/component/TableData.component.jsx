@@ -1,32 +1,13 @@
 
-import React, {useState} from "react"
+import React, { useState, useEffect} from "react"
 import {doc, deleteDoc, updateDoc} from 'firebase/firestore'
 import { db } from '../../../firebase/firebase.init'
 import * as MdIcons from "react-icons/md"
 import * as FiIcons from "react-icons/fi"
 import styles from './Table.module.scss'
 import { Dropdown, Modal, InputGroup, FormControl, Button, Form } from 'react-bootstrap'
-import { InputUser } from "./InputUser.component"
 
-const deleteUser = async (row) => {
-  const id = row.id
-  const userDoc = doc(db, 'users', id)
-  await deleteDoc(userDoc)
 
-  console.log(row.id + 'is deleted')
-}
-
-const updateAdmin = async (row) => {
-  const id = row.id
-  const status = row.isAdmin
-  const userDoc = doc(db, 'users', id)
-
-  const newField = { isAdmin: !status }
-
-  await updateDoc(userDoc, newField)
-
-  console.log(newField)
-}
 
 export const Column = [
   {
@@ -48,8 +29,33 @@ export const Column = [
   },
   {
     Header: 'Action',
-    Cell: (row) => (
-      <div className={`${styles.Btn}`}>
+    Cell: (row) => {
+          
+    const deleteUser = async (row) => {
+      const id = row.id
+      const userDoc = doc(db, 'users', id)
+      await deleteDoc(userDoc)
+
+      console.log(row.id + 'is deleted')
+    }
+
+    const updateAdmin = async (row) => {
+
+      const id = row.id
+      const status = row.isAdmin
+      const userDoc = doc(db, 'users', id)
+
+      const newField = { isAdmin: !status }
+
+      await updateDoc(userDoc, newField)
+
+      console.log(newField)
+      window.location.reload(false)
+      
+    }
+
+      return (
+        <div className={`${styles.Btn}`}>
         <span
           className={`${styles.deleteBtn}`}
           onClick={(e) => deleteUser(row.row.original)}
@@ -63,7 +69,11 @@ export const Column = [
           <FiIcons.FiEdit />
         </span>
       </div>
-    ),
+      )
+    }
+      
+     
+    ,
   },
 ]
 
@@ -74,6 +84,7 @@ const updateCancel = async (row) => {
   const newField = {status: 'canceled'}
   await updateDoc(userDoc, newField)
   console.log(newField)
+  window.location.reload()
 }
 
 const updateApprove = async (row) => {
@@ -83,6 +94,7 @@ const updateApprove = async (row) => {
   const newField = {status: 'approved'}
   await updateDoc(userDoc, newField)
   console.log(newField)
+  window.location.reload()
 }
 
 const updatePending = async (row) => {
@@ -92,6 +104,7 @@ const updatePending = async (row) => {
   const newField = {status: 'pending'}
   await updateDoc(userDoc, newField)
   console.log(newField)
+  window.location.reload()
 }
 
 const updateDecline = async (row) => {
@@ -101,15 +114,18 @@ const updateDecline = async (row) => {
   const newField = {status: 'declined'}
   await updateDoc(userDoc, newField)
   console.log(newField)
+  window.location.reload()
 }
 
 const updateSold = async (row) => {
-  const id = row
+  const id = row.id
   const userDoc = doc(db, 'booked', id)
 
   const newField = {status: 'sold'}
   await updateDoc(userDoc, newField)
   console.log(newField)
+  window.location.reload()
+
 }
 
 export const BookingColumn = [

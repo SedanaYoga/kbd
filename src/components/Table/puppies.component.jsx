@@ -6,6 +6,7 @@ import styles from './component/Table.module.scss'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/firebase.init'
 import { InputPuppies } from './component/InputPuppies.component'
+import SuccessAddPup from './component/AddSuccess.component'
 
 
 export const Puppies = () => {
@@ -13,6 +14,7 @@ export const Puppies = () => {
     const [puppies, setPuppies] = useState([])
     const puppiesCollectionRef = collection(db, "puppies")
     const [inputform, setForm] = useState(false);
+    const [modalSuccess, setSuccess] = useState(false);
     
 
     useEffect(() => {
