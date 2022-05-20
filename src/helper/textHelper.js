@@ -1,3 +1,21 @@
+const dogSpecs = {
+  color: {
+    black: 'H',
+    white: 'P',
+    brown: 'C',
+    bridle: 'A',
+  },
+  breedQuality: {
+    normal: 'N',
+    premium: 'P',
+    champion: 'C',
+  },
+  sex: {
+    male: 'M',
+    female: 'F',
+  },
+}
+
 export const capitalizeFirst = (str) => {
   const arr = str?.split(' ')
   for (var i = 0; i < arr?.length; i++) {
@@ -22,4 +40,18 @@ export const strToCurrency = (string) => {
     currency: 'IDR',
   })
   return formatter.format(string)
+}
+
+export const displayIdGenerator = (puppyObject) => {
+  const { breedQuality, color, dob, sex } = puppyObject
+  const dobToText = new Date(dob)
+    .toISOString()
+    .split('T')[0]
+    .split('-')
+    .reverse()
+    .join('')
+  const sexText = dogSpecs['sex'][sex]
+  const colorText = dogSpecs['color'][color]
+  const breedQualityText = dogSpecs['breedQuality'][breedQuality]
+  return `${breedQualityText}${colorText}${dobToText}${sexText}`
 }
