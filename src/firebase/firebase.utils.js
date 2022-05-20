@@ -52,6 +52,8 @@ export const signInWithGoogle = async () => {
       console.log('Creating User to Firestore')
 
       await addDoc(usersCollectionRef, userToFirestore)
+      console.log(result.user)
+      return { email: result.email, uid:result.uid }
     } else {
       querySnapshot.forEach(async (user) => {
         const getUserRef = doc(db, 'users', user.id)
@@ -61,9 +63,11 @@ export const signInWithGoogle = async () => {
       })
       console.log('User exists')
       console.log(result.user)
+      return { email: result.email, uid:result.uid }
     }
   } catch (err) {
     console.log(err)
+    return { error:err }
   }
 }
 
