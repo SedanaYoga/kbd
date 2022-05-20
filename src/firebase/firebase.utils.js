@@ -53,7 +53,7 @@ export const signInWithGoogle = async () => {
 
       await addDoc(usersCollectionRef, userToFirestore)
       console.log(result.user)
-      return { email: result.email, uid:result.uid }
+      return { email: result.user.email, uid: result.user.uid, token: result.user.stsTokenManager.accessToken }
     } else {
       querySnapshot.forEach(async (user) => {
         const getUserRef = doc(db, 'users', user.id)
@@ -63,7 +63,7 @@ export const signInWithGoogle = async () => {
       })
       console.log('User exists')
       console.log(result.user)
-      return { email: result.email, uid:result.uid }
+      return { email: result.user.email, uid:result.user.uid, token:result.user.stsTokenManager.accessToken }
     }
   } catch (err) {
     console.log(err)
