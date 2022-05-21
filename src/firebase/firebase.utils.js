@@ -22,60 +22,84 @@ const puppiesCollectionRef = collection(db, 'puppies')
 const usersCollectionRef = collection(db, 'users')
 const bookedCollectionRef = collection(db, 'booked')
 const pricingCollectionRef = collection(db, 'pricing')
-const breedQualityRef = doc(pricingCollectionRef, 'breedQuality')
-const colorRef = doc(pricingCollectionRef, 'color')
 
+// export const signInWithGoogle = async () => {
+//   const provider = new GoogleAuthProvider()
+//   try {
+//     const result = await signInWithPopup(auth, provider)
+//     const { email, displayName, metadata, photoURL } = result.user
+//     const userRef = query(
+//       usersCollectionRef,
+//       where('email', '==', result.user.email),
+//     )
+//     const querySnapshot = await getDocs(userRef)
+
+//     if (querySnapshot.docs.length === 0) {
+//       const createdAt = new Date(metadata.creationTime)
+//       const lastLoginAt = new Date(metadata.lastSignInTime)
+//       const imgUrl = photoURL
+//       const userToFirestore = {
+//         email,
+//         displayName,
+//         createdAt,
+//         lastLoginAt,
+//         imgUrl,
+//         isAdmin: false,
+//         isGoogle: true,
+//       }
+//       console.log('Creating User to Firestore')
+
+//       await addDoc(usersCollectionRef, userToFirestore)
+//       console.log(result.user)
+//       return {
+//         email: result.user.email,
+//         uid: result.user.uid,
+//         token: result.user.stsTokenManager.accessToken,
+//       }
+//     } else {
+//       querySnapshot.forEach(async (user) => {
+//         const getUserRef = doc(db, 'users', user.id)
+//         await updateDoc(getUserRef, {
+//           lastLoginAt: new Date(),
+//         })
+//       })
+//       console.log('User exists')
+//       console.log(result.user)
+//       return {
+//         email: result.user.email,
+//         uid: result.user.uid,
+//         token: result.user.stsTokenManager.accessToken,
+//       }
+//     }
+//   } catch (err) {
+//     console.log(err)
+//     return { error: err }
+//   }
+// }
 export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
   try {
     const result = await signInWithPopup(auth, provider)
-    const { email, displayName, metadata, photoURL } = result.user
-    const userRef = query(
-      usersCollectionRef,
-      where('email', '==', result.user.email),
-    )
-    const querySnapshot = await getDocs(userRef)
-
-    if (querySnapshot.docs.length === 0) {
-      const createdAt = new Date(metadata.creationTime)
-      const lastLoginAt = new Date(metadata.lastSignInTime)
-      const imgUrl = photoURL
-      const userToFirestore = {
-        email,
-        displayName,
-        createdAt,
-        lastLoginAt,
-        imgUrl,
-        isAdmin: false,
-        isGoogle: true,
-      }
-      console.log('Creating User to Firestore')
-
-      await addDoc(usersCollectionRef, userToFirestore)
-      console.log(result.user)
-      return { email: result.user.email, uid: result.user.uid, token: result.user.stsTokenManager.accessToken }
-    } else {
-      querySnapshot.forEach(async (user) => {
-        const getUserRef = doc(db, 'users', user.id)
-        await updateDoc(getUserRef, {
-          lastLoginAt: new Date(),
-        })
-      })
-      console.log('User exists')
-      console.log(result.user)
-      return { email: result.user.email, uid:result.user.uid, token:result.user.stsTokenManager.accessToken }
+    return {
+      email: result.user.email,
+      uid: result.user.uid,
+      token: result.user.stsTokenManager.accessToken,
     }
   } catch (err) {
     console.log(err)
-    return { error:err }
+    return { error: err }
   }
 }
 
 export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
-    console.log(user)
-    return { email: user.user.email, uid:user.user.uid, token:user.user.stsTokenManager.accessToken }
+    // console.log(user)
+    return {
+      email: user.user.email,
+      uid: user.user.uid,
+      token: user.user.stsTokenManager.accessToken,
+    }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }
