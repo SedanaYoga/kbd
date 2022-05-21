@@ -1,18 +1,17 @@
 @import '../global.scss';
 
-.profile {
+.capture {
   margin-top: 5rem;
   @include centerFlexColumn;
   justify-content: flex-start;
-  height: 600px;
+  height: 650px;
+  gap: 1.5rem;
   &Title {
     font-weight: 700;
     span {
+      display: block;
+      text-align: center;
       color: $primaryBtnActive;
     }
-  }
-  &SubPage {
-    @include centerFlexRow;
-    margin: 1rem 0 2rem;
   }
 }

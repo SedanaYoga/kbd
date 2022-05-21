@@ -2,8 +2,19 @@ import Head from 'next/head'
 import { Container } from 'react-bootstrap'
 import styles from '../../styles/pages/ProfilePage.module.scss'
 import UserLayout from '../../components/Layouts/UserLayout'
+import BtnComp from '../../components/BtnComp/BtnComp'
+import BiodataComp from '../../components/BiodataComp/BiodataComp'
+import BookingsComp from '../../components/BookingsComp/BookingsComp'
+import { useState } from 'react'
 
 const ProfilePage = () => {
+  const [showBooking, setShowBooking] = useState(false)
+  const openBiodata = () => {
+    setShowBooking(false)
+  }
+  const openBookings = () => {
+    setShowBooking(true)
+  }
   return (
     <div>
       <Head>
@@ -22,38 +33,19 @@ const ProfilePage = () => {
             </h1>
 
             <div className={styles.profileSubPage}>
-              <div>Biodata</div>
-              <div>Bookings</div>
+              <BtnComp
+                style={{ borderRight: '1px solid black' }}
+                onClick={openBiodata}
+                type='link'
+                padding='0 1rem'
+                borad='none'>
+                Biodata
+              </BtnComp>
+              <BtnComp onClick={openBookings} type='link' padding='0 1rem'>
+                Bookings
+              </BtnComp>
             </div>
-
-            <div className={styles.profilePic}>
-              <div className={styles.profilePicLeft}>
-                <img src='/images/user.png' alt='profile-photo' />
-              </div>
-              <div className={styles.profilePicRight}>
-                <h3>Profile Picture</h3>
-                <p>This will be displayed on your profile</p>
-                <div className={styles.profilePicRightButtons}>
-                  <button>Upload</button>
-                  <button>Delete</button>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.profileData}>
-              <div className={styles.profileDataName}>
-                <input type='text' value='Sedana' name='firstName' />
-                <input type='text' value='Yoga' name='lastName' />
-              </div>
-              <input type='text' value='+6281335751213' name='phoneNumber' />
-              <input
-                type='text'
-                value='Jalan Akasia XIII No. 6, Denpasar, Bali'
-                name='address'
-              />
-            </div>
-
-            <button>Update</button>
+            {showBooking ? <BookingsComp /> : <BiodataComp />}
           </div>
         </Container>
       </section>

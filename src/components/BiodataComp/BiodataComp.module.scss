@@ -1,0 +1,45 @@
+@import '../../styles/global.scss';
+
+.biodata {
+  @include centerFlexColumn;
+  &Pic {
+    @include centerFlexRow;
+    margin-bottom: 2rem;
+    p,
+    h3 {
+      margin: 0;
+    }
+    &Left {
+      margin-right: 2rem;
+      img {
+        width: 120px;
+      }
+    }
+    &Right {
+      h3,
+      p {
+        margin: 0;
+      }
+      h3 {
+        font-size: 1.25rem;
+      }
+      p {
+        margin-bottom: 1rem;
+      }
+      &Buttons {
+        @include centerFlexRow;
+        justify-content: flex-start;
+        gap: 1.5rem;
+      }
+    }
+  }
+  &Data {
+    @include centerFlexColumn;
+    gap: 10px;
+    margin-bottom: 1rem;
+    &Name {
+      @include centerFlexRow;
+      gap: 1rem;
+    }
+  }
+}
