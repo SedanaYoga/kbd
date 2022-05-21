@@ -10,6 +10,8 @@ export const InputUser = (props) => {
     const [newPassword, setNewPassword] = useState('')
 
     const usersCollectionRef = collection(db, 'users')
+    
+    
 
     const createUser = async () => {
         await addDoc(usersCollectionRef, {
@@ -24,6 +26,7 @@ export const InputUser = (props) => {
         })
 
         props.onHide()
+        window.location.reload()
         console.log('User added')
     }
 

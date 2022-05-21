@@ -1,0 +1,18 @@
+@import '../global.scss';
+
+.profile {
+  margin-top: 5rem;
+  @include centerFlexColumn;
+  justify-content: flex-start;
+  height: 600px;
+  &Title {
+    font-weight: 700;
+    span {
+      color: $primaryBtnActive;
+    }
+  }
+  &SubPage {
+    @include centerFlexRow;
+    margin: 1rem 0 2rem;
+  }
+}
