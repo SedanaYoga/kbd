@@ -42,9 +42,6 @@ export default function Home() {
             />
           </Head>
 
-          <Link href='/profile/1234'>
-            <a>Profile Page</a>
-          </Link>
           <section>
             <Container className={styles.heroContainer}>
               <Row className='h-100 d-flex flex-lg-row flex-column'>
