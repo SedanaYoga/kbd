@@ -52,6 +52,8 @@ export const signInWithGoogle = async () => {
       console.log('Creating User to Firestore')
 
       await addDoc(usersCollectionRef, userToFirestore)
+      console.log(result.user)
+      return { email: result.user.email, uid: result.user.uid, token: result.user.stsTokenManager.accessToken }
     } else {
       querySnapshot.forEach(async (user) => {
         const getUserRef = doc(db, 'users', user.id)
@@ -61,9 +63,11 @@ export const signInWithGoogle = async () => {
       })
       console.log('User exists')
       console.log(result.user)
+      return { email: result.user.email, uid:result.user.uid, token:result.user.stsTokenManager.accessToken }
     }
   } catch (err) {
     console.log(err)
+    return { error:err }
   }
 }
 
@@ -71,7 +75,7 @@ export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
     console.log(user)
-    return { email: user.user.email }
+    return { email: user.user.email, uid:user.user.uid, token:user.user.stsTokenManager.accessToken }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }

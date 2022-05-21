@@ -6,8 +6,6 @@ import { useRouter } from 'next/router'
 import { Booking } from "../../components/Table/bookinglist.component"
 
 const dashboard = () => {
-    
-    const router = useRouter()
 
     return (
         <>
