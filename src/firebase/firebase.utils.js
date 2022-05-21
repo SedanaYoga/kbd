@@ -100,7 +100,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
       ...userToFirestore,
     })
     console.log(user)
-    return { user }
+    return { email: user.user.email, uid:user.user.uid, token:user.user.stsTokenManager.accessToken }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }
