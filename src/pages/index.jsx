@@ -42,6 +42,9 @@ export default function Home() {
             />
           </Head>
 
+          <Link href='/profile/1234'>
+            <a>Profile Page</a>
+          </Link>
           <section>
             <Container className={styles.heroContainer}>
               <Row className='h-100 d-flex flex-lg-row flex-column'>
@@ -62,8 +65,7 @@ export default function Home() {
                           }}
                           type='primary'
                           padding='.6rem 3rem'
-                          borad='pill'
-                        >
+                          borad='pill'>
                           Meet our Best Puppies!
                         </BtnComp>
                       </Link>
