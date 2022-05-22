@@ -1,4 +1,5 @@
 import UserLayout from '../../components/Layouts/UserLayout'
+import styles from '../../styles/pages/BookingPage.module.scss'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { Container, Row, Col, Table, Form, Button } from 'react-bootstrap'
@@ -10,7 +11,7 @@ import {
 import { useState } from 'react'
 import nookies from 'nookies'
 import { auth, db } from '../../firebase/firebaseAdmin.init'
-import { timeStampToDateString } from '../../helper/dateHelper'
+import { dateTimeToISO, timeStampToDateString } from '../../helper/dateHelper'
 
 export const getServerSideProps = async (ctx) => {
   const { id } = ctx.params
@@ -67,8 +68,8 @@ const Book = ({ puppy, pricing }) => {
 
   // Date Input State
   const [input, setInput] = useState({
-    appt_date: '',
-    appt_time: '',
+    appt_time: dateTimeToISO(new Date())[1].slice(0, 5),
+    appt_date: dateTimeToISO(new Date())[0],
   })
 
   const inputChangeHandler = (e) => {
@@ -162,14 +163,18 @@ const Book = ({ puppy, pricing }) => {
               <Col className='h-100 m-4 d-flex justify-content-center'>
                 <div className='w-75 bg-light shadow-sm p-5 py-5 d-flex flex-column justify-content-center align-items-center'>
                   <Form onSubmit={bookingSubmitHandler} className='w-100'>
-                    <Form.Group className='w-100 d-flex justify-content-between mb-4'>
+                    <Form.Group
+                      className={`w-100 d-flex justify-content-between mb-4 ${styles.inputDateTime}`}>
                       <label>
-                        Date{' '}
+                        Date
                         <input
                           className='form-control '
                           type='date'
                           name='appt_date'
                           onChange={inputChangeHandler}
+                          value={input.appt_date}
+                          min={dateTimeToISO(new Date())[0]}
+                          required
                         />
                       </label>
                       <label>
@@ -178,7 +183,11 @@ const Book = ({ puppy, pricing }) => {
                           className='form-control'
                           type='time'
                           name='appt_time'
+                          min='09:00'
+                          max='17:00'
+                          value={input.appt_time}
                           onChange={inputChangeHandler}
+                          required
                         />
                       </label>
                     </Form.Group>
