@@ -1,13 +1,30 @@
 import styles from './BiodataComp.module.scss'
 import BtnComp from '../BtnComp/BtnComp'
 import InputComp from '../InputComp/InputComp'
+import { useState } from 'react'
 
-const BiodataComp = ({ type, user }) => {
+const BiodataComp = ({ type, setBiodata, onSubmit }) => {
+  const [biodataInput, setBiodataInput] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    address: '',
+  })
+
+  const handleChange = (name, value) => {
+    setBiodata && setBiodata(biodataInput)
+    setBiodataInput({ ...biodataInput, [name]: value })
+  }
+
+  const submitHandler = () => {
+    onSubmit()
+  }
+
   return (
     <div className={styles.biodata}>
       <div className={styles.biodataPic}>
         <div className={styles.biodataPicLeft}>
-          <img src='/images/user.png' alt='biodata-photo' />
+          <img src='/images/default-user.png' alt='biodata-photo' />
         </div>
         <div className={styles.biodataPicRight}>
           <h3>Profile Picture</h3>
@@ -25,14 +42,38 @@ const BiodataComp = ({ type, user }) => {
 
       <div className={styles.biodataData}>
         <div className={styles.biodataDataName}>
-          <InputComp type='text' name='firstName' label='First Name' />
-          <InputComp type='text' name='lastName' label='Last Name' />
+          <InputComp
+            type='text'
+            setNameValue={handleChange}
+            name='firstName'
+            label='First Name'
+          />
+          <InputComp
+            type='text'
+            setNameValue={handleChange}
+            name='lastName'
+            label='Last Name'
+          />
         </div>
-        <InputComp type='text' name='phoneNumber' label='Phone Number' />
-        <InputComp type='text' name='address' label='Address' />
+        <InputComp
+          type='text'
+          setNameValue={handleChange}
+          name='phoneNumber'
+          label='Phone Number'
+        />
+        <InputComp
+          type='text'
+          setNameValue={handleChange}
+          name='address'
+          label='Address'
+        />
       </div>
 
-      <BtnComp type='primary' borad='pill' padding='0.5rem 4rem'>
+      <BtnComp
+        type='primary'
+        onClick={submitHandler}
+        borad='pill'
+        padding='0.5rem 4rem'>
         {type === 'data-capture' ? 'Register' : 'Update'}
       </BtnComp>
     </div>

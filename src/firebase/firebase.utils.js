@@ -94,7 +94,8 @@ export const signInWithGoogle = async () => {
 export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
-    // console.log(user)
+
+    console.log(user)
     return {
       email: user.user.email,
       uid: user.user.uid,
@@ -113,18 +114,24 @@ export const signUpWithEmailAndPassword = async (userData) => {
       userData.email,
       userData.password,
     )
-    const { confirmPassword, ...userToFirestore } = userData
+    const { confirmPassword, password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
     await addDoc(usersCollectionRef, {
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
-      isGoogle: false,
-      imgUrl: '/image/default-user.jpg',
+      imgUrl: '/images/default-user.jpg',
+      uid: user.user.uid,
       ...userToFirestore,
     })
     console.log(user)
-    return { email: user.user.email, uid:user.user.uid, token:user.user.stsTokenManager.accessToken }
+    return {
+      email: user.user.email,
+      uid: user.user.uid,
+      token: user.user.stsTokenManager.accessToken,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+    }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }

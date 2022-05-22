@@ -50,6 +50,7 @@ const NavBar = () => {
   const logoutHandler = async () => {
     await signOut(auth)
     dispatch(logout())
+    setShowDropdown(false)
   }
 
   return (

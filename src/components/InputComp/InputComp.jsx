@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import styles from './InputComp.module.scss'
 
-export default ({ label, type, name }) => {
+export default ({ label, setNameValue, type, name }) => {
   const [isActive, setIsActive] = useState(false)
   const [value, setValue] = useState('')
 
   const changeHandler = (e) => {
-    const text = e.target.value
-    setValue(text)
-    text !== '' ? setIsActive(true) : setIsActive(false)
+    const value = e.target.value
+    const name = e.target.name
+    setValue(value)
+    if (setNameValue) setNameValue(name, value)
+    value !== '' ? setIsActive(true) : setIsActive(false)
   }
   return (
     <div className={styles.floatLabel}>
