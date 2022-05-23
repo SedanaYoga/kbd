@@ -62,8 +62,7 @@ export default function Home() {
                           }}
                           type='primary'
                           padding='.6rem 3rem'
-                          borad='pill'
-                        >
+                          borad='pill'>
                           Meet our Best Puppies!
                         </BtnComp>
                       </Link>

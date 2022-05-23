@@ -5,8 +5,10 @@ import UserLayout from '../components/Layouts/UserLayout'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/slices/userSlice';
-import { loginWithEmailAndPassword, setLastLoginAt } from '../firebase/firebase.utils'
+import { loginWithEmailAndPassword, setLastLoginAt, signInWithGoogle } from '../firebase/firebase.utils'
 import { useRouter } from 'next/router'
+import { woFirebaseWord, woFirebaseWordGoogle } from '../helper/authHelper'
+import Notif from '../components/Notif/Notif.component'
 
 export default function Login() {
   const router = useRouter()
@@ -21,7 +23,7 @@ export default function Login() {
 
   useEffect(() => {
     if(user) router.replace('/')
-  })
+  }, [])
 
   const handleChange = ({ target: { name, value } }) => {
     setInput({ ...input, [name]: value })
@@ -34,9 +36,21 @@ export default function Login() {
     const result = await loginWithEmailAndPassword(input.email, input.password)
     if (result.error) {
       console.log(result.error)
+      setLoginError(woFirebaseWord(result.error))
     } else {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
+      dispatch(login(result))
+      router.push('/')
+    }
+  }
+
+  const handleLoginWithGoogle = async() => {
+    const result = await signInWithGoogle();
+    if(result.hasOwnProperty('error')) {
+      setLoginError(woFirebaseWordGoogle(result.error))
+    }
+    else {
       dispatch(login(result))
       router.push('/')
     }
@@ -49,6 +63,7 @@ export default function Login() {
         <meta name='description' content='Login page for Kinta-Bali Dog Site' />
       </Head>
       <Container className='full-with-footer'>
+        {loginError !== '' && <Notif message={loginError} />}
         <div className='pt-5'>
           <h2>Login to Your Account</h2>
           <p>
@@ -77,7 +92,7 @@ export default function Login() {
             <Button variant='dark' className='me-3' type='submit'>
               Submit
             </Button>
-            <Button className='text-white' variant='google' type='button'>
+            <Button onClick={handleLoginWithGoogle} className='text-white' variant='google' type='button'>
               Sign In With Google
             </Button>
           </Form>
