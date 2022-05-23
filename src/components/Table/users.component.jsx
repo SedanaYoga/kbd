@@ -44,7 +44,7 @@ export const Users = () => {
 
     return (
         <>
-        <Button variant='secondary' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
+        <Button variant='dark' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
           +Add User
         </Button>
         <InputUser show={inputform} onHide={() => setForm(false)}/>

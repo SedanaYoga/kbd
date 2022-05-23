@@ -98,100 +98,103 @@ export const InputPuppies = (props) => {
                   <Form.Label className='inline'>
                     Quality :
                   </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
+                  <div key={`inline-radio`} className="mb-3">
                         <Form.Check
                           inline
                           label="normal"
-                          type={type}
+                          name="group3"
+                          type="radio"
                           value="1"
-                          id={`inline-${type}-1`}
+                          id={`inline-radio-1`}
                           onChange={inputQuality}
                         />
                         <Form.Check
                           inline
+                          name="group3"
                           label="premium"
-                          type={type}
+                          type="radio"
                           value="2"
-                          id={`inline-${type}-2`}
+                          id={`inline-radio-2`}
                           onChange={inputQuality}
                         />
                         <Form.Check
                           inline
+                          name="group3"
                           label="champion"
-                          type={type}
+                          type="radio"
                           value="3"
-                          id={`inline-${type}-3`}
+                          id={`inline-radio-3`}
                           onChange={inputQuality}
                         />
                       </div>
-                    ))}
                 </Form>
                 <Form>
                   <Form.Label className='inline'>
                     Color :
                   </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
+                  <div key={`inline-radio`} className="mb-3">
                         <Form.Check
                           inline
+                          name="group1"
                           label="Brown"
-                          type={type}
+                          type="radio"
                           value="1"
-                          id={`inline-${type}-1`}
+                          id={`inline-radio-1`}
                           onChange={inputColor}
                         />
                         <Form.Check
                           inline
+                          name="group1"
                           label="Black"
-                          type={type}
+                          type="radio"
                           value="2"
-                          id={`inline-${type}-2`}
+                          id={`inline-radio-2`}
                           onChange={inputColor}
                         />
                         <Form.Check
                           inline
+                          name="group1"
                           label="White"
-                          type={type}
+                          type="radio"
                           value="3"
-                          id={`inline-${type}-3`}
+                          id={`inline-radio-3`}
                           onChange={inputColor}
                         />
                         <Form.Check
                           inline
-                          label="Briddle"
-                          type={type}
+                          name="group1"
+                          label="Bridle"
+                          type="radio"
                           value="4"
-                          id={`inline-${type}-4`}
+                          id={`inline-radio-4`}
                           onChange={inputColor}
                         />
                       </div>
-                    ))}
                 </Form>
                 <Form>
                   <Form.Label className='inline'>
                     Sex :
                   </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
+                  <div key={`inline-radio`} className="mb-3">
                         <Form.Check
                           inline
+                          name="group2"
                           label="Male"
-                          type={type}
+                          type="radio"
                           value="true"
-                          id={`inline-${type}-1`}
+                          id={`inline-radio-1`}
                           onChange={inputSex}
                         />
                         <Form.Check
                           inline
+                          name="group2"
                           label="Female"
-                          type={type}
+                          type="radio"
                           value="false"
-                          id={`inline-${type}-2`}
+                          id={`inline-radio-2`}
                           onChange={inputSex}
                         />
                       </div>
-                    ))}
                 </Form>
                 <Form  className='w-100'>
                   <Form.Group className='w-100 d-flex justify-content-between mb-3'>

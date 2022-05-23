@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, login } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
-// import { auth } from 'firebase-admin'
+import { auth } from '../../firebase/firebase.init'
+import {db} from "../../firebase/firebase.init"
+import { doc, query, getDoc } from 'firebase/firestore'
 
 const dashboard = () => {
 
-  
-  
   return (
     <>
       <Head>
