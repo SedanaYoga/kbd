@@ -3,9 +3,13 @@ import { Button, Container, Form } from 'react-bootstrap'
 import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/slices/userSlice';
-import { loginWithEmailAndPassword, setLastLoginAt, signInWithGoogle } from '../firebase/firebase.utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../redux/slices/userSlice'
+import {
+  loginWithEmailAndPassword,
+  setLastLoginAt,
+  signUpInWithGoogle,
+} from '../firebase/firebase.utils'
 import { useRouter } from 'next/router'
 import { woFirebaseWord, woFirebaseWordGoogle } from '../helper/authHelper'
 import Notif from '../components/Notif/Notif.component'
@@ -22,7 +26,7 @@ export default function Login() {
   })
 
   useEffect(() => {
-    if(user) router.replace('/')
+    if (user) router.replace('/')
   }, [])
 
   const handleChange = ({ target: { name, value } }) => {
@@ -45,12 +49,11 @@ export default function Login() {
     }
   }
 
-  const handleLoginWithGoogle = async() => {
-    const result = await signInWithGoogle();
-    if(result.hasOwnProperty('error')) {
+  const handleLoginWithGoogle = async () => {
+    const result = await signUpInWithGoogle()
+    if (result.hasOwnProperty('error')) {
       setLoginError(woFirebaseWordGoogle(result.error))
-    }
-    else {
+    } else {
       dispatch(login(result))
       router.push('/')
     }
@@ -92,7 +95,11 @@ export default function Login() {
             <Button variant='dark' className='me-3' type='submit'>
               Submit
             </Button>
-            <Button onClick={handleLoginWithGoogle} className='text-white' variant='google' type='button'>
+            <Button
+              onClick={handleLoginWithGoogle}
+              className='text-white'
+              variant='google'
+              type='button'>
               Sign In With Google
             </Button>
           </Form>
