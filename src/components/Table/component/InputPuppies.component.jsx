@@ -25,7 +25,9 @@ export const InputPuppies = (props) => {
                   + newDob.toDate().toISOString().slice(0, 10).slice(2, 4)
                   + newSex.slice(0, 1).toUpperCase(), 
         dob: newDob,  
-        imgUrl: newUrl, 
+        imgUrl: [
+          newUrl, newUrl, newUrl, newUrl, newUrl
+        ], 
         breedQuality: newQuality,
         color: newColor,
         sex: newSex });

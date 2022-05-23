@@ -58,6 +58,7 @@ export const Column = [
       console.log(row.id + 'is deleted')
     }
 
+
     const updateAdmin = async (row) => {
 
       const id = row.id
@@ -232,56 +233,6 @@ export const PuppiesColumn = [
               <Modal.Title>Edit Puppies Data</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form>
-                  <Form.Label className='inline'>
-                    Stambum History:
-                  </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
-                        <Form.Check
-                          inline
-                          label="Male"
-                          type={type}
-                          value="true"
-                          id={`inline-${type}-1`}
-                       
-                        />
-                        <Form.Check
-                          inline
-                          label="Female"
-                          type={type}
-                          value="false"
-                          id={`inline-${type}-2`}
-                       
-                        />
-                      </div>
-                    ))}
-              </Form>
-            <Form>
-                  <Form.Label className='inline'>
-                    Vaccinating History :
-                  </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
-                        <Form.Check
-                          inline
-                          label="Male"
-                          type={type}
-                          value="true"
-                          id={`inline-${type}-1`}
-                       
-                        />
-                        <Form.Check
-                          inline
-                          label="Female"
-                          type={type}
-                          value="false"
-                          id={`inline-${type}-2`}
-                       
-                        />
-                      </div>
-                    ))}
-              </Form>
               <InputGroup className="mb-3">
                     <FormControl
                       placeholder="Image Url"
