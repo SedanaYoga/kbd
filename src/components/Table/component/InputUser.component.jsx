@@ -11,8 +11,6 @@ export const InputUser = (props) => {
 
     const usersCollectionRef = collection(db, 'users')
     
-    
-
     const createUser = async () => {
         await addDoc(usersCollectionRef, {
             firstName: newName,
@@ -44,7 +42,7 @@ export const InputUser = (props) => {
                     <InputGroup className="mb-3">
                         <FormControl
                             placeholder='First Name'
-                            aria-label='Firs Name'
+                            aria-label='First Name'
                             aria-describedby='basic-addon1'
                             onChange={(event) => {setNewName(event.target.value)}}
                             />

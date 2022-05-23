@@ -7,6 +7,25 @@ import * as FiIcons from "react-icons/fi"
 import styles from './Table.module.scss'
 import { Dropdown, Modal, InputGroup, FormControl, Button, Form } from 'react-bootstrap'
 
+export const AdminColumn = [
+  {
+    Header: 'Name',
+    accessor: (data) => 
+      data.displayName || data.firstName + ' ' + data.lastName
+  },
+  {
+    Header: 'Email',
+    accessor: 'email'
+  },
+  {
+    Header: 'Created At',
+    accessor: 'createdAt'
+  },
+  {
+    Header: 'Last Login At',
+    accessor: 'lastLoginAt'
+  }
+]
 
 
 export const Column = [
@@ -287,22 +306,29 @@ export const PuppiesColumn = [
   }
 ]
 
+
+
 export const DashData = [
   {
     title: 'Users',
     path: '/dashboard',
-    cName: 'nav-text',
+    cName: 'nav-text'
   },
   {
     title: 'Puppies',
     path: '/dashboard/puppies-list',
-    cName: 'nav-text',
+    cName: 'nav-text'
   },
   {
     title: 'Booking List',
     path: '/dashboard/booking-list',
-    cName: 'nav-text',
+    cName: 'nav-text'
   },
+  {
+    title: 'Pricing',
+    path: '/dashboard/pricing',
+    cName: 'nav-text'
+  }
 ]
 
 
