@@ -6,21 +6,27 @@ import BiodataComp from '../../components/BiodataComp/BiodataComp'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { signUpWithEmailAndPassword } from '../../firebase/firebase.utils'
+import {
+  setGoogleDataToFirestore,
+  signUpWithEmailAndPassword,
+} from '../../firebase/firebase.utils'
 // import { woFirebaseWord } from '../../helper/authHelper'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/userSlice'
 import { clearRegInput } from '../../redux/slices/registerSlice'
 
-const ProfilePage = () => {
+const DataCapturePage = () => {
+  const router = useRouter()
+  const { msg } = router.query
+
   const dispatch = useDispatch()
   const {
-    regInput: { inputUser },
-    user: { user },
+    regInput: { inputUser: regInput },
   } = useSelector((state) => state)
+
   const [userInput, setUserInput] = useState({
-    email: inputUser?.email,
-    password: inputUser?.password,
+    email: regInput?.email,
+    password: regInput?.password,
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -28,15 +34,19 @@ const ProfilePage = () => {
   })
   // const [registerError, setRegisterError] = useState('')
 
-  const router = useRouter()
-
   const biodataInputHandler = (biodata) => {
     setUserInput({ ...userInput, ...biodata })
   }
 
   const authSubmitHandler = async () => {
     console.log(userInput)
-    const result = await signUpWithEmailAndPassword(userInput)
+    const result = {}
+    if (msg === 'googleSignUp') {
+      // Firestore creation, since the auth part is handled in Register page
+      result = await setGoogleDataToFirestore(regInput, userInput)
+    } else {
+      result = await signUpWithEmailAndPassword(userInput)
+    }
     if (result.error) {
       // setRegisterError(woFirebaseWord(result.error))
       console.log(result.error)
@@ -50,7 +60,7 @@ const ProfilePage = () => {
   }
 
   useEffect(() => {
-    if (inputUser === null) {
+    if (regInput === null) {
       router.push('/')
     }
   }, [])
@@ -75,6 +85,7 @@ const ProfilePage = () => {
               type='data-capture'
               onSubmit={authSubmitHandler}
               setBiodata={biodataInputHandler}
+              profileImg={regInput?.imgUrl}
             />
           </div>
         </Container>
@@ -83,8 +94,8 @@ const ProfilePage = () => {
   )
 }
 
-ProfilePage.getLayout = function getLayout(page) {
+DataCapturePage.getLayout = function getLayout(page) {
   return <UserLayout>{page}</UserLayout>
 }
 
-export default ProfilePage
+export default DataCapturePage

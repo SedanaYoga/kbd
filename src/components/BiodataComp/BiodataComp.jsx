@@ -3,8 +3,9 @@ import BtnComp from '../BtnComp/BtnComp'
 import InputComp from '../InputComp/InputComp'
 import { useState } from 'react'
 
-const BiodataComp = ({ type, setBiodata, onSubmit }) => {
+const BiodataComp = ({ type, setBiodata, onSubmit, profileImg }) => {
   const [biodataInput, setBiodataInput] = useState({
+    imgUrl: profileImg ? profileImg : '/images/default-user.png',
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -24,7 +25,7 @@ const BiodataComp = ({ type, setBiodata, onSubmit }) => {
     <div className={styles.biodata}>
       <div className={styles.biodataPic}>
         <div className={styles.biodataPicLeft}>
-          <img src='/images/default-user.png' alt='biodata-photo' />
+          <img src={biodataInput.imgUrl} alt='biodata-photo' />
         </div>
         <div className={styles.biodataPicRight}>
           <h3>Profile Picture</h3>

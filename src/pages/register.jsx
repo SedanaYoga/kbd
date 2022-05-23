@@ -5,7 +5,7 @@ import UserLayout from '../components/Layouts/UserLayout'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-// import { signUpWithEmailAndPassword } from '../firebase/firebase.utils'
+import { signUpInWithGoogle } from '../firebase/firebase.utils'
 // import { woFirebaseWord } from '../helper/authHelper'
 import Notif from '../components/Notif/Notif.component'
 // import { login } from '../redux/slices/userSlice'
@@ -39,6 +39,23 @@ export default function Register() {
     } else {
       dispatch(setRegInput(input))
       router.push('/data-capture')
+    }
+  }
+
+  const signUpWithGoogleHandler = async () => {
+    // Sign Up First
+    const result = await signUpInWithGoogle()
+    // Check if there is any error
+    if (result.hasOwnProperty('error')) {
+      setLoginError(woFirebaseWordGoogle(result.error))
+    } else {
+      // If not, set Register Input in Redux with Email from the result
+      // can ignore password
+      dispatch(setRegInput(result))
+      router.push({
+        pathname: '/data-capture',
+        query: { msg: 'googleSignUp' },
+      })
     }
   }
 
@@ -98,7 +115,10 @@ export default function Register() {
                 margin='0 1rem 0 0'>
                 Sign Up, FREE!
               </BtnComp>
-              <BtnComp borad='pill' type='secondary'>
+              <BtnComp
+                onClick={signUpWithGoogleHandler}
+                borad='pill'
+                type='secondary'>
                 <GoogleIcon /> Sign Up with Google
               </BtnComp>
             </div>

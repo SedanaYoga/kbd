@@ -105,7 +105,12 @@ const NavBar = () => {
               ) : (
                 <div className={styles.authMenu}>
                   <div onClick={() => setShowDropdown((prev) => !prev)}>
-                    <p>Welcome, {user.email}</p>
+                    <p>
+                      Welcome,{' '}
+                      {user.firstName
+                        ? `${user.firstName} ${user.lastName}`
+                        : user.email}
+                    </p>
                   </div>
                   <div
                     className={`${showDropdown ? styles.dropdownShown : ''} ${

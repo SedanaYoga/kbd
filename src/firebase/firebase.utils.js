@@ -76,34 +76,53 @@ const pricingCollectionRef = collection(db, 'pricing')
 //     return { error: err }
 //   }
 // }
-export const signInWithGoogle = async () => {
+
+export const signUpInWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
   try {
+    // Sign Up With Google comes first in Firebase Auth, then to Firebase Store in Data Capture
+    // PopUp sign in first
     const result = await signInWithPopup(auth, provider)
+    console.log(result)
+    // Return email, uid, and token to be consumed by Redux
+    let { creationTime, lastSignInTime } = result.user.metadata
     return {
       email: result.user.email,
       uid: result.user.uid,
       token: result.user.stsTokenManager.accessToken,
+      imgUrl: result.user.photoURL,
+      creationTime,
+      lastSignInTime,
     }
   } catch (err) {
     console.log(err)
-    return { error: err }
+    return { error: err.message }
   }
 }
 
-export const loginWithEmailAndPassword = async (email, password) => {
+export const setGoogleDataToFirestore = async (regInput, userInput) => {
+  const { email: emailUserInput, password, ...userInputRest } = userInput
+  const { uid, imgUrl, email, token, creationTime, lastSignInTime } = regInput
   try {
-    const user = await signInWithEmailAndPassword(auth, email, password)
-
-    console.log(user)
+    const googleDataToFirestore = {
+      isAdmin: false,
+      createdAt: new Date(creationTime),
+      lastLoginAt: new Date(lastSignInTime),
+      imgUrl,
+      uid,
+      email,
+      ...userInputRest,
+    }
+    await addDoc(usersCollectionRef, googleDataToFirestore)
     return {
-      email: user.user.email,
-      uid: user.user.uid,
-      token: user.user.stsTokenManager.accessToken,
+      email,
+      uid,
+      token,
+      firstName: userInputRest.firstName,
+      lastName: userInputRest.lastName,
     }
   } catch (err) {
     console.log(err.message)
-    return { error: err.message }
   }
 }
 
@@ -131,6 +150,22 @@ export const signUpWithEmailAndPassword = async (userData) => {
       token: user.user.stsTokenManager.accessToken,
       firstName: userData.firstName,
       lastName: userData.lastName,
+    }
+  } catch (err) {
+    console.log(err.message)
+    return { error: err.message }
+  }
+}
+
+export const loginWithEmailAndPassword = async (email, password) => {
+  try {
+    const user = await signInWithEmailAndPassword(auth, email, password)
+
+    console.log(user)
+    return {
+      email: user.user.email,
+      uid: user.user.uid,
+      token: user.user.stsTokenManager.accessToken,
     }
   } catch (err) {
     console.log(err.message)
