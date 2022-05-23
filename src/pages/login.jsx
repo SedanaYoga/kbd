@@ -11,8 +11,10 @@ import {
   signUpInWithGoogle,
 } from '../firebase/firebase.utils'
 import { useRouter } from 'next/router'
-import { woFirebaseWord, woFirebaseWordGoogle } from '../helper/authHelper'
+import { woFirebaseWord, woFirebaseWordGoogle, GoogleIcon } from '../helper/authHelper'
 import Notif from '../components/Notif/Notif.component'
+import InputComp from '../components/InputComp/InputComp'
+import BtnComp from '../components/BtnComp/BtnComp'
 
 export default function Login() {
   const router = useRouter()
@@ -29,7 +31,7 @@ export default function Login() {
     if (user) router.replace('/')
   }, [])
 
-  const handleChange = ({ target: { name, value } }) => {
+  const handleChange = (name, value) => {
     setInput({ ...input, [name]: value })
   }
 
@@ -81,28 +83,40 @@ export default function Login() {
               </Link>
             </span>
           </p>
-          <Form className='mb-5 formContainer' onSubmit={handleSubmit}>
-            <Form.Group className='formGroup mb-4 pe-5'>
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type='email' name='email' onChange={handleChange} />
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                name='password'
-                onChange={handleChange}
+          
+
+          <div className='formContainer'>
+            <div className='d-flex flex-column justify-content-center gap-3 mb-4'>
+              <InputComp
+                label='Email'
+                setNameValue={handleChange}
+                name='email'
+                type='email'
               />
-            </Form.Group>
-            <Button variant='dark' className='me-3' type='submit'>
-              Submit
-            </Button>
-            <Button
-              onClick={handleLoginWithGoogle}
-              className='text-white'
-              variant='google'
-              type='button'>
-              Sign In With Google
-            </Button>
-          </Form>
+              <InputComp
+                label='Password'
+                setNameValue={handleChange}
+                name='password'
+                type='password'
+              />
+            </div>
+
+            <div>
+              <BtnComp
+                borad='pill'
+                onClick={handleSubmit}
+                type='primary'
+                margin='0 1rem 0 0'>
+                Sign Up, FREE!
+              </BtnComp>
+              <BtnComp
+                onClick={handleLoginWithGoogle}
+                borad='pill'
+                type='secondary'>
+                <GoogleIcon /> Sign In With Google
+              </BtnComp>
+            </div>
+          </div>
         </div>
       </Container>
     </div>
