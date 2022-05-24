@@ -7,6 +7,25 @@ import * as FiIcons from "react-icons/fi"
 import styles from './Table.module.scss'
 import { Dropdown, Modal, InputGroup, FormControl, Button, Form } from 'react-bootstrap'
 
+export const AdminColumn = [
+  {
+    Header: 'Name',
+    accessor: (data) => 
+      data.displayName || data.firstName + ' ' + data.lastName
+  },
+  {
+    Header: 'Email',
+    accessor: 'email'
+  },
+  {
+    Header: 'Created At',
+    accessor: 'createdAt'
+  },
+  {
+    Header: 'Last Login At',
+    accessor: 'lastLoginAt'
+  }
+]
 
 
 export const Column = [
@@ -38,6 +57,7 @@ export const Column = [
 
       console.log(row.id + 'is deleted')
     }
+
 
     const updateAdmin = async (row) => {
 
@@ -213,56 +233,6 @@ export const PuppiesColumn = [
               <Modal.Title>Edit Puppies Data</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form>
-                  <Form.Label className='inline'>
-                    Stambum History:
-                  </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
-                        <Form.Check
-                          inline
-                          label="Male"
-                          type={type}
-                          value="true"
-                          id={`inline-${type}-1`}
-                       
-                        />
-                        <Form.Check
-                          inline
-                          label="Female"
-                          type={type}
-                          value="false"
-                          id={`inline-${type}-2`}
-                       
-                        />
-                      </div>
-                    ))}
-              </Form>
-            <Form>
-                  <Form.Label className='inline'>
-                    Vaccinating History :
-                  </Form.Label>
-                    {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
-                        <Form.Check
-                          inline
-                          label="Male"
-                          type={type}
-                          value="true"
-                          id={`inline-${type}-1`}
-                       
-                        />
-                        <Form.Check
-                          inline
-                          label="Female"
-                          type={type}
-                          value="false"
-                          id={`inline-${type}-2`}
-                       
-                        />
-                      </div>
-                    ))}
-              </Form>
               <InputGroup className="mb-3">
                     <FormControl
                       placeholder="Image Url"
@@ -287,22 +257,29 @@ export const PuppiesColumn = [
   }
 ]
 
+
+
 export const DashData = [
   {
     title: 'Users',
     path: '/dashboard',
-    cName: 'nav-text',
+    cName: 'nav-text'
   },
   {
     title: 'Puppies',
     path: '/dashboard/puppies-list',
-    cName: 'nav-text',
+    cName: 'nav-text'
   },
   {
     title: 'Booking List',
     path: '/dashboard/booking-list',
-    cName: 'nav-text',
+    cName: 'nav-text'
   },
+  {
+    title: 'Pricing',
+    path: '/dashboard/pricing',
+    cName: 'nav-text'
+  }
 ]
 
 

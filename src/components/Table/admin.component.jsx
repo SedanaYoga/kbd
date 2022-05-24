@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import { useTable} from 'react-table/dist/react-table.development'
-import { Column } from './component/TableData.component'
+import { AdminColumn } from './component/TableData.component'
 import Table from 'react-bootstrap/Table'
 import Container from 'react-bootstrap/Container'
 import styles from './component/Table.module.scss'
@@ -28,7 +28,7 @@ export const Admin = () => {
     getUsers()
   }, [])
 
-  const columns = useMemo(() => Column, [])
+  const columns = useMemo(() => AdminColumn, [])
   const data = useMemo(() => users, [users])
 
   const TableInstance = useTable({

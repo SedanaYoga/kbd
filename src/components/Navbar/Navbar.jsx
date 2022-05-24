@@ -11,7 +11,7 @@ import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
 
 const menu = {
-  main: ['home', 'about us', 'browse'],
+  main: ['home', 'about us', 'browse', 'dashboard'],
   auth: ['log in', 'register'],
 }
 const NavBar = () => {

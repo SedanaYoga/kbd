@@ -44,7 +44,7 @@ export const Puppies = () => {
 
     return (
         <>
-            <Button variant='secondary' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
+            <Button variant='dark' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
                 +Add Puppies
             </Button>
             <InputPuppies show={inputform} onHide={() => setForm(false)}/>

@@ -2,28 +2,32 @@ import React, {useState} from 'react'
 import { Button, Modal, InputGroup, FormControl } from 'react-bootstrap'
 import { collection, addDoc  } from 'firebase/firestore'
 import { db } from '../../../firebase/firebase.init'
+import { addUserFromDashboard } from '../../../firebase/firebase.utils'
 
 export const InputUser = (props) => {
-    const [newName, setNewName] = useState('') 
-    const [newLastName, setNewLastName] = useState('')
-    const [newEmail, setNewEmail] = useState('')
-    const [newPassword, setNewPassword] = useState('')
 
-    const usersCollectionRef = collection(db, 'users')
-    
-    
+    const [userInput, setUserInput] = useState({
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        address: '',
+      })
 
+      const handleChange = (e) => {
+
+        const name = e.target.name
+        const value = e.target.value
+
+        setUserInput({ ...userInput, [name]: value })
+      }
+    
+    // const usersCollectionRef = collection(db, 'users')
+    
     const createUser = async () => {
-        await addDoc(usersCollectionRef, {
-            firstName: newName,
-            lastName: newLastName,
-            isAdmin: false,
-            email: newEmail,
-            password: newPassword,
-            createdAt: new Date(),
-            lastLoginAt: new Date(),
-            imgUrl: ''
-        })
+
+        await addUserFromDashboard(userInput)
 
         props.onHide()
         window.location.reload()
@@ -44,9 +48,11 @@ export const InputUser = (props) => {
                     <InputGroup className="mb-3">
                         <FormControl
                             placeholder='First Name'
-                            aria-label='Firs Name'
+                            aria-label='First Name'
                             aria-describedby='basic-addon1'
-                            onChange={(event) => {setNewName(event.target.value)}}
+                            value={userInput.firstName}
+                            name="firstName"
+                            onChange={handleChange}
                             />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -54,7 +60,9 @@ export const InputUser = (props) => {
                             placeholder='Last Name'
                             aria-label='Last Name'
                             aria-describedby='basic-addon1'
-                            onChange={(event) => {setNewLastName(event.target.value)}}
+                            value={userInput.lastName}
+                            name="lastName"
+                            onChange={handleChange}
                             />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -62,7 +70,9 @@ export const InputUser = (props) => {
                             placeholder='Email User'
                             aria-label='Email User'
                             aria-describedby='basic-addon1'
-                            onChange={(event) => {setNewEmail(event.target.value)}}
+                            value={userInput.email}
+                            name="email"
+                            onChange={handleChange}
                             />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -70,9 +80,32 @@ export const InputUser = (props) => {
                             placeholder='Password'
                             aria-label='Password'
                             aria-describedby='basic-addon1'
-                            onChange={(event) => {setNewPassword(event.target.value)}}
+                            value={userInput.password}
+                            name="password"
+                            onChange={handleChange}
                             />
                     </InputGroup>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder='Phone Number'
+                            aria-label='phone number'
+                            aria-describedby='basic-addon1'
+                            value={userInput.phoneNumber}
+                            name="phoneNumber"
+                            onChange={handleChange}
+                            />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder='Address'
+                            aria-label='address'
+                            aria-describedby='basic-addon1'
+                            value={userInput.address}
+                            name="address"
+                            onChange={handleChange}
+                            />
+                    </InputGroup>
+                   
                 </Modal.Body>
                 <Modal.Body>
                     <Button onClick={createUser}>Create User</Button>
