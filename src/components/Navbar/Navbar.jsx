@@ -32,8 +32,6 @@ const NavBar = () => {
             token: await user.getIdToken(),
             uid: user.uid,
           }),
-
-          
         )
       }
     })
