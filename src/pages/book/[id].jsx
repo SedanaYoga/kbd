@@ -12,6 +12,9 @@ import { useState } from 'react'
 import nookies from 'nookies'
 import { auth, db } from '../../firebase/firebaseAdmin.init'
 import { dateTimeToISO, timeStampToDateString } from '../../helper/dateHelper'
+import moment from 'moment'
+import { useSelector } from 'react-redux'
+import { addBookedData } from '../../firebase/firebase.utils'
 
 export const getServerSideProps = async (ctx) => {
   const { id } = ctx.params
@@ -41,7 +44,7 @@ export const getServerSideProps = async (ctx) => {
     }
     return {
       props: {
-        message: `Your email is ${email} and your UID is ${uid}.`,
+        user: { email, uid },
         pricing: pricingData,
         puppy: puppyData,
       },
@@ -56,7 +59,9 @@ export const getServerSideProps = async (ctx) => {
 
 const Book = ({ puppy, pricing }) => {
   const router = useRouter()
+  const { id: puppyId } = router.query
   const priceRelatedData = ['breedQuality', 'color']
+  const user = useSelector((state) => state.user.user)
 
   const calcTotalPrice = (pricing, puppy) => {
     let totalPrice = 0
@@ -80,16 +85,15 @@ const Book = ({ puppy, pricing }) => {
 
   const bookingSubmitHandler = async (e) => {
     e.preventDefault()
-    console.log('Submitting')
-    // const { appt_date, appt_time } = input
-    // const valueToSubmit = {
-    //   apptTime: new Date(moment(appt_date + ' ' + appt_time)),
-    //   adoptPrice: calcTotalPrice(pricing, puppy).toString(),
-    //   status: 'pending',
-    //   puppyId: puppy.id,
-    //   requesterId: 'abc123',
-    // }
-    // await addBookedData(valueToSubmit)
+    const { appt_date, appt_time } = input
+    const valueToSubmit = {
+      apptTime: new Date(moment(appt_date + ' ' + appt_time)),
+      adoptPrice: calcTotalPrice(pricing, puppy).toString(),
+      status: 'pending',
+      puppyId,
+      requesterEmail: user.email,
+    }
+    await addBookedData(valueToSubmit)
     router.push({
       pathname: '/browse',
       query: { msg: 'bookSuccess' },
