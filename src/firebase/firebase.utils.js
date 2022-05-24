@@ -126,6 +126,33 @@ export const setGoogleDataToFirestore = async (regInput, userInput) => {
   }
 }
 
+export const addUserFromDashboard = async (userData) => {
+  try {
+    const user = await createUserWithEmailAndPassword(
+      auth,
+      userData.email,
+      userData.password,
+    )
+    const { password, ...userToFirestore } = userData
+    let { creationTime, lastSignInTime } = user.user.metadata
+    await addDoc(usersCollectionRef, {
+      isAdmin: false,
+      createdAt: new Date(creationTime),
+      lastLoginAt: new Date(lastSignInTime),
+      imgUrl: '/images/default-user.jpg',
+      uid: user.user.uid,
+      ...userToFirestore,
+    })
+    return {
+      message: "user successfully created"
+    }
+  } catch (err) {
+    console.log(err.message)
+    return { error: err.message }
+  }
+
+}
+
 export const signUpWithEmailAndPassword = async (userData) => {
   try {
     const user = await createUserWithEmailAndPassword(

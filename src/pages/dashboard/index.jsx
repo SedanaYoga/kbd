@@ -11,29 +11,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, login } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
+import {ver} from 'firebase/auth'
 import { getDocs, query, where, collection, getDoc, doc } from 'firebase/firestore'
 import { db } from '../../firebase/firebase.init'
 import { async } from '@firebase/util'
+import { parseCookies } from 'nookies'
 
 const dashboard = () => {
 
   const router = useRouter()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
-  const [setData, setNewData] = useState('')
+  const [setData, setNewData] = useState()
  
   useEffect(() => {
+
+    const {uid} = parseCookies()
+      
     const getUser =  async () => {
-      const user = auth.currentUser
-      const q = query(collection(db, "users"), where("uid", "==", user.uid));
-
+      const q = query(collection(db, "users"), where("uid", "==", uid));
       const data = await getDocs(q)
-
       data.forEach((doc) => {
-
         if(doc.data().isAdmin === false){
-          return router.push('/')
-        } return router.push('/dashboard')
+          return router.replace('/')
+        } return router.replace('/dashboard')
       })
     }
 
