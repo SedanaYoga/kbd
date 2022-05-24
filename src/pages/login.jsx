@@ -2,27 +2,63 @@ import Head from 'next/head'
 import { Button, Container, Form } from 'react-bootstrap'
 import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../redux/slices/userSlice'
+import {
+  loginWithEmailAndPassword,
+  setLastLoginAt,
+  signUpInWithGoogle,
+} from '../firebase/firebase.utils'
+import { useRouter } from 'next/router'
+import { woFirebaseWord, woFirebaseWordGoogle, GoogleIcon } from '../helper/authHelper'
+import Notif from '../components/Notif/Notif.component'
+import InputComp from '../components/InputComp/InputComp'
+import BtnComp from '../components/BtnComp/BtnComp'
 
 export default function Login() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { isLoading, user } = useSelector((state) => state.user)
+  const [loginError, setLoginError] = useState('')
+
   const [input, setInput] = useState({
     email: '',
     password: '',
   })
-  const handleChange = ({ target: { name, value } }) => {
+
+  useEffect(() => {
+    if (user) router.replace('/')
+  }, [])
+
+  const handleChange = (name, value) => {
     setInput({ ...input, [name]: value })
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    // // login with email and password
-    // const result = await loginWithEmailAndPassword(input.email, input.password)
-    // if (result.error) {
-    //   console.log(result.error)
-    // } else {
-    //   // Code for logging lastLoginAt to the firestore
-    //   await setLastLoginAt(result.email)
-    // }
+
+    // login with email and password
+    const result = await loginWithEmailAndPassword(input.email, input.password)
+    if (result.error) {
+      console.log(result.error)
+      setLoginError(woFirebaseWord(result.error))
+    } else {
+      // Code for logging lastLoginAt to the firestore
+      await setLastLoginAt(result.email)
+      dispatch(login(result))
+      router.push('/')
+    }
+  }
+
+  const handleLoginWithGoogle = async () => {
+    const result = await signUpInWithGoogle()
+    if (result.hasOwnProperty('error')) {
+      setLoginError(woFirebaseWordGoogle(result.error))
+    } else {
+      dispatch(login(result))
+      router.push('/')
+    }
   }
 
   return (
@@ -32,6 +68,7 @@ export default function Login() {
         <meta name='description' content='Login page for Kinta-Bali Dog Site' />
       </Head>
       <Container className='full-with-footer'>
+        {loginError !== '' && <Notif message={loginError} />}
         <div className='pt-5'>
           <h2>Login to Your Account</h2>
           <p>
@@ -46,24 +83,40 @@ export default function Login() {
               </Link>
             </span>
           </p>
-          <Form className='mb-5 formContainer' onSubmit={handleSubmit}>
-            <Form.Group className='formGroup mb-4 pe-5'>
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type='email' name='email' onChange={handleChange} />
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                name='password'
-                onChange={handleChange}
+          
+
+          <div className='formContainer'>
+            <div className='d-flex flex-column justify-content-center gap-3 mb-4'>
+              <InputComp
+                label='Email'
+                setNameValue={handleChange}
+                name='email'
+                type='email'
               />
-            </Form.Group>
-            <Button variant='dark' className='me-3' type='submit'>
-              Submit
-            </Button>
-            <Button className='text-white' variant='google' type='button'>
-              Sign In With Google
-            </Button>
-          </Form>
+              <InputComp
+                label='Password'
+                setNameValue={handleChange}
+                name='password'
+                type='password'
+              />
+            </div>
+
+            <div>
+              <BtnComp
+                borad='pill'
+                onClick={handleSubmit}
+                type='primary'
+                margin='0 1rem 0 0'>
+                Sign Up, FREE!
+              </BtnComp>
+              <BtnComp
+                onClick={handleLoginWithGoogle}
+                borad='pill'
+                type='secondary'>
+                <GoogleIcon /> Sign In With Google
+              </BtnComp>
+            </div>
+          </div>
         </div>
       </Container>
     </div>

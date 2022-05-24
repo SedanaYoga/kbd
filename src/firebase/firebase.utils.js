@@ -22,59 +22,107 @@ const puppiesCollectionRef = collection(db, 'puppies')
 const usersCollectionRef = collection(db, 'users')
 const bookedCollectionRef = collection(db, 'booked')
 const pricingCollectionRef = collection(db, 'pricing')
-const breedQualityRef = doc(pricingCollectionRef, 'breedQuality')
-const colorRef = doc(pricingCollectionRef, 'color')
 
-export const signInWithGoogle = async () => {
+// export const signInWithGoogle = async () => {
+//   const provider = new GoogleAuthProvider()
+//   try {
+//     const result = await signInWithPopup(auth, provider)
+//     const { email, displayName, metadata, photoURL } = result.user
+//     const userRef = query(
+//       usersCollectionRef,
+//       where('email', '==', result.user.email),
+//     )
+//     const querySnapshot = await getDocs(userRef)
+
+//     if (querySnapshot.docs.length === 0) {
+//       const createdAt = new Date(metadata.creationTime)
+//       const lastLoginAt = new Date(metadata.lastSignInTime)
+//       const imgUrl = photoURL
+//       const userToFirestore = {
+//         email,
+//         displayName,
+//         createdAt,
+//         lastLoginAt,
+//         imgUrl,
+//         isAdmin: false,
+//         isGoogle: true,
+//       }
+//       console.log('Creating User to Firestore')
+
+//       await addDoc(usersCollectionRef, userToFirestore)
+//       console.log(result.user)
+//       return {
+//         email: result.user.email,
+//         uid: result.user.uid,
+//         token: result.user.stsTokenManager.accessToken,
+//       }
+//     } else {
+//       querySnapshot.forEach(async (user) => {
+//         const getUserRef = doc(db, 'users', user.id)
+//         await updateDoc(getUserRef, {
+//           lastLoginAt: new Date(),
+//         })
+//       })
+//       console.log('User exists')
+//       console.log(result.user)
+//       return {
+//         email: result.user.email,
+//         uid: result.user.uid,
+//         token: result.user.stsTokenManager.accessToken,
+//       }
+//     }
+//   } catch (err) {
+//     console.log(err)
+//     return { error: err }
+//   }
+// }
+
+export const signUpInWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
   try {
+    // Sign Up With Google comes first in Firebase Auth, then to Firebase Store in Data Capture
+    // PopUp sign in first
     const result = await signInWithPopup(auth, provider)
-    const { email, displayName, metadata, photoURL } = result.user
-    const userRef = query(
-      usersCollectionRef,
-      where('email', '==', result.user.email),
-    )
-    const querySnapshot = await getDocs(userRef)
-
-    if (querySnapshot.docs.length === 0) {
-      const createdAt = new Date(metadata.creationTime)
-      const lastLoginAt = new Date(metadata.lastSignInTime)
-      const imgUrl = photoURL
-      const userToFirestore = {
-        email,
-        displayName,
-        createdAt,
-        lastLoginAt,
-        imgUrl,
-        isAdmin: false,
-        isGoogle: true,
-      }
-      console.log('Creating User to Firestore')
-
-      await addDoc(usersCollectionRef, userToFirestore)
-    } else {
-      querySnapshot.forEach(async (user) => {
-        const getUserRef = doc(db, 'users', user.id)
-        await updateDoc(getUserRef, {
-          lastLoginAt: new Date(),
-        })
-      })
-      console.log('User exists')
-      console.log(result.user)
+    console.log(result)
+    // Return email, uid, and token to be consumed by Redux
+    let { creationTime, lastSignInTime } = result.user.metadata
+    return {
+      email: result.user.email,
+      uid: result.user.uid,
+      token: result.user.stsTokenManager.accessToken,
+      imgUrl: result.user.photoURL,
+      creationTime,
+      lastSignInTime,
     }
   } catch (err) {
     console.log(err)
+    return { error: err.message }
   }
 }
 
-export const loginWithEmailAndPassword = async (email, password) => {
+export const setGoogleDataToFirestore = async (regInput, userInput) => {
+  const { email: emailUserInput, password, ...userInputRest } = userInput
+  const { uid, imgUrl, email, token, creationTime, lastSignInTime } = regInput
   try {
-    const user = await signInWithEmailAndPassword(auth, email, password)
-    console.log(user)
-    return { email: user.user.email }
+    const googleDataToFirestore = {
+      isAdmin: false,
+      createdAt: new Date(creationTime),
+      lastLoginAt: new Date(lastSignInTime),
+      imgUrl,
+      uid,
+      email,
+      ...userInputRest,
+    }
+    await addDoc(usersCollectionRef, googleDataToFirestore)
+    return {
+      email,
+      uid,
+      token,
+      firstName: userInputRest.firstName,
+      lastName: userInputRest.lastName,
+    }
   } catch (err) {
     console.log(err.message)
-    return { error: err.message }
   }
 }
 
@@ -85,18 +133,40 @@ export const signUpWithEmailAndPassword = async (userData) => {
       userData.email,
       userData.password,
     )
-    const { confirmPassword, ...userToFirestore } = userData
+    const { confirmPassword, password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
     await addDoc(usersCollectionRef, {
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
-      isGoogle: false,
-      imgUrl: '/image/default-user.jpg',
+      imgUrl: '/images/default-user.jpg',
+      uid: user.user.uid,
       ...userToFirestore,
     })
     console.log(user)
-    return { user }
+    return {
+      email: user.user.email,
+      uid: user.user.uid,
+      token: user.user.stsTokenManager.accessToken,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+    }
+  } catch (err) {
+    console.log(err.message)
+    return { error: err.message }
+  }
+}
+
+export const loginWithEmailAndPassword = async (email, password) => {
+  try {
+    const user = await signInWithEmailAndPassword(auth, email, password)
+
+    console.log(user)
+    return {
+      email: user.user.email,
+      uid: user.user.uid,
+      token: user.user.stsTokenManager.accessToken,
+    }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }

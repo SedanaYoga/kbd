@@ -1,0 +1,10 @@
+@import '../global.scss';
+
+.inputDateTime {
+  input {
+    position: relative;
+    &:invalid {
+      border: 2px solid red;
+    }
+  }
+}

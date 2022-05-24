@@ -31,7 +31,8 @@ const BtnComp = React.forwardRef(
           padding,
           fontSize,
           margin,
-          borderRadius: borad === 'pill' ? '50px' : '4px',
+          borderRadius:
+            borad === 'pill' ? '50px' : borad === 'none' ? '0px' : '4px',
           ...style,
         }}>
         {children}

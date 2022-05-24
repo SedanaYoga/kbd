@@ -1,26 +1,61 @@
 import Head from 'next/head'
-import { Button, Container, Form } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
+import { signUpInWithGoogle } from '../firebase/firebase.utils'
+import { woFirebaseWord, GoogleIcon } from '../helper/authHelper'
+import Notif from '../components/Notif/Notif.component'
+import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
+import BtnComp from '../components/BtnComp/BtnComp'
+import InputComp from '../components/InputComp/InputComp'
 
 export default function Register() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.user)
   const [input, setInput] = useState({
-    username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    firstName: '',
-    lastName: '',
   })
+  const [registerError, setRegisterError] = useState('')
 
-  const handleChange = ({ target: { name, value } }) => {
+  useEffect(() => {
+    dispatch(clearRegInput())
+    if (user) router.replace('/')
+  }, [])
+
+  const handleChange = (name, value) => {
     setInput({ ...input, [name]: value })
   }
 
-  const submitHandler = async (e) => {
-    e.preventDefault()
-    console.log('hello')
+  const submitHandler = () => {
+    if (input.password !== input.confirmPassword) {
+      setRegisterError('Password does not match')
+    } else {
+      dispatch(setRegInput(input))
+      router.push('/data-capture')
+    }
+  }
+
+  const signUpWithGoogleHandler = async () => {
+    // Sign Up First
+    const result = await signUpInWithGoogle()
+    // Check if there is any error
+    if (result.hasOwnProperty('error')) {
+      setLoginError(woFirebaseWordGoogle(result.error))
+    } else {
+      // If not, set Register Input in Redux with Email from the result
+      // can ignore password
+      dispatch(setRegInput(result))
+      router.push({
+        pathname: '/data-capture',
+        query: { msg: 'googleSignUp' },
+      })
+    }
   }
 
   return (
@@ -34,6 +69,7 @@ export default function Register() {
       </Head>
 
       <Container className='full-with-footer'>
+        {registerError !== '' && <Notif message={registerError} />}
         <div className='pt-5'>
           <h2>Create New Account</h2>
           <p>
@@ -48,62 +84,44 @@ export default function Register() {
               </Link>
             </span>
           </p>
-          <Form className='formContainer mb-5' onSubmit={submitHandler}>
-            <div className='d-flex flex-row justify-content-between'>
-              <Form.Group className='formGroup'>
-                <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  type='text'
-                  name='firstName'
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group className='formGroup'>
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                  type='text'
-                  name='lastName'
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </div>
-            <div className='d-flex flex-row justify-content-between'>
-              <Form.Group className='formGroup'>
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type='text'
-                  name='username'
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group className='formGroup'>
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type='email'
-                  name='email'
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </div>
-            <Form.Group className='formGroup mb-4'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
+          <div className='formContainer'>
+            <div className='d-flex flex-column justify-content-center gap-3 mb-4'>
+              <InputComp
+                label='Email'
+                setNameValue={handleChange}
+                name='email'
+                type='email'
+              />
+              <InputComp
+                label='Password'
+                setNameValue={handleChange}
                 name='password'
-                onChange={handleChange}
-              />
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
                 type='password'
-                name='confirmPassword'
-                onChange={handleChange}
               />
-            </Form.Group>
+              <InputComp
+                label='Confirm Password'
+                setNameValue={handleChange}
+                name='confirmPassword'
+                type='password'
+              />
+            </div>
 
-            <Button variant='button' type='submit'>
-              Submit
-            </Button>
-          </Form>
+            <div>
+              <BtnComp
+                borad='pill'
+                onClick={submitHandler}
+                type='primary'
+                margin='0 1rem 0 0'>
+                Sign Up, FREE!
+              </BtnComp>
+              <BtnComp
+                onClick={signUpWithGoogleHandler}
+                borad='pill'
+                type='secondary'>
+                <GoogleIcon /> Sign Up with Google
+              </BtnComp>
+            </div>
+          </div>
         </div>
       </Container>
     </div>

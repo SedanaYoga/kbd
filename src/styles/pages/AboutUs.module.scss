@@ -1,0 +1,81 @@
+@import '../global.scss';
+
+.aboutus {
+  position: relative;
+  height: 1600px;
+  .hero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-image: url('/images/bg/back-3.png');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    height: calc(100vh - 58px);
+    @include centerFlexColumn;
+    justify-content: flex-end;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      z-index: 0;
+    }
+    &Content {
+      @include centerFlexColumn;
+      padding: 5rem;
+      color: white;
+      z-index: 1;
+      p {
+        margin: 2rem;
+        font-size: 1.25rem;
+        span {
+          text-align: center;
+          display: block;
+        }
+      }
+      h1 {
+        font-weight: 700;
+        span {
+          color: $primary;
+        }
+      }
+    }
+  }
+  .kennel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: calc(100vh - 58px);
+    z-index: -1;
+    &Image {
+      img {
+        width: 100%;
+      }
+    }
+    &Info {
+      background: $inputColor;
+      @include centerFlexColumn;
+      h1 {
+        font-weight: 700;
+        span {
+          color: $primary;
+        }
+      }
+      p {
+        margin-top: 3rem;
+        padding: 0 10rem;
+        text-align: justify;
+      }
+    }
+  }
+}
