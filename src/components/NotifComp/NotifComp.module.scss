@@ -1,0 +1,41 @@
+@import '../../styles/global.scss';
+
+.nt {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  width: 500px;
+  min-height: 60px;
+  background: $secondary;
+  box-shadow: 0 0 8px rgba($dark1, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  @include betweenFlexRow;
+  justify-content: flex-start;
+  &Left {
+    position: relative;
+    padding: 0 1rem;
+    height: 50px;
+    @include centerFlexRow;
+    &::before {
+      content: '';
+      @include centerAbsolute;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: black;
+      border-radius: 2px;
+    }
+  }
+  &Right {
+    @include centerFlexColumn;
+    align-items: flex-start;
+    h4,
+    p {
+      margin: 0;
+    }
+    p {
+      color: $dark2;
+    }
+  }
+}
