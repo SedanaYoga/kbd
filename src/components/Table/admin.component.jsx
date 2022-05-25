@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react'
-import { useTable} from 'react-table/dist/react-table.development'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useTable } from 'react-table/dist/react-table.development'
 import { AdminColumn } from './component/TableData.component'
 import Table from 'react-bootstrap/Table'
 import Container from 'react-bootstrap/Container'
@@ -9,21 +9,24 @@ import { db } from '../../firebase/firebase.init'
 
 export const Admin = () => {
   const [users, setUsers] = useState([])
-  const usersCollectionRef = collection(db, "users")
+  const usersCollectionRef = collection(db, 'users')
 
-    useEffect(() => {
-        const getUsers = async () => {
-            const queryData = query(usersCollectionRef, where("isAdmin", "==", true));
-            const data = await getDocs(queryData);
-            const transformData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
-            const newTransformdata = transformData.map((data) => ({
-                ...data,
-                createdAt: data.createdAt.toDate().toString().slice(0, 25),
-                lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25)
-            }));
-            setUsers(newTransformdata)
-            // console.log(newTransformdata)
-        }
+  useEffect(() => {
+    const getUsers = async () => {
+      const queryData = query(usersCollectionRef, where('isAdmin', '==', true))
+      const data = await getDocs(queryData)
+      const transformData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+      const newTransformdata = transformData.map((data) => ({
+        ...data,
+        createdAt: data.createdAt.toDate().toString().slice(0, 25),
+        lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25),
+      }))
+      setUsers(newTransformdata)
+      // console.log(newTransformdata)
+    }
 
     getUsers()
   }, [])

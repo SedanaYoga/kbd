@@ -14,6 +14,7 @@ import {
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/userSlice'
 import { clearRegInput } from '../../redux/slices/registerSlice'
+import { useNotif } from '../../helper/errorHelper'
 
 const DataCapturePage = () => {
   const router = useRouter()
@@ -32,7 +33,6 @@ const DataCapturePage = () => {
     phoneNumber: '',
     address: '',
   })
-  // const [registerError, setRegisterError] = useState('')
 
   const biodataInputHandler = (biodata) => {
     setUserInput({ ...userInput, ...biodata })
@@ -48,11 +48,8 @@ const DataCapturePage = () => {
       result = await signUpWithEmailAndPassword(userInput)
     }
     if (result.error) {
-      // setRegisterError(woFirebaseWord(result.error))
-      console.log(result.error)
+      useNotif(dispatch, result.error)
     } else {
-      // setRegisterError('')
-      console.log(result)
       dispatch(login(result))
       router.push('/')
     }

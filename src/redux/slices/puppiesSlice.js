@@ -14,6 +14,7 @@ export const getPuppiesFb = createAsyncThunk(
       const puppies = await getPuppiesData()
       return puppies
     } catch (error) {
+      console.log(error.message)
       return thunkAPI.rejectWithValue('Something went wrong...')
     }
   },

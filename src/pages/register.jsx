@@ -6,11 +6,11 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { signUpInWithGoogle } from '../firebase/firebase.utils'
-import { woFirebaseWord, GoogleIcon } from '../helper/authHelper'
-import Notif from '../components/Notif/Notif.component'
+import { GoogleIcon } from '../helper/authHelper'
 import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
 import BtnComp from '../components/BtnComp/BtnComp'
 import InputComp from '../components/InputComp/InputComp'
+import { useNotif } from '../helper/errorHelper'
 
 export default function Register() {
   const router = useRouter()
@@ -21,7 +21,6 @@ export default function Register() {
     password: '',
     confirmPassword: '',
   })
-  const [registerError, setRegisterError] = useState('')
 
   useEffect(() => {
     dispatch(clearRegInput())
@@ -34,7 +33,7 @@ export default function Register() {
 
   const submitHandler = () => {
     if (input.password !== input.confirmPassword) {
-      setRegisterError('Password does not match')
+      useNotif(dispatch, 'Password does not match')
     } else {
       dispatch(setRegInput(input))
       router.push('/data-capture')
@@ -46,7 +45,7 @@ export default function Register() {
     const result = await signUpInWithGoogle()
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
-      setLoginError(woFirebaseWordGoogle(result.error))
+      useNotif(dispatch, result.error)
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password
@@ -69,7 +68,6 @@ export default function Register() {
       </Head>
 
       <Container className='full-with-footer'>
-        {registerError !== '' && <Notif message={registerError} />}
         <div className='pt-5'>
           <h2>Create New Account</h2>
           <p>

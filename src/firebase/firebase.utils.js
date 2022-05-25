@@ -23,60 +23,6 @@ const usersCollectionRef = collection(db, 'users')
 const bookedCollectionRef = collection(db, 'booked')
 const pricingCollectionRef = collection(db, 'pricing')
 
-// export const signInWithGoogle = async () => {
-//   const provider = new GoogleAuthProvider()
-//   try {
-//     const result = await signInWithPopup(auth, provider)
-//     const { email, displayName, metadata, photoURL } = result.user
-//     const userRef = query(
-//       usersCollectionRef,
-//       where('email', '==', result.user.email),
-//     )
-//     const querySnapshot = await getDocs(userRef)
-
-//     if (querySnapshot.docs.length === 0) {
-//       const createdAt = new Date(metadata.creationTime)
-//       const lastLoginAt = new Date(metadata.lastSignInTime)
-//       const imgUrl = photoURL
-//       const userToFirestore = {
-//         email,
-//         displayName,
-//         createdAt,
-//         lastLoginAt,
-//         imgUrl,
-//         isAdmin: false,
-//         isGoogle: true,
-//       }
-//       console.log('Creating User to Firestore')
-
-//       await addDoc(usersCollectionRef, userToFirestore)
-//       console.log(result.user)
-//       return {
-//         email: result.user.email,
-//         uid: result.user.uid,
-//         token: result.user.stsTokenManager.accessToken,
-//       }
-//     } else {
-//       querySnapshot.forEach(async (user) => {
-//         const getUserRef = doc(db, 'users', user.id)
-//         await updateDoc(getUserRef, {
-//           lastLoginAt: new Date(),
-//         })
-//       })
-//       console.log('User exists')
-//       console.log(result.user)
-//       return {
-//         email: result.user.email,
-//         uid: result.user.uid,
-//         token: result.user.stsTokenManager.accessToken,
-//       }
-//     }
-//   } catch (err) {
-//     console.log(err)
-//     return { error: err }
-//   }
-// }
-
 export const signUpInWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
   try {
@@ -144,13 +90,12 @@ export const addUserFromDashboard = async (userData) => {
       ...userToFirestore,
     })
     return {
-      message: "user successfully created"
+      message: 'user successfully created',
     }
   } catch (err) {
     console.log(err.message)
     return { error: err.message }
   }
-
 }
 
 export const signUpWithEmailAndPassword = async (userData) => {
