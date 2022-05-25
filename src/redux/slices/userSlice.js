@@ -13,11 +13,12 @@ export const userSlice = createSlice({
     login: (state, action) => {
       state.user = action.payload
       setCookie(undefined, 'token', action.payload.token, { path: '/' })
-      setCookie(undefined, 'uid', action.payload.uid, {path: '/'})
+      setCookie(undefined, 'uid', action.payload.uid, { path: '/' })
     },
     logout: (state) => {
       state.user = null
       setCookie(undefined, 'token', '', { path: '/' })
+      setCookie(undefined, 'uid', '', { path: '/' })
     },
   },
 })
