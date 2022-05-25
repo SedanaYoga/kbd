@@ -12,6 +12,10 @@
   padding: 1rem;
   @include betweenFlexRow;
   justify-content: flex-start;
+  visibility: hidden;
+  &.active {
+    visibility: visible;
+  }
   &Left {
     position: relative;
     padding: 0 1rem;

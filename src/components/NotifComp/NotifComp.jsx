@@ -4,9 +4,10 @@ import {
   BsFillXCircleFill,
   BsCheckCircleFill,
 } from 'react-icons/bs'
+import { useSelector } from 'react-redux'
 
 const NotifComp = ({ type }) => {
-  console.log(styles)
+  const { isShown, notif } = useSelector((state) => state.notif)
   let ntCl = ''
   switch (type) {
     case 'success':
@@ -22,7 +23,7 @@ const NotifComp = ({ type }) => {
       break
   }
   return (
-    <div className={styles.nt}>
+    <div className={`${styles.nt} ${isShown ? styles.active : ''}`}>
       <div className={styles.ntLeft}>
         {type === 'success' ? (
           <BsCheckCircleFill size='2rem' color='limegreen' />
@@ -34,7 +35,7 @@ const NotifComp = ({ type }) => {
       </div>
       <div className={styles.ntRight}>
         <h4>Error</h4>
-        <p>Something went wrong...</p>
+        <p>{notif}</p>
       </div>
     </div>
   )
