@@ -10,7 +10,7 @@ import { GoogleIcon } from '../helper/authHelper'
 import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
 import BtnComp from '../components/BtnComp/BtnComp'
 import InputComp from '../components/InputComp/InputComp'
-import { useNotif } from '../helper/errorHelper'
+import { notifHandler } from '../helper/errorHelper'
 
 export default function Register() {
   const router = useRouter()
@@ -33,7 +33,7 @@ export default function Register() {
 
   const submitHandler = () => {
     if (input.password !== input.confirmPassword) {
-      useNotif(dispatch, 'Password does not match')
+      notifHandler(dispatch, 'Password does not match')
     } else {
       dispatch(setRegInput(input))
       router.push('/data-capture')
@@ -45,7 +45,7 @@ export default function Register() {
     const result = await signUpInWithGoogle()
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
-      useNotif(dispatch, result.error)
+      notifHandler(dispatch, result.error)
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password

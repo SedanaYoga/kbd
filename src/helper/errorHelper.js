@@ -16,7 +16,7 @@ const errorMapping = new Map([
   ],
 ])
 
-export const useNotif = (dispatch, error) => {
+export const notifHandler = (dispatch, error) => {
   dispatch(showNotif(errorMapping.get(error) ? errorMapping.get(error) : error))
   setTimeout(() => {
     dispatch(clearNotif())

@@ -40,4 +40,6 @@ const PuppyCard = React.forwardRef(
   },
 )
 
+PuppyCard.displayName = 'PuppyCard'
+
 export default PuppyCard

@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 import { GoogleIcon } from '../helper/authHelper'
 import InputComp from '../components/InputComp/InputComp'
 import BtnComp from '../components/BtnComp/BtnComp'
-import { useNotif } from '../helper/errorHelper'
+import { notifHandler } from '../helper/errorHelper'
 
 export default function Login() {
   const router = useRouter()
@@ -40,7 +40,7 @@ export default function Login() {
     // login with email and password
     const result = await loginWithEmailAndPassword(input.email, input.password)
     if (result.error) {
-      useNotif(dispatch, result.error)
+      notifHandler(dispatch, result.error)
     } else {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
@@ -52,7 +52,7 @@ export default function Login() {
   const handleLoginWithGoogle = async () => {
     const result = await signUpInWithGoogle()
     if (result.hasOwnProperty('error')) {
-      useNotif(dispatch, result.error)
+      notifHandler(dispatch, result.error)
     } else {
       dispatch(login(result))
       router.push('/')

@@ -9,7 +9,7 @@ import { getDocs, query, where, collection } from 'firebase/firestore'
 import { db } from '../../firebase/firebase.init'
 import { parseCookies } from 'nookies'
 
-const dashboard = () => {
+const Dashboard = () => {
   const router = useRouter()
   const { user } = useSelector((state) => state.user)
 
@@ -45,9 +45,9 @@ const dashboard = () => {
   )
 }
 
-export default dashboard
+export default Dashboard
 
-dashboard.getLayout = function getLayout(page) {
+Dashboard.getLayout = function getLayout(page) {
   return (
     <UserLayout>
       <DashLayout />

@@ -10,11 +10,10 @@ import {
   setGoogleDataToFirestore,
   signUpWithEmailAndPassword,
 } from '../../firebase/firebase.utils'
-// import { woFirebaseWord } from '../../helper/authHelper'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/userSlice'
 import { clearRegInput } from '../../redux/slices/registerSlice'
-import { useNotif } from '../../helper/errorHelper'
+import { notifHandler } from '../../helper/errorHelper'
 
 const DataCapturePage = () => {
   const router = useRouter()
@@ -38,7 +37,7 @@ const DataCapturePage = () => {
     setUserInput({ ...userInput, ...biodata })
   }
 
-  const authSubmitHandler = async () => {
+  const useAuthSubmitHandler = async () => {
     console.log(userInput)
     const result = {}
     if (msg === 'googleSignUp') {
@@ -48,7 +47,7 @@ const DataCapturePage = () => {
       result = await signUpWithEmailAndPassword(userInput)
     }
     if (result.error) {
-      useNotif(dispatch, result.error)
+      notifHandler(dispatch, result.error)
     } else {
       dispatch(login(result))
       router.push('/')
@@ -80,7 +79,7 @@ const DataCapturePage = () => {
             </h1>
             <BiodataComp
               type='data-capture'
-              onSubmit={authSubmitHandler}
+              onSubmit={useAuthSubmitHandler}
               setBiodata={biodataInputHandler}
               profileImg={regInput?.imgUrl}
             />

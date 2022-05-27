@@ -43,6 +43,8 @@ const BtnComp = React.forwardRef(
 
 export default BtnComp
 
+BtnComp.displayName = 'BtnComp'
+
 BtnComp.defaultProps = {
   type: 'primary',
   margin: '0',

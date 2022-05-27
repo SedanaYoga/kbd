@@ -29,7 +29,7 @@ const ProfilePage = () => {
         <Container>
           <div className={styles.profile}>
             <h1 className={styles.profileTitle}>
-              Here's <span>your profile ❤️ </span>
+              Here&#39;s <span>your profile ❤️ </span>
             </h1>
 
             <div className={styles.profileSubPage}>

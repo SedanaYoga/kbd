@@ -48,10 +48,10 @@ export const Booking = () => {
         </div>
         <Table striped bordered hover {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroups) => (
-              <tr {...headerGroups.getHeaderGroupProps()}>
-                {headerGroups.headers.map((columns) => (
-                  <th {...columns.getHeaderProps()}>
+            {headerGroups.map((headerGroups, i) => (
+              <tr key={i} {...headerGroups.getHeaderGroupProps()}>
+                {headerGroups.headers.map((columns, j) => (
+                  <th key={j} {...columns.getHeaderProps()}>
                     {columns.render('Header')}
                   </th>
                 ))}
@@ -59,13 +59,15 @@ export const Booking = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {rows.map((row, i) => {
               prepareRow(row)
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
+                <tr key={i} {...row.getRowProps()}>
+                  {row.cells.map((cell, j) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      <td key={j} {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
                     )
                   })}
                 </tr>

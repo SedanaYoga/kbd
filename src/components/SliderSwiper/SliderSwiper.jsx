@@ -1,7 +1,7 @@
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-export default ({ children }) => {
+const SlideSwiper = ({ children }) => {
   const options = {
     slidesPerView: 3,
     centeredSlides: true,
@@ -18,3 +18,5 @@ export default ({ children }) => {
     </Swiper>
   )
 }
+
+export default SlideSwiper

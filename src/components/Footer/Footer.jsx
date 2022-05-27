@@ -15,12 +15,18 @@ const Footer = () => {
             <h5>Check our social Media</h5>
             <ul className={styles.sosmedUl}>
               <li>
-                <a href='https://www.facebook.com/coksedana' target='_blank'>
+                <a
+                  href='https://www.facebook.com/coksedana'
+                  target='_blank'
+                  rel='noreferrer'>
                   <FacebookIcon /> Facebook
                 </a>
               </li>
               <li>
-                <a href='https://www.instagram.com/cok_yoga' target='_blank'>
+                <a
+                  href='https://www.instagram.com/cok_yoga'
+                  target='_blank'
+                  rel='noreferrer'>
                   <InstagramIcon /> Instagram
                 </a>
               </li>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './InputComp.module.scss'
 
-export default ({ label, setNameValue, type, name }) => {
+const InputComp = ({ label, setNameValue, type, name }) => {
   const [isActive, setIsActive] = useState(false)
   const [value, setValue] = useState('')
 
@@ -27,3 +27,5 @@ export default ({ label, setNameValue, type, name }) => {
     </div>
   )
 }
+
+export default InputComp
