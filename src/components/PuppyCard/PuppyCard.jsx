@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { CgGenderMale } from 'react-icons/cg'
 import { CgGenderFemale } from 'react-icons/cg'
 import { diffTwoDateInMonths } from '../../helper/dateHelper'
@@ -9,11 +10,15 @@ const PuppyCard = React.forwardRef(
     return (
       <a href={href} onClick={onClick} ref={ref}>
         <div className={styles.card}>
-          <img
-            src={imgUrl[0]}
-            alt={`puppies ${id}`}
-            className={styles.cardImg}
-          />
+          <div className={styles.cardImg}>
+            <Image
+              src={imgUrl[0]}
+              alt={`puppies ${id}`}
+              width={475}
+              height={475}
+              objectFit='cover'
+            />
+          </div>
           <div className={styles.cardTag}>
             <div className={styles.cardTagSex}>
               <div>
