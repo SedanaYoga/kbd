@@ -12,16 +12,21 @@ const BiodataComp = ({
   profileImg,
 }) => {
   const [biodataInput, setBiodataInput] = useState({
-    imgUrl: profileImg ? profileImg : '/images/default-user.png',
+    imgUrl: profileImg ? profileImg : '',
     firstName: '',
     lastName: '',
     phoneNumber: '',
     address: '',
   })
+  const [previewImage, setPreviewImage] = useState(null)
 
   const handleChange = (name, value) => {
-    setBiodata && setBiodata(biodataInput)
+    console.log(name, value)
     setBiodataInput({ ...biodataInput, [name]: value })
+    setBiodata && setBiodata(biodataInput)
+    if (name === 'imgUrl') {
+      setPreviewImage(URL.createObjectURL(value))
+    }
   }
 
   const submitHandler = () => {
@@ -39,10 +44,24 @@ const BiodataComp = ({
     <div className={styles.biodata}>
       <div className={styles.biodataPic}>
         <div className={styles.biodataPicLeft}>
-          <img src={biodataInput.imgUrl} alt='biodata-photo' />
+          <img
+            src={
+              typeof biodataInput.imgUrl === 'object'
+                ? previewImage
+                : biodataInput.imgUrl === ''
+                ? '/images/default-user.png'
+                : ''
+            }
+            alt='biodata-photo'
+          />
           <input
             type='file'
-            onChange={handleChange}
+            name='imgUrl'
+            onChange={(e) => {
+              const { name, files } = e.target
+              handleChange(name, files[0])
+              console.log(files[0])
+            }}
             className={styles.inputPic}
           />
         </div>

@@ -79,7 +79,7 @@ export const addUserFromDashboard = async (userData) => {
     const user = await createUserWithEmailAndPassword(
       auth,
       userData.email,
-      userData.password
+      userData.password,
     )
     const { password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
@@ -105,7 +105,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
     const user = await createUserWithEmailAndPassword(
       auth,
       userData.email,
-      userData.password
+      userData.password,
     )
     const { confirmPassword, password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
@@ -224,7 +224,7 @@ export const getUserActiveBook = async (email) => {
   try {
     const bookedQuery = query(
       bookedCollectionRef,
-      where('requester_email', '==', email)
+      where('requester_email', '==', email),
     )
     const bookedDocs = await getDocs(bookedQuery)
     if (bookedDocs) {
@@ -286,3 +286,5 @@ export const uploadFiles = async (fileToUpload, type) => {
     return { error: error.message }
   }
 }
+
+// export const uploadProfilePic = async()

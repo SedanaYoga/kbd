@@ -17,7 +17,7 @@ import { notifHandler } from '../../helper/errorHelper'
 
 const DataCapturePage = () => {
   // State for profile image to be uploaded
-  const [profileUpload, setProfileUpload] = useState(null)
+  // const [profileUpload, setProfileUpload] = useState(null)
 
   const router = useRouter()
   const { msg } = router.query
@@ -59,7 +59,11 @@ const DataCapturePage = () => {
   }
 
   const onUploadPic = async () => {
-    console.log('Uploading')
+    if (!userInput.imgUrl) {
+      notifHandler(dispatch, 'No image is selected, please select first!')
+    } else {
+      console.log(userInput.imgUrl)
+    }
   }
 
   const onDeletePic = async () => {

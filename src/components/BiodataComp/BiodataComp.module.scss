@@ -12,6 +12,7 @@
     &Left {
       position: relative;
       margin-right: 2rem;
+      overflow: hidden;
       @include centerFlexColumn;
       img {
         border-radius: 60px;
@@ -29,13 +30,6 @@
         &::before {
           content: 'Edit';
           color: black;
-          // display: inline-block;
-          // background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
-          // border: 1px solid #999;
-          // border-radius: 3px;
-          // padding: 5px 8px;
-          // outline: none;
-          // white-space: nowrap;
           -webkit-user-select: none;
           user-select: none;
           cursor: pointer;
