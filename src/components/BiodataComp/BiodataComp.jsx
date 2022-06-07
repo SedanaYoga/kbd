@@ -21,9 +21,9 @@ const BiodataComp = ({
   const [previewImage, setPreviewImage] = useState(null)
 
   const handleChange = (name, value) => {
-    console.log(name, value)
-    setBiodataInput({ ...biodataInput, [name]: value })
-    setBiodata && setBiodata(biodataInput)
+    const newBiodataInput = { ...biodataInput, [name]: value }
+    setBiodata(newBiodataInput)
+    setBiodataInput(newBiodataInput)
     if (name === 'imgUrl') {
       setPreviewImage(URL.createObjectURL(value))
     }
@@ -49,8 +49,8 @@ const BiodataComp = ({
               typeof biodataInput.imgUrl === 'object'
                 ? previewImage
                 : biodataInput.imgUrl === ''
-                ? '/images/default-user.png'
-                : ''
+                  ? '/images/default-user.png'
+                  : ''
             }
             alt='biodata-photo'
           />
@@ -60,7 +60,7 @@ const BiodataComp = ({
             onChange={(e) => {
               const { name, files } = e.target
               handleChange(name, files[0])
-              console.log(files[0])
+              // console.log(files[0])
             }}
             className={styles.inputPic}
           />

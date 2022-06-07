@@ -14,11 +14,10 @@ import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/userSlice'
 import { clearRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
+import { uploadFiles } from '../../firebase/firebase.utils'
+
 
 const DataCapturePage = () => {
-  // State for profile image to be uploaded
-  // const [profileUpload, setProfileUpload] = useState(null)
-
   const router = useRouter()
   const { msg } = router.query
 
@@ -50,7 +49,7 @@ const DataCapturePage = () => {
       result = await signUpWithEmailAndPassword(userInput)
     }
     if (result.error) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       dispatch(login(result))
       router.push('/')
@@ -60,9 +59,12 @@ const DataCapturePage = () => {
 
   const onUploadPic = async () => {
     if (!userInput.imgUrl) {
-      notifHandler(dispatch, 'No image is selected, please select first!')
+      notifHandler(dispatch, 'No image is selected, please select first!', 'error')
     } else {
-      console.log(userInput.imgUrl)
+      const downloadUrl = await uploadFiles(userInput.imgUrl, 'profilePic')
+      const userInputWithDownloadedUrl = { ...userInput, imgUrl: downloadUrl }
+      setUserInput(userInputWithDownloadedUrl)
+      notifHandler(dispatch, 'Your profile picture has successfully uploaded!', 'success')
     }
   }
 

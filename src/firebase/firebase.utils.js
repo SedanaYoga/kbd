@@ -1,4 +1,3 @@
-import { v4 } from 'uuid'
 import { db, auth, storage } from './firebase.init'
 import {
   createUserWithEmailAndPassword,
@@ -19,6 +18,7 @@ import {
 } from 'firebase/firestore'
 import { timeStampToDateString } from '../helper/dateHelper'
 import { uploadBytes, getDownloadURL, ref } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 const puppiesCollectionRef = collection(db, 'puppies')
 const usersCollectionRef = collection(db, 'users')
@@ -273,9 +273,8 @@ export const updatePricing = async (pricingData) => {
 
 export const uploadFiles = async (fileToUpload, type) => {
   if (fileToUpload === null) return
-  const filePath = `${type === 'image' ? 'images' : 'videos'}/${
-    fileToUpload.name + '_' + v4()
-  }`
+  const filePath = `${type === 'image' ? 'images' : type === 'profilePic' ? 'profilePic' : 'videos'}/${fileToUpload.name + '_' + v4()
+    }`
   const fileRef = ref(storage, filePath)
   try {
     const uploadResult = await uploadBytes(fileRef, fileToUpload)

@@ -33,7 +33,7 @@ export default function Register() {
 
   const submitHandler = () => {
     if (input.password !== input.confirmPassword) {
-      notifHandler(dispatch, 'Password does not match')
+      notifHandler(dispatch, 'Password does not match', 'error')
     } else {
       dispatch(setRegInput(input))
       router.push('/data-capture')
@@ -45,7 +45,7 @@ export default function Register() {
     const result = await signUpInWithGoogle()
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password
