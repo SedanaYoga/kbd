@@ -16,6 +16,9 @@ import { clearRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
 
 const DataCapturePage = () => {
+  // State for profile image to be uploaded
+  const [profileUpload, setProfileUpload] = useState(null)
+
   const router = useRouter()
   const { msg } = router.query
 
@@ -37,7 +40,7 @@ const DataCapturePage = () => {
     setUserInput({ ...userInput, ...biodata })
   }
 
-  const useAuthSubmitHandler = async () => {
+  const onAuthSubmitHandler = async () => {
     console.log(userInput)
     const result = {}
     if (msg === 'googleSignUp') {
@@ -53,6 +56,14 @@ const DataCapturePage = () => {
       router.push('/')
     }
     dispatch(clearRegInput())
+  }
+
+  const onUploadPic = async () => {
+    console.log('Uploading')
+  }
+
+  const onDeletePic = async () => {
+    console.log('Deleting')
   }
 
   useEffect(() => {
@@ -79,7 +90,9 @@ const DataCapturePage = () => {
             </h1>
             <BiodataComp
               type='data-capture'
-              onSubmit={useAuthSubmitHandler}
+              onSubmit={onAuthSubmitHandler}
+              onUploadPic={onUploadPic}
+              onDeletePic={onDeletePic}
               setBiodata={biodataInputHandler}
               profileImg={regInput?.imgUrl}
             />

@@ -11,13 +11,7 @@ const PuppyCard = React.forwardRef(
       <a href={href} onClick={onClick} ref={ref}>
         <div className={styles.card}>
           <div className={styles.cardImg}>
-            <Image
-              src={imgUrl[0]}
-              alt={`puppies ${id}`}
-              width={475}
-              height={475}
-              objectFit='cover'
-            />
+            <Image src={imgUrl[0]} alt={`puppies ${id}`} layout='fill' />
           </div>
           <div className={styles.cardTag}>
             <div className={styles.cardTagSex}>
@@ -42,7 +36,7 @@ const PuppyCard = React.forwardRef(
         </div>
       </a>
     )
-  },
+  }
 )
 
 PuppyCard.displayName = 'PuppyCard'

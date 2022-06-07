@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import { storage } from '../../firebase/firebase.init'
 import { ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
+import { uploadFiles } from '../../firebase/firebase.utils'
 
 const FileUploadComp = () => {
   const [imageUpload, setImageUpload] = useState(null)
   const uploadImage = async () => {
-    if (imageUpload === null) return
-    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`)
-    const uploadedImage = await uploadBytes(imageRef, imageUpload)
-    console.log('Image Uploaded!', { uploadedImage })
+    const downloadUrl = await uploadFiles(imageUpload, 'image')
+    console.log(downloadUrl)
   }
   return (
     <div>

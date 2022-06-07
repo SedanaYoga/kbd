@@ -10,10 +10,44 @@
       margin: 0;
     }
     &Left {
+      position: relative;
       margin-right: 2rem;
+      @include centerFlexColumn;
       img {
         border-radius: 60px;
         width: 120px;
+      }
+      .inputPic {
+        position: absolute;
+        color: transparent;
+        bottom: 8%;
+        left: 40%;
+
+        &::-webkit-file-upload-button {
+          display: none;
+        }
+        &::before {
+          content: 'Edit';
+          color: black;
+          // display: inline-block;
+          // background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+          // border: 1px solid #999;
+          // border-radius: 3px;
+          // padding: 5px 8px;
+          // outline: none;
+          // white-space: nowrap;
+          -webkit-user-select: none;
+          user-select: none;
+          cursor: pointer;
+          font-weight: 500;
+          font-size: 10pt;
+        }
+        &:active {
+          outline: 0;
+        }
+        &:hover::before {
+          border-color: black;
+        }
       }
     }
     &Right {

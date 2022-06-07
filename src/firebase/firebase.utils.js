@@ -1,4 +1,5 @@
-import { db, auth } from './firebase.init'
+import { v4 } from 'uuid'
+import { db, auth, storage } from './firebase.init'
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -17,6 +18,7 @@ import {
   where,
 } from 'firebase/firestore'
 import { timeStampToDateString } from '../helper/dateHelper'
+import { uploadBytes, getDownloadURL, ref } from 'firebase/storage'
 
 const puppiesCollectionRef = collection(db, 'puppies')
 const usersCollectionRef = collection(db, 'users')
@@ -77,7 +79,7 @@ export const addUserFromDashboard = async (userData) => {
     const user = await createUserWithEmailAndPassword(
       auth,
       userData.email,
-      userData.password,
+      userData.password
     )
     const { password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
@@ -103,7 +105,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
     const user = await createUserWithEmailAndPassword(
       auth,
       userData.email,
-      userData.password,
+      userData.password
     )
     const { confirmPassword, password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
@@ -222,7 +224,7 @@ export const getUserActiveBook = async (email) => {
   try {
     const bookedQuery = query(
       bookedCollectionRef,
-      where('requester_email', '==', email),
+      where('requester_email', '==', email)
     )
     const bookedDocs = await getDocs(bookedQuery)
     if (bookedDocs) {
@@ -266,5 +268,21 @@ export const updatePricing = async (pricingData) => {
     await updateDoc(pricingRef, pricingData)
   } catch (err) {
     console.log(err.message)
+  }
+}
+
+export const uploadFiles = async (fileToUpload, type) => {
+  if (fileToUpload === null) return
+  const filePath = `${type === 'image' ? 'images' : 'videos'}/${
+    fileToUpload.name + '_' + v4()
+  }`
+  const fileRef = ref(storage, filePath)
+  try {
+    const uploadResult = await uploadBytes(fileRef, fileToUpload)
+    const downloadUrl = await getDownloadURL(uploadResult.ref)
+    return downloadUrl
+  } catch (error) {
+    console.log(error.message)
+    return { error: error.message }
   }
 }
