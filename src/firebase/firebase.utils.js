@@ -272,11 +272,11 @@ export const updatePricing = async (pricingData) => {
   }
 }
 
-export const uploadFiles = async (fileToUpload, type) => {
+export const uploadFiles = async (fileToUpload, type, fileName) => {
   if (fileToUpload === null) return
-  const { fileName, extension } = fileNameToExtension(fileToUpload.name)
+  const { extension } = fileNameToExtension(fileToUpload.name)
   const parentPath = type === 'image' ? 'images' : type === 'profilePic' ? 'profilePic' : 'videos'
-  const fileNameOnUpload = `${fileName}_${v4()}.${extension}`
+  const fileNameOnUpload = `${fileName}.${extension}`
   const filePath = `${parentPath}/${fileNameOnUpload}`
   const fileRef = ref(storage, filePath)
   try {

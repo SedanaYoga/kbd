@@ -61,7 +61,7 @@ const DataCapturePage = () => {
     if (!userInput.imgUrl) {
       notifHandler(dispatch, 'No image is selected, please select first!', 'error')
     } else {
-      const uploadResult = await uploadFiles(userInput.imgUrl, 'profilePic')
+      const uploadResult = await uploadFiles(userInput.imgUrl, 'profilePic', userInput.email)
       const userInputWithDownloadedUrl = { ...userInput, imgUrl: uploadResult }
       setUserInput(userInputWithDownloadedUrl)
       notifHandler(dispatch, 'Your profile picture has successfully uploaded!', 'success')

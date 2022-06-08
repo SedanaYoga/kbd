@@ -25,7 +25,9 @@ const BiodataComp = ({
   const handleChange = async (name, value) => {
     if (name === 'imgUrl') {
       setIsPicUploaded(false)
-      setPreviewImage(URL.createObjectURL(value))
+      if (value) {
+        setPreviewImage(URL.createObjectURL(value))
+      }
       deletePrevImage()
     }
     const newBiodataInput = { ...biodataInput, [name]: value }
