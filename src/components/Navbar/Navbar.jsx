@@ -9,17 +9,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, login } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
+import { clearRegInput } from '../../redux/slices/registerSlice'
+import nookies, { setCookie } from 'nookies'
 
 const menu = {
   main: ['home', 'about us', 'browse', 'dashboard'],
   auth: ['log in', 'register'],
 }
-const NavBar = () => {
+const NavBar = (ctx) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const currentPath = router.pathname.split('/')[1]
   const { user } = useSelector((state) => state.user)
   const [showDropdown, setShowDropdown] = useState(false)
+  const cookies = nookies.get(ctx)
 
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
@@ -29,7 +32,7 @@ const NavBar = () => {
         dispatch(
           login({
             email: user.email,
-            token: await user.getIdToken(),
+            token: cookies.token,
             uid: user.uid,
           }),
         )
@@ -50,7 +53,9 @@ const NavBar = () => {
   const logoutHandler = async () => {
     await signOut(auth)
     dispatch(logout())
+    dispatch(clearRegInput())
     setShowDropdown(false)
+    router.push('/')
   }
 
   return (

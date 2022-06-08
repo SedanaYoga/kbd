@@ -9,17 +9,24 @@ import {
   loginWithEmailAndPassword,
   setLastLoginAt,
   signUpInWithGoogle,
+  getBiodata,
 } from '../firebase/firebase.utils'
 import { useRouter } from 'next/router'
 import { GoogleIcon } from '../helper/authHelper'
 import InputComp from '../components/InputComp/InputComp'
 import BtnComp from '../components/BtnComp/BtnComp'
 import { notifHandler } from '../helper/errorHelper'
+import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
+import nookies, { setCookie } from 'nookies'
 
-export default function Login() {
+export default function Login(ctx) {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
+  const {
+    regInput: { inputUser: regInput },
+  } = useSelector((state) => state)
+  const cookies = nookies.get(ctx)
 
   const [input, setInput] = useState({
     email: '',
@@ -27,6 +34,12 @@ export default function Login() {
   })
 
   useEffect(() => {
+    if(cookies.regInput) {
+      dispatch(setRegInput(cookies.regInput))
+      dispatch(login({email: cookies.regInput}))
+    }
+
+    if (regInput) router.replace('/data-capture')
     if (user) router.replace('/')
   }, [])
 
@@ -39,13 +52,28 @@ export default function Login() {
 
     // login with email and password
     const result = await loginWithEmailAndPassword(input.email, input.password)
+
     if (result.error) {
       notifHandler(dispatch, result.error)
     } else {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
-      dispatch(login(result))
-      router.push('/')
+
+      // dispatch(login(result))
+
+      // const biodata = await getBiodata(input.email)
+      console.log(await getBiodata(input.email))
+      // const dataCaptureLogic = biodata.phoneNumber ? true : false
+
+      if(dataCaptureLogic) {
+        setCookie(undefined, 'regInput', input.email)
+        dispatch(setRegInput(input.email))
+        router.push('/data-capture')
+      } else {
+        router.push('/')
+      }
+
+      // router.push('/')
     }
   }
 
@@ -54,7 +82,7 @@ export default function Login() {
     if (result.hasOwnProperty('error')) {
       notifHandler(dispatch, result.error)
     } else {
-      dispatch(login(result))
+      // dispatch(login(result))
       router.push('/')
     }
   }
@@ -103,13 +131,13 @@ export default function Login() {
                 onClick={handleSubmit}
                 type='primary'
                 margin='0 1rem 0 0'>
-                Sign Up, FREE!
+                Login
               </BtnComp>
               <BtnComp
                 onClick={handleLoginWithGoogle}
                 borad='pill'
                 type='secondary'>
-                <GoogleIcon /> Sign In With Google
+                <GoogleIcon /> Login With Google
               </BtnComp>
             </div>
           </div>

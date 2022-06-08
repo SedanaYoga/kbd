@@ -10,6 +10,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setUserState: (state, action) => {
+      state.user = action.payload
+    },
     login: (state, action) => {
       state.user = action.payload
       setCookie(undefined, 'token', action.payload.token, { path: '/' })
@@ -19,10 +22,11 @@ export const userSlice = createSlice({
       state.user = null
       setCookie(undefined, 'token', '', { path: '/' })
       setCookie(undefined, 'uid', '', { path: '/' })
+      setCookie(undefined, 'regInput', '', { path: '/' })
     },
   },
 })
 
-export const { login, logout } = userSlice.actions
+export const { login, logout, setUserState } = userSlice.actions
 
 export default userSlice.reducer

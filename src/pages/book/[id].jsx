@@ -21,6 +21,9 @@ export const getServerSideProps = async (ctx) => {
   try {
     // Parse cookies
     const cookies = nookies.get(ctx)
+
+    if(cookies.regInput) ctx.res.writeHead(302, { Location: '/data-capture' })
+
     const token = await auth.verifyIdToken(cookies.token)
 
     const { uid, email } = token

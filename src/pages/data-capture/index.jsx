@@ -9,24 +9,25 @@ import { useRouter } from 'next/router'
 import {
   setGoogleDataToFirestore,
   signUpWithEmailAndPassword,
+  updateBiodata,
 } from '../../firebase/firebase.utils'
 import { useDispatch } from 'react-redux'
-import { login } from '../../redux/slices/userSlice'
-import { clearRegInput } from '../../redux/slices/registerSlice'
+import { login, setUserState } from '../../redux/slices/userSlice'
+import { clearRegInput, setRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
+import nookies, {setCookie} from 'nookies'
 
-const DataCapturePage = () => {
+const DataCapturePage = (ctx) => {
   const router = useRouter()
-  const { msg } = router.query
-
   const dispatch = useDispatch()
+  const cookies = nookies.get(ctx)
+  
   const {
     regInput: { inputUser: regInput },
   } = useSelector((state) => state)
-
+  
   const [userInput, setUserInput] = useState({
     email: regInput?.email,
-    password: regInput?.password,
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -39,25 +40,30 @@ const DataCapturePage = () => {
 
   const useAuthSubmitHandler = async () => {
     console.log(userInput)
-    const result = {}
-    if (msg === 'googleSignUp') {
-      // Firestore creation, since the auth part is handled in Register page
-      result = await setGoogleDataToFirestore(regInput, userInput)
+
+    const formComplete = (userInput.firstName && userInput.lastName && userInput.phoneNumber && userInput.address) ? true : false
+
+    if (!formComplete) {
+      notifHandler(dispatch, "Please fullfill all required data form")
     } else {
-      result = await signUpWithEmailAndPassword(userInput)
-    }
-    if (result.error) {
-      notifHandler(dispatch, result.error)
-    } else {
-      dispatch(login(result))
+      // dispatch(login(result))
+
+      updateBiodata(userInput)
+      dispatch(clearRegInput())
+      setCookie(undefined, 'regInput', '')
       router.push('/')
     }
-    dispatch(clearRegInput())
   }
 
   useEffect(() => {
-    if (regInput === null) {
-      router.push('/')
+    if(cookies.regInput && !userInput.email) {
+      dispatch(setRegInput({email: cookies.regInput}))
+      dispatch(setUserState({email: cookies.regInput}))
+      setUserInput({email: cookies.regInput})
+    }
+    
+    if (!cookies.regInput) {
+      router.replace('/')
     }
   }, [])
 

@@ -122,6 +122,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
       token: user.user.stsTokenManager.accessToken,
       firstName: userData.firstName,
       lastName: userData.lastName,
+      phoneNumber: user.user.phoneNumber,
     }
   } catch (err) {
     console.log(err.message)
@@ -133,11 +134,13 @@ export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
 
+    console.log('user')
     console.log(user)
     return {
       email: user.user.email,
       uid: user.user.uid,
       token: user.user.stsTokenManager.accessToken,
+      phoneNumber: user.user.phoneNumber,
     }
   } catch (err) {
     console.log(err.message)
@@ -241,6 +244,31 @@ export const setLastLoginAt = async (email) => {
     const getUserRef = doc(db, 'users', user.id)
     await updateDoc(getUserRef, {
       lastLoginAt: new Date(),
+    })
+  })
+}
+
+export const getBiodata = async (email) => {
+  const userRef = query(usersCollectionRef, where('email', '==', email))
+  const findUsers = await getDocs(userRef);
+  findUsers.forEach((doc) => {
+    const data = doc.data()
+    // console.log(data)
+    return data
+  });
+  
+}
+
+export const updateBiodata = async (biodata) => {
+  const userRef = query(usersCollectionRef, where('email', '==', biodata.email))
+  const findUsers = await getDocs(userRef)
+  findUsers.forEach(async (user) => {
+    const getUserRef = doc(db, 'users', user.id)
+    await updateDoc(getUserRef, {
+      firstName: biodata.firstName,
+      lastName: biodata.lastName,
+      phoneNumber: biodata.phoneNumber,
+      address: biodata.address,
     })
   })
 }

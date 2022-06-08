@@ -75,7 +75,7 @@ const BiodataComp = ({ type, setBiodata, onSubmit, profileImg }) => {
         onClick={submitHandler}
         borad='pill'
         padding='0.5rem 4rem'>
-        {type === 'data-capture' ? 'Register' : 'Update'}
+        {type === 'data-capture' ? 'Confirm' : 'Update'}
       </BtnComp>
     </div>
   )

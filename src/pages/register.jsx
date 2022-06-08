@@ -11,6 +11,11 @@ import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
 import BtnComp from '../components/BtnComp/BtnComp'
 import InputComp from '../components/InputComp/InputComp'
 import { notifHandler } from '../helper/errorHelper'
+import {
+  setGoogleDataToFirestore,
+  signUpWithEmailAndPassword,
+} from '../firebase/firebase.utils'
+import { setCookie } from 'nookies'
 
 export default function Register() {
   const router = useRouter()
@@ -23,7 +28,6 @@ export default function Register() {
   })
 
   useEffect(() => {
-    dispatch(clearRegInput())
     if (user) router.replace('/')
   }, [])
 
@@ -31,28 +35,47 @@ export default function Register() {
     setInput({ ...input, [name]: value })
   }
 
-  const submitHandler = () => {
-    if (input.password !== input.confirmPassword) {
-      notifHandler(dispatch, 'Password does not match')
-    } else {
-      dispatch(setRegInput(input))
-      router.push('/data-capture')
+  const submitHandler = async () => {
+    if( !input.email || !input.password || !input.confirmPassword ) {
+      notifHandler(dispatch, 'Please fullfill all required register form')
+    }
+    else {
+      if (input.password !== input.confirmPassword) {
+        notifHandler(dispatch, 'Password does not match')
+      } else {
+        dispatch(setRegInput(input.email))
+
+        const result = await signUpWithEmailAndPassword(input)
+
+        if (result.error) {
+          notifHandler(dispatch, result.error)
+        } else {
+          // dispatch(login(result))
+          setCookie(undefined, 'regInput', input.email)
+          dispatch(setRegInput(result.email))
+          router.push('/data-capture')
+        }
+      }
     }
   }
 
   const signUpWithGoogleHandler = async () => {
     // Sign Up First
     const result = await signUpInWithGoogle()
+
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
       notifHandler(dispatch, result.error)
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password
-      dispatch(setRegInput(result))
+
+      setCookie(undefined, 'regInput', input.email)
+      dispatch(setRegInput(result.email))
+
       router.push({
         pathname: '/data-capture',
-        query: { msg: 'googleSignUp' },
+        // query: { msg: 'googleSignUp' },
       })
     }
   }
