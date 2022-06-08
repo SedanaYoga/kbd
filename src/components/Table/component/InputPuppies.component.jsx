@@ -1,9 +1,13 @@
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Button, Modal, InputGroup, FormControl, Form, FormCheck } from 'react-bootstrap'
 import { collection, addDoc, Timestamp } from 'firebase/firestore'
 import { db } from '../../../firebase/firebase.init'
 import SuccessAddPup from './AddSuccess.component'
+import styles from  './Table.module.scss'
+import { storage } from '../../../firebase/firebase.init'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+
 
 
 export const InputPuppies = (props) => {
@@ -13,7 +17,18 @@ export const InputPuppies = (props) => {
     const [newDob, setNewDob] = useState("")
     const [newSex, setNewSex] = useState("")
     const [newUrl, setNewUrl] = useState("")
+
+     const [file, setFile] = useState("");
+ 
+
+     const [percent, setPercent] = useState(0);
   
+ 
+     function handleChange(event) {
+         setFile(event.target.files[0]);
+     }
+  
+    
     const puppiesCollectionRef = collection(db, "puppies")
 
     const createPuppies = async () => {
@@ -35,6 +50,33 @@ export const InputPuppies = (props) => {
       props.onHide()
       // inputDisplayId()
       console.log('Pup Added')
+
+      if (!file) {
+        alert("Please upload an image first!");
+    }
+
+    const storageRef = ref(storage, `/puppies/${file.name}`);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+            const percent = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+
+            // update progress
+            setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+            // download url
+            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                setNewUrl(url)
+            });
+        }
+    );
 
       setSuccess(true)
     }
@@ -209,15 +251,11 @@ export const InputPuppies = (props) => {
                     </label>
                   </Form.Group>
                 </Form>
-                
-                <InputGroup className="mb-3">
-                    <FormControl
-                      placeholder="Image Url"
-                      aria-label="Image Url"
-                      aria-describedby="basic-addon1"
-                      onChange={(event) => {setNewUrl(event.target.value)}}
-                    />
-                </InputGroup>
+                <div>
+                  <input type="file" onChange={handleChange} accept="/image/*" multiple/>
+                  {/* <button onClick={handleUpload}>Upload to Firebase</button> */}
+                  <p>{percent} "% done"</p>
+                </div>
             </Modal.Body>
             <Modal.Body>
                 <Button onClick={createPuppies}>Add Puppies</Button>

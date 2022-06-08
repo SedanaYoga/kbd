@@ -48,3 +48,27 @@
 	width: 10px;
 	height: 10px;
 }
+
+.form {
+
+	[type="file"] {
+	  font-size: 1em;
+	  padding: 1em;
+	  border: solid 1px gray;
+	  border-radius: .5em;
+	}
+  
+	button {
+	  color: white;
+	  font-size: 1em;
+	  background-color: blueviolet;
+	  padding: .5em .8em;
+	  border: none;
+	  border-radius: .2em;
+	}
+  
+	code {
+	  text-align: left;
+	}
+  
+  }
