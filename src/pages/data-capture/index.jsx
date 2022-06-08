@@ -69,8 +69,10 @@ const DataCapturePage = () => {
   }
 
   const deletePrevImage = async () => {
-    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
-      await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+    if (userInput.imgUrl) {
+      if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+        await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+      }
     }
   }
 
@@ -78,6 +80,7 @@ const DataCapturePage = () => {
     if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
       await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
     }
+    setUserInput({ ...userInput, imgUrl: { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' } })
   }
 
   useEffect(() => {

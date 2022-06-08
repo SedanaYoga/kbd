@@ -115,7 +115,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
-      imgUrl: userToFirestore.imgUrl ? userToFirestore.imgUrl : '/images/default-user.jpg',
+      imgUrl: userToFirestore.imgUrl ? userToFirestore.imgUrl : { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
       uid: user.user.uid,
     })
     console.log(user)
