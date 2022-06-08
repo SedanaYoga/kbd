@@ -33,11 +33,15 @@ export default function Register() {
 
   const submitHandler = () => {
     if (input.password !== input.confirmPassword) {
-      notifHandler(dispatch, 'Password does not match', 'error')
-    } else {
-      dispatch(setRegInput(input))
-      router.push('/data-capture')
+      return notifHandler(dispatch, 'Password does not match', 'error')
     }
+
+    // if (input.email === '' || input.password === '' || input.confirmPassword === '') {
+    //   return notifHandler(dispatch, "Fields can't be empty", 'warning')
+    // }
+
+    dispatch(setRegInput(input))
+    router.push('/data-capture')
   }
 
   const signUpWithGoogleHandler = async () => {

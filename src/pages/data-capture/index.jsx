@@ -9,12 +9,12 @@ import { useRouter } from 'next/router'
 import {
   setGoogleDataToFirestore,
   signUpWithEmailAndPassword,
+  uploadFiles, deleteFiles
 } from '../../firebase/firebase.utils'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/userSlice'
 import { clearRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
-import { uploadFiles } from '../../firebase/firebase.utils'
 
 
 const DataCapturePage = () => {
@@ -61,15 +61,23 @@ const DataCapturePage = () => {
     if (!userInput.imgUrl) {
       notifHandler(dispatch, 'No image is selected, please select first!', 'error')
     } else {
-      const downloadUrl = await uploadFiles(userInput.imgUrl, 'profilePic')
-      const userInputWithDownloadedUrl = { ...userInput, imgUrl: downloadUrl }
+      const uploadResult = await uploadFiles(userInput.imgUrl, 'profilePic')
+      const userInputWithDownloadedUrl = { ...userInput, imgUrl: uploadResult }
       setUserInput(userInputWithDownloadedUrl)
       notifHandler(dispatch, 'Your profile picture has successfully uploaded!', 'success')
     }
   }
 
+  const deletePrevImage = async () => {
+    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+    }
+  }
+
   const onDeletePic = async () => {
-    console.log('Deleting')
+    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+    }
   }
 
   useEffect(() => {
@@ -101,6 +109,7 @@ const DataCapturePage = () => {
               onDeletePic={onDeletePic}
               setBiodata={biodataInputHandler}
               profileImg={regInput?.imgUrl}
+              deletePrevImage={deletePrevImage}
             />
           </div>
         </Container>

@@ -10,6 +10,7 @@ const BiodataComp = ({
   onDeletePic,
   onSubmit,
   profileImg,
+  deletePrevImage
 }) => {
   const [biodataInput, setBiodataInput] = useState({
     imgUrl: profileImg ? profileImg : '',
@@ -19,14 +20,17 @@ const BiodataComp = ({
     address: '',
   })
   const [previewImage, setPreviewImage] = useState(null)
+  const [isPicUploaded, setIsPicUploaded] = useState(true)
 
-  const handleChange = (name, value) => {
+  const handleChange = async (name, value) => {
+    if (name === 'imgUrl') {
+      setIsPicUploaded(false)
+      setPreviewImage(URL.createObjectURL(value))
+      deletePrevImage()
+    }
     const newBiodataInput = { ...biodataInput, [name]: value }
     setBiodata(newBiodataInput)
     setBiodataInput(newBiodataInput)
-    if (name === 'imgUrl') {
-      setPreviewImage(URL.createObjectURL(value))
-    }
   }
 
   const submitHandler = () => {
@@ -35,9 +39,11 @@ const BiodataComp = ({
 
   const uploadPicHandler = () => {
     onUploadPic()
+    setIsPicUploaded(true)
   }
   const deletePicHandler = () => {
     onDeletePic()
+    setBiodataInput({ ...biodataInput, imgUrl: '' })
   }
 
   return (
@@ -67,7 +73,7 @@ const BiodataComp = ({
         </div>
         <div className={styles.biodataPicRight}>
           <h3>Profile Picture</h3>
-          <p>This will be displayed on your profile</p>
+          <p>{isPicUploaded ? 'This will be displayed on your profile' : 'Please Upload before submitting!'}</p>
           <div className={styles.biodataPicRightButtons}>
             <BtnComp
               type='secondary'
