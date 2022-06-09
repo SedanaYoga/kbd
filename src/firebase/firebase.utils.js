@@ -251,12 +251,11 @@ export const setLastLoginAt = async (email) => {
 export const getBiodata = async (email) => {
   const userRef = query(usersCollectionRef, where('email', '==', email))
   const findUsers = await getDocs(userRef);
+  const data = null
   findUsers.forEach((doc) => {
-    const data = doc.data()
-    // console.log(data)
-    return data
+    data = doc.data()
   });
-  
+  return data
 }
 
 export const updateBiodata = async (biodata) => {

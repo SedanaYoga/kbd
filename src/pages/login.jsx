@@ -34,9 +34,9 @@ export default function Login(ctx) {
   })
 
   useEffect(() => {
-    if(cookies.regInput) {
+    if (cookies.regInput) {
       dispatch(setRegInput(cookies.regInput))
-      dispatch(login({email: cookies.regInput}))
+      dispatch(login({ email: cookies.regInput }))
     }
 
     if (regInput) router.replace('/data-capture')
@@ -61,19 +61,17 @@ export default function Login(ctx) {
 
       // dispatch(login(result))
 
-      // const biodata = await getBiodata(input.email)
-      console.log(await getBiodata(input.email))
-      // const dataCaptureLogic = biodata.phoneNumber ? true : false
+      const biodata = await getBiodata(input.email)
+      const dataCaptureLogic = biodata.phoneNumber ? true : false
+      console.log(dataCaptureLogic)
 
-      if(dataCaptureLogic) {
+      if (!dataCaptureLogic) {
         setCookie(undefined, 'regInput', input.email)
         dispatch(setRegInput(input.email))
         router.push('/data-capture')
       } else {
         router.push('/')
       }
-
-      // router.push('/')
     }
   }
 
