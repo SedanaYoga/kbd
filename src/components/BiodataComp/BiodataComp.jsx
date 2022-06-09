@@ -31,7 +31,7 @@ const BiodataComp = ({
       deletePrevImage()
     }
     const newBiodataInput = { ...biodataInput, [name]: value }
-    setBiodata(newBiodataInput)
+    setBiodata(newBiodataInput, isPicUploaded)
     setBiodataInput(newBiodataInput)
   }
 

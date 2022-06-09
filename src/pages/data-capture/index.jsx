@@ -35,8 +35,13 @@ const DataCapturePage = () => {
     address: '',
   })
 
-  const biodataInputHandler = (biodata) => {
-    setUserInput({ ...userInput, ...biodata })
+  const biodataInputHandler = (biodata, isPicUploaded) => {
+    if (userInput.imgUrl && !isPicUploaded && userInput.imgUrl.hasOwnProperty('downloadUrl')) {
+      const { imgUrl, ...biodataWithoutImgUrl } = biodata
+      setUserInput({ ...userInput, ...biodataWithoutImgUrl })
+    } else {
+      setUserInput({ ...userInput, ...biodata })
+    }
   }
 
   const onAuthSubmitHandler = async () => {

@@ -36,9 +36,9 @@ export default function Register() {
       return notifHandler(dispatch, 'Password does not match', 'error')
     }
 
-    // if (input.email === '' || input.password === '' || input.confirmPassword === '') {
-    //   return notifHandler(dispatch, "Fields can't be empty", 'warning')
-    // }
+    if (input.email === '' || input.password === '' || input.confirmPassword === '') {
+      return notifHandler(dispatch, "Fields can't be empty", 'warning')
+    }
 
     dispatch(setRegInput(input))
     router.push('/data-capture')
