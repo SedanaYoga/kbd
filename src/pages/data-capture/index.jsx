@@ -12,7 +12,7 @@ import {
   updateBiodata,
 } from '../../firebase/firebase.utils'
 import { useDispatch } from 'react-redux'
-import { login, setUserState } from '../../redux/slices/userSlice'
+import { logout, setUserState } from '../../redux/slices/userSlice'
 import { clearRegInput, setRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
 import nookies, {setCookie} from 'nookies'
@@ -48,10 +48,9 @@ const DataCapturePage = (ctx) => {
     } else {
       updateBiodata(userInput)
       dispatch(clearRegInput())
-      setCookie(undefined, 'regInput', '')
       
-      dispatch(login())
-      router.push('/')
+      dispatch(logout())
+      router.push('/login')
     }
   }
 
