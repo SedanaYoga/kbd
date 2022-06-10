@@ -46,11 +46,11 @@ const DataCapturePage = (ctx) => {
     if (!formComplete) {
       notifHandler(dispatch, "Please fullfill all required data form")
     } else {
-      // dispatch(login(result))
-
       updateBiodata(userInput)
       dispatch(clearRegInput())
       setCookie(undefined, 'regInput', '')
+      
+      dispatch(login())
       router.push('/')
     }
   }

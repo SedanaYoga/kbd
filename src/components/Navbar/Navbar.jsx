@@ -6,7 +6,7 @@ import { capitalizeFirst } from '../../helper/textHelper'
 import BtnComp from '../BtnComp/BtnComp'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, login } from '../../redux/slices/userSlice'
+import { logout, login, setUserState } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
 import { clearRegInput } from '../../redux/slices/registerSlice'
@@ -29,13 +29,12 @@ const NavBar = (ctx) => {
       if (!user) {
         dispatch(logout())
       } else {
-        dispatch(
-          login({
-            email: user.email,
-            token: cookies.token,
-            uid: user.uid,
-          }),
-        )
+        dispatch(setUserState({
+          email: cookies.email,
+          token: cookies.token,
+          uid: cookies.uid,
+        }))
+        dispatch(login())
       }
     })
   }, [])

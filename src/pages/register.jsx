@@ -15,9 +15,9 @@ import {
   setGoogleDataToFirestore,
   signUpWithEmailAndPassword,
 } from '../firebase/firebase.utils'
-import { setCookie } from 'nookies'
+import nookies, { setCookie } from 'nookies'
 
-export default function Register() {
+export default function Register(ctx) {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
@@ -26,8 +26,10 @@ export default function Register() {
     password: '',
     confirmPassword: '',
   })
+  const cookies = nookies.get(ctx)
 
   useEffect(() => {
+    if (cookies.regInput) router.replace('/data-capture')
     if (user) router.replace('/')
   }, [])
 
@@ -73,10 +75,7 @@ export default function Register() {
       setCookie(undefined, 'regInput', input.email)
       dispatch(setRegInput(result.email))
 
-      router.push({
-        pathname: '/data-capture',
-        // query: { msg: 'googleSignUp' },
-      })
+      router.push('/data-capture')
     }
   }
 

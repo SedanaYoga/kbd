@@ -4,7 +4,7 @@ import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../redux/slices/userSlice'
+import { login, setUserState } from '../redux/slices/userSlice'
 import {
   loginWithEmailAndPassword,
   setLastLoginAt,
@@ -38,8 +38,7 @@ export default function Login(ctx) {
       dispatch(setRegInput(cookies.regInput))
       dispatch(login({ email: cookies.regInput }))
     }
-
-    if (regInput) router.replace('/data-capture')
+    if (cookies.regInput) router.replace('/data-capture')
     if (user) router.replace('/')
   }, [])
 
@@ -59,17 +58,17 @@ export default function Login(ctx) {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
 
-      // dispatch(login(result))
-
       const biodata = await getBiodata(input.email)
       const dataCaptureLogic = biodata.phoneNumber ? true : false
-      console.log(dataCaptureLogic)
+      setCookie(undefined, 'email', input.email)
 
       if (!dataCaptureLogic) {
         setCookie(undefined, 'regInput', input.email)
         dispatch(setRegInput(input.email))
         router.push('/data-capture')
       } else {
+        dispatch(setUserState(result))
+        dispatch(login())
         router.push('/')
       }
     }

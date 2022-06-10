@@ -134,8 +134,6 @@ export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
 
-    console.log('user')
-    console.log(user)
     return {
       email: user.user.email,
       uid: user.user.uid,
@@ -238,7 +236,7 @@ export const getUserActiveBook = async (email) => {
 }
 
 export const setLastLoginAt = async (email) => {
-  const userRef = query(collection(db, 'users'), where('email', '==', email))
+  const userRef = query(usersCollectionRef, where('email', '==', email))
   const findUsers = await getDocs(userRef)
   findUsers.forEach(async (user) => {
     const getUserRef = doc(db, 'users', user.id)
