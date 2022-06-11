@@ -21,7 +21,7 @@ export const InputPuppies = (props) => {
   const [file, setFile] = useState("");
 
   function handleChange(event) {
-    setFile(event.target.files[0]);
+    setFile(event.target.files);
   }
 
   const puppiesCollectionRef = collection(db, "puppies")
@@ -30,8 +30,11 @@ export const InputPuppies = (props) => {
     if (!file) {
       alert("Please upload an image first!");
     } else {
-      const fileName = `${fileNameToExtension(file.name).fileName}_${+ new Date()}`
-      const uploadResult = await uploadFiles(file, 'image', fileName)
+      const filesToPromiseAll = Array.from(file).map((imgObj) => {
+        const fileName = `${fileNameToExtension(imgObj.name).fileName}_${new Date().toISOString()}`
+        return uploadFiles(imgObj, 'image', fileName)
+      })
+      const uploadResults = await Promise.all(filesToPromiseAll)
       await addDoc(puppiesCollectionRef,
         {
           bookedStatus: 'available',
@@ -41,9 +44,7 @@ export const InputPuppies = (props) => {
             + newDob.toDate().toISOString().slice(0, 10).slice(2, 4)
             + newSex.slice(0, 1).toUpperCase(),
           dob: newDob,
-          imgUrl: [
-            uploadResult, uploadResult, uploadResult, uploadResult, uploadResult
-          ],
+          imgUrl: uploadResults,
           breedQuality: newQuality,
           color: newColor,
           sex: newSex
@@ -231,8 +232,6 @@ export const InputPuppies = (props) => {
           </Form>
           <div>
             <input type="file" onChange={handleChange} accept="/image/*" multiple />
-            {/* <button onClick={handleUpload}>Upload to Firebase</button> */}
-            {/* <p>{percent} "% done"</p> */}
           </div>
         </Modal.Body>
         <Modal.Body>
