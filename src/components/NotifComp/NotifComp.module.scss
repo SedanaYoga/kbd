@@ -13,6 +13,7 @@
   @include betweenFlexRow;
   justify-content: flex-start;
   visibility: hidden;
+  z-index: 2000;
   &.active {
     visibility: visible;
   }

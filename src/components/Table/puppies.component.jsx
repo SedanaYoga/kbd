@@ -1,34 +1,36 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTable } from 'react-table/dist/react-table.development'
 import { PuppiesColumn } from './component/TableData.component'
-import { Container, Table, Button, Modal } from 'react-bootstrap'
+import { Container, Table, Button } from 'react-bootstrap'
 import styles from './component/Table.module.scss'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/firebase.init'
 import { InputPuppies } from './component/InputPuppies.component'
-import SuccessAddPup from './component/AddSuccess.component'
 
 export const Puppies = () => {
-  const [puppies, setPuppies] = useState([])
   const puppiesCollectionRef = collection(db, 'puppies')
+  const [puppies, setPuppies] = useState([])
   const [inputform, setForm] = useState(false)
-  const [modalSuccess, setSuccess] = useState(false)
 
+  const getPuppies = async () => {
+    const data = await getDocs(puppiesCollectionRef)
+    const transformData = data.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }))
+    const newTransformdata = transformData.map((data) => ({
+      ...data,
+    }))
+    setPuppies(newTransformdata)
+  }
   useEffect(() => {
-    const getPuppies = async () => {
-      const data = await getDocs(puppiesCollectionRef)
-      const transformData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }))
-      const newTransformdata = transformData.map((data) => ({
-        ...data,
-      }))
-      setPuppies(newTransformdata)
-    }
-
     getPuppies()
+    console.log(puppies)
   }, [])
+
+  const updatePuppyHandler = (puppyObject) => {
+    setPuppies([...puppies, puppyObject])
+  }
 
   const columns = useMemo(() => PuppiesColumn, [])
   const data = useMemo(() => puppies, [puppies])
@@ -50,7 +52,7 @@ export const Puppies = () => {
         onClick={() => setForm(true)}>
         +Add Puppies
       </Button>
-      <InputPuppies show={inputform} onHide={() => setForm(false)} />
+      <InputPuppies updatePuppy={updatePuppyHandler} show={inputform} onHide={() => setForm(false)} />
       <Container>
         <div className={`${styles.tableTitle}`}>
           <h5>Puppies</h5>

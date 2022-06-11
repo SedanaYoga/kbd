@@ -1,10 +1,12 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Thumbs } from 'swiper'
 import { useState } from 'react'
+import { fileNameToExtension } from '../../helper/textHelper'
 // import styles from './SliderWithThumbs.module.scss'
 
 const ProductImagesSlider = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState()
+  console.log(images.at(-1))
 
   return (
     <>
@@ -19,7 +21,14 @@ const ProductImagesSlider = ({ images }) => {
         className='product-images-slider'>
         {images.map((item, index) => (
           <SwiperSlide key={index}>
-            <img src={item} alt='product images' />
+            {index === images.length - 1 && fileNameToExtension(item.fileNameOnUpload).extension === 'mp4' ?
+              <video controls autoPlay={true}>
+                <source src={item.downloadUrl}
+                  type="video/mp4" />
+              </video>
+              :
+              <img src={item.downloadUrl} alt='product images' />
+            }
           </SwiperSlide>
         ))}
       </Swiper>
@@ -32,7 +41,14 @@ const ProductImagesSlider = ({ images }) => {
         {images.map((item, index) => (
           <SwiperSlide key={index}>
             <div className='product-images-slider-thumbs-wrapper'>
-              <img src={item} alt='product images' />
+              {index === images.length - 1 && fileNameToExtension(item.fileNameOnUpload).extension === 'mp4' ?
+                <video muted>
+                  <source src={item.downloadUrl}
+                    type="video/mp4" />
+                </video>
+                :
+                <img src={item.downloadUrl} alt='product images' />
+              }
             </div>
           </SwiperSlide>
         ))}

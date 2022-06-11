@@ -25,7 +25,7 @@ export const capitalizeFirst = (str) => {
 }
 
 export const camelToNormalUpperCase = (str) => {
-  return str.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) {
+  return str.replace(/([A-Z])/g, ' $1').replace(/^./, function(str) {
     return str.toUpperCase()
   })
 }
@@ -54,4 +54,11 @@ export const displayIdGenerator = (puppyObject) => {
   const colorText = dogSpecs['color'][color]
   const breedQualityText = dogSpecs['breedQuality'][breedQuality]
   return `${breedQualityText}${colorText}${dobToText}${sexText}`
+}
+
+export const fileNameToExtension = (str) => {
+  const extension = str.split('.').at(-1)
+  const indexOfExtension = str.search(extension)
+  const fileName = str.slice(0, indexOfExtension - 1)
+  return { fileName, extension }
 }

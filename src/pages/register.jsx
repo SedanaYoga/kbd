@@ -33,11 +33,15 @@ export default function Register() {
 
   const submitHandler = () => {
     if (input.password !== input.confirmPassword) {
-      notifHandler(dispatch, 'Password does not match')
-    } else {
-      dispatch(setRegInput(input))
-      router.push('/data-capture')
+      return notifHandler(dispatch, 'Password does not match', 'error')
     }
+
+    if (input.email === '' || input.password === '' || input.confirmPassword === '') {
+      return notifHandler(dispatch, "Fields can't be empty", 'warning')
+    }
+
+    dispatch(setRegInput(input))
+    router.push('/data-capture')
   }
 
   const signUpWithGoogleHandler = async () => {
@@ -45,7 +49,7 @@ export default function Register() {
     const result = await signUpInWithGoogle()
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password

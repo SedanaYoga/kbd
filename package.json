@@ -24,7 +24,8 @@
     "react-slick": "^0.29.0",
     "react-table": "^7.7.0",
     "slick-carousel": "^1.8.1",
-    "swiper": "^8.1.4"
+    "swiper": "^8.1.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "8.15.0",

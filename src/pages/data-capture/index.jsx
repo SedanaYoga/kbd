@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import {
   setGoogleDataToFirestore,
   signUpWithEmailAndPassword,
+  uploadFiles, deleteFiles
 } from '../../firebase/firebase.utils'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/slices/userSlice'
@@ -33,11 +34,16 @@ const DataCapturePage = () => {
     address: '',
   })
 
-  const biodataInputHandler = (biodata) => {
-    setUserInput({ ...userInput, ...biodata })
+  const biodataInputHandler = (biodata, isPicUploaded) => {
+    if (userInput.imgUrl && !isPicUploaded && userInput.imgUrl.hasOwnProperty('downloadUrl')) {
+      const { imgUrl, ...biodataWithoutImgUrl } = biodata
+      setUserInput({ ...userInput, ...biodataWithoutImgUrl })
+    } else {
+      setUserInput({ ...userInput, ...biodata })
+    }
   }
 
-  const useAuthSubmitHandler = async () => {
+  const onAuthSubmitHandler = async () => {
     console.log(userInput)
     const result = {}
     if (msg === 'googleSignUp') {
@@ -47,12 +53,38 @@ const DataCapturePage = () => {
       result = await signUpWithEmailAndPassword(userInput)
     }
     if (result.error) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       dispatch(login(result))
       router.push('/')
     }
     dispatch(clearRegInput())
+  }
+
+  const onUploadPic = async () => {
+    if (!userInput.imgUrl) {
+      notifHandler(dispatch, 'No image is selected, please select first!', 'error')
+    } else {
+      const uploadResult = await uploadFiles(userInput.imgUrl, 'profilePic', userInput.email)
+      const userInputWithDownloadedUrl = { ...userInput, imgUrl: uploadResult }
+      setUserInput(userInputWithDownloadedUrl)
+      notifHandler(dispatch, 'Your profile picture has successfully uploaded!', 'success')
+    }
+  }
+
+  const deletePrevImage = async () => {
+    if (userInput.imgUrl) {
+      if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+        await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+      }
+    }
+  }
+
+  const onDeletePic = async () => {
+    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+    }
+    setUserInput({ ...userInput, imgUrl: { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' } })
   }
 
   useEffect(() => {
@@ -79,9 +111,12 @@ const DataCapturePage = () => {
             </h1>
             <BiodataComp
               type='data-capture'
-              onSubmit={useAuthSubmitHandler}
+              onSubmit={onAuthSubmitHandler}
+              onUploadPic={onUploadPic}
+              onDeletePic={onDeletePic}
               setBiodata={biodataInputHandler}
               profileImg={regInput?.imgUrl}
+              deletePrevImage={deletePrevImage}
             />
           </div>
         </Container>
