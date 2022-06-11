@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react'
 import { Button, Modal, Form, InputGroup } from 'react-bootstrap'
-import { collection, addDoc, Timestamp } from 'firebase/firestore'
+import { setDoc, Timestamp, doc } from 'firebase/firestore'
 import { db } from '../../../firebase/firebase.init'
 import { uploadFiles } from '../../../firebase/firebase.utils'
 import { fileNameToExtension, displayIdGenerator } from '../../../helper/textHelper'
@@ -24,7 +23,6 @@ export const InputPuppies = (props) => {
     setFile(event.target.files);
   }
 
-  const puppiesCollectionRef = collection(db, "puppies")
 
   const createPuppies = async () => {
     // Check if the image file inputs exist
@@ -43,7 +41,7 @@ export const InputPuppies = (props) => {
       notifHandler(dispatch, 'Uploading and Creating...', 'warning')
       try {
         // Promise of image Files
-        const arrayImagesAndVideo = [...Array.from(file), newVideo]
+        const arrayImagesAndVideo = newVideo ? [...Array.from(file), newVideo] : Array.from(file)
         const filesToPromiseAll = arrayImagesAndVideo.map((obj, index) => {
           const fileName = `${fileNameToExtension(obj.name).fileName}_${new Date().toISOString()}`
           return uploadFiles(obj, `${index === arrayImagesAndVideo.length - 1 ? 'video' : 'image'}`, fileName)
@@ -59,12 +57,14 @@ export const InputPuppies = (props) => {
           dob: newDob,
           sex: newSex
         }
+        const displayId = displayIdGenerator(displayIdObject)
 
+        const puppyWithIdRef = doc(db, "puppies", `${+new Date()}_${displayId}`)
         // ADD: Puppy data
-        await addDoc(puppiesCollectionRef,
+        await setDoc(puppyWithIdRef,
           {
             ...displayIdObject,
-            displayId: displayIdGenerator(displayIdObject),
+            displayId,
             dob: Timestamp.fromDate(new Date(newDob)),
             bookedStatus: 'available',
             imgUrl: uploadResults,

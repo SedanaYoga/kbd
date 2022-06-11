@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Thumbs } from 'swiper'
 import { useState } from 'react'
+import { fileNameToExtension } from '../../helper/textHelper'
 // import styles from './SliderWithThumbs.module.scss'
 
 const ProductImagesSlider = ({ images }) => {
@@ -20,8 +21,8 @@ const ProductImagesSlider = ({ images }) => {
         className='product-images-slider'>
         {images.map((item, index) => (
           <SwiperSlide key={index}>
-            {index === images.length - 1 ?
-              <video controls>
+            {index === images.length - 1 && fileNameToExtension(item.fileNameOnUpload).extension === 'mp4' ?
+              <video controls autoPlay={true}>
                 <source src={item.downloadUrl}
                   type="video/mp4" />
               </video>
@@ -40,7 +41,7 @@ const ProductImagesSlider = ({ images }) => {
         {images.map((item, index) => (
           <SwiperSlide key={index}>
             <div className='product-images-slider-thumbs-wrapper'>
-              {index === images.length - 1 ?
+              {index === images.length - 1 && fileNameToExtension(item.fileNameOnUpload).extension === 'mp4' ?
                 <video muted>
                   <source src={item.downloadUrl}
                     type="video/mp4" />
