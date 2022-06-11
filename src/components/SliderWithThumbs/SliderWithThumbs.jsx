@@ -19,7 +19,7 @@ const ProductImagesSlider = ({ images }) => {
         className='product-images-slider'>
         {images.map((item, index) => (
           <SwiperSlide key={index}>
-            <img src={item} alt='product images' />
+            <img src={item.downloadUrl} alt='product images' />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -32,7 +32,7 @@ const ProductImagesSlider = ({ images }) => {
         {images.map((item, index) => (
           <SwiperSlide key={index}>
             <div className='product-images-slider-thumbs-wrapper'>
-              <img src={item} alt='product images' />
+              <img src={item.downloadUrl} alt='product images' />
             </div>
           </SwiperSlide>
         ))}

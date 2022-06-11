@@ -16,7 +16,6 @@ import { login } from '../../redux/slices/userSlice'
 import { clearRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
 
-
 const DataCapturePage = () => {
   const router = useRouter()
   const { msg } = router.query
