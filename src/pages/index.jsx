@@ -20,7 +20,7 @@ import 'swiper/css/thumbs'
 import hero1 from '../../public/images/hero-images/1.png'
 import hero2 from '../../public/images/hero-images/2.png'
 import hero3 from '../../public/images/hero-images/3.png'
-// import FileUploadComp from '../components/FileUploadComp/FileUploadComp'
+import VideoComp from '../components/VideoComp/VideoComp'
 
 export default function Home() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
@@ -46,10 +46,6 @@ export default function Home() {
               content='Kintamani-Bali Dog adoption platform'
             />
           </Head>
-
-          {/* <section>
-            <FileUploadComp />
-          </section> */}
 
           <section>
             <Container className={styles.heroContainer}>
