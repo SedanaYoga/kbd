@@ -5,9 +5,9 @@ import UserLayout from '../components/Layouts/UserLayout'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-import { signUpInWithGoogle } from '../firebase/firebase.utils'
+import { getBiodata, signUpInWithGoogle } from '../firebase/firebase.utils'
 import { GoogleIcon } from '../helper/authHelper'
-import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
+import { setRegInput } from '../redux/slices/registerSlice'
 import BtnComp from '../components/BtnComp/BtnComp'
 import InputComp from '../components/InputComp/InputComp'
 import { notifHandler } from '../helper/errorHelper'
@@ -52,7 +52,6 @@ export default function Register(ctx) {
         if (result.error) {
           notifHandler(dispatch, result.error)
         } else {
-          // dispatch(login(result))
           setCookie(undefined, 'regInput', input.email)
           dispatch(setRegInput(result.email))
           router.push('/data-capture')
@@ -72,8 +71,12 @@ export default function Register(ctx) {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password
 
-      setCookie(undefined, 'regInput', input.email)
+      const biodata = await getBiodata(result.email)
+      
+      setCookie(undefined, 'regInput', result.email)
       dispatch(setRegInput(result.email))
+      
+      if(!biodata) setGoogleDataToFirestore(result)
 
       router.push('/data-capture')
     }

@@ -11,6 +11,10 @@ import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
 import { clearRegInput } from '../../redux/slices/registerSlice'
 import nookies, { setCookie } from 'nookies'
+import {
+  getBiodata,
+} from '../../firebase/firebase.utils'
+import { setRegInput } from '../../redux/slices/registerSlice'
 
 const menu = {
   main: ['home', 'about us', 'browse', 'dashboard'],
@@ -24,17 +28,32 @@ const NavBar = (ctx) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const cookies = nookies.get(ctx)
 
+  const checkGoogleBiodata = async (email, result) => {
+    const biodata = await getBiodata(email)
+
+    const dataCaptureLogic = biodata?.phoneNumber ? true : false
+    setCookie(undefined, 'email', email)
+    dispatch(setUserState({email: email}))
+
+    if (!dataCaptureLogic) {
+      setCookie(undefined, 'regInput', email)
+      dispatch(setRegInput({email: email}))
+    } else {
+      dispatch(setUserState(result))
+      dispatch(login())
+    }
+  }
+
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
       if (!user) {
         dispatch(logout())
       } else {
-        dispatch(setUserState({
-          email: cookies.email,
-          token: cookies.token,
-          uid: cookies.uid,
-        }))
-        dispatch(login())
+        checkGoogleBiodata(user.email, {
+          email: user.email,
+          token: await user.getIdToken(),
+          uid: user.uid,
+        })
       }
     })
   }, [])

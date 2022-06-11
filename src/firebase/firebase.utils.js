@@ -32,6 +32,18 @@ export const signUpInWithGoogle = async () => {
     console.log(result)
     // Return email, uid, and token to be consumed by Redux
     let { creationTime, lastSignInTime } = result.user.metadata
+
+    const biodata = await getBiodata(result.user.email)
+
+    if(!biodata)
+      setGoogleDataToFirestore({
+        email: result.user.email,
+        uid: result.user.uid,
+        token: result.user.stsTokenManager.accessToken,
+        imgUrl: result.user.photoURL,
+        creationTime,
+        lastSignInTime,
+      })
     return {
       email: result.user.email,
       uid: result.user.uid,
@@ -46,26 +58,26 @@ export const signUpInWithGoogle = async () => {
   }
 }
 
-export const setGoogleDataToFirestore = async (regInput, userInput) => {
-  const { email: emailUserInput, password, ...userInputRest } = userInput
+export const setGoogleDataToFirestore = async (regInput) => {
   const { uid, imgUrl, email, token, creationTime, lastSignInTime } = regInput
   try {
-    const googleDataToFirestore = {
-      isAdmin: false,
-      createdAt: new Date(creationTime),
-      lastLoginAt: new Date(lastSignInTime),
-      imgUrl,
-      uid,
-      email,
-      ...userInputRest,
-    }
-    await addDoc(usersCollectionRef, googleDataToFirestore)
-    return {
-      email,
-      uid,
-      token,
-      firstName: userInputRest.firstName,
-      lastName: userInputRest.lastName,
+    const biodata = await getBiodata(email)
+    console.log(biodata)
+    if(!biodata) {
+      const googleDataToFirestore = {
+        isAdmin: false,
+        createdAt: new Date(creationTime),
+        lastLoginAt: new Date(lastSignInTime),
+        imgUrl,
+        uid,
+        email,
+      }
+      await addDoc(usersCollectionRef, googleDataToFirestore)
+      return {
+        email,
+        uid,
+        token,
+      }
     }
   } catch (err) {
     console.log(err.message)

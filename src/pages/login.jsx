@@ -16,7 +16,7 @@ import { GoogleIcon } from '../helper/authHelper'
 import InputComp from '../components/InputComp/InputComp'
 import BtnComp from '../components/BtnComp/BtnComp'
 import { notifHandler } from '../helper/errorHelper'
-import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
+import { setRegInput } from '../redux/slices/registerSlice'
 import nookies, { setCookie } from 'nookies'
 
 export default function Login(ctx) {
@@ -46,6 +46,22 @@ export default function Login(ctx) {
     setInput({ ...input, [name]: value })
   }
 
+  const checkBiodata = async (email, result) => {
+    const biodata = await getBiodata(email)
+    const dataCaptureLogic = biodata?.phoneNumber ? true : false
+    setCookie(undefined, 'email', email)
+
+    if (!dataCaptureLogic) {
+      setCookie(undefined, 'regInput', email)
+      dispatch(setRegInput(email))
+      router.push('/data-capture')
+    } else {
+      dispatch(setUserState(result))
+      dispatch(login())
+      router.push('/')
+    }
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
 
@@ -58,29 +74,22 @@ export default function Login(ctx) {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
 
-      const biodata = await getBiodata(input.email)
-      const dataCaptureLogic = biodata.phoneNumber ? true : false
-      setCookie(undefined, 'email', input.email)
-
-      if (!dataCaptureLogic) {
-        setCookie(undefined, 'regInput', input.email)
-        dispatch(setRegInput(input.email))
-        router.push('/data-capture')
-      } else {
-        dispatch(setUserState(result))
-        dispatch(login())
-        router.push('/')
-      }
+      checkBiodata(input.email, result)
     }
   }
 
   const handleLoginWithGoogle = async () => {
     const result = await signUpInWithGoogle()
+    console.log('result')
+    console.log(result)
     if (result.hasOwnProperty('error')) {
       notifHandler(dispatch, result.error)
     } else {
-      // dispatch(login(result))
-      router.push('/')
+      await setLastLoginAt(result.email)
+      checkBiodata(result.email, {
+        email: result.email,
+        uid: result.uid,
+      })
     }
   }
 
