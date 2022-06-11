@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import { storage } from '../../firebase/firebase.init'
-import { ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
 import { uploadFiles } from '../../firebase/firebase.utils'
 
