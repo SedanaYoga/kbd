@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { notifHandler } from '../../../helper/errorHelper'
 import Image from 'next/image'
 
-export const InputPuppies = (props) => {
+export const InputPuppies = ({ updatePuppy, show, onHide }) => {
   const [newQuality, setNewQuality] = useState("")
   const [newColor, setColor] = useState("")
   const [newDob, setNewDob] = useState("")
@@ -59,22 +59,24 @@ export const InputPuppies = (props) => {
         }
         const displayId = displayIdGenerator(displayIdObject)
 
+        const docPath = `${+new Date()}_${displayId}`
         const puppyWithIdRef = doc(db, "puppies", `${+new Date()}_${displayId}`)
         // ADD: Puppy data
-        await setDoc(puppyWithIdRef,
-          {
-            ...displayIdObject,
-            displayId,
-            dob: Timestamp.fromDate(new Date(newDob)),
-            bookedStatus: 'available',
-            imgUrl: uploadResults,
-          });
+        const objectToUpload = {
+          ...displayIdObject,
+          displayId,
+          dob: Timestamp.fromDate(new Date(newDob)),
+          bookedStatus: 'available',
+          imgUrl: uploadResults,
+        }
+        await setDoc(puppyWithIdRef, objectToUpload)
+        updatePuppy({ id: docPath, ...objectToUpload })
         notifHandler(dispatch, 'Your puppy has been created!', 'success')
       } catch (error) {
         notifHandler(dispatch, error.message, 'error')
       }
 
-      props.onHide()
+      onHide()
       console.log('Pup Added')
     }
     setColor(null)
@@ -134,7 +136,7 @@ export const InputPuppies = (props) => {
 
   return (
     <>
-      <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered >
+      <Modal show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             Add Puppies
