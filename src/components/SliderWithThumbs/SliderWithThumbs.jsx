@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 const ProductImagesSlider = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState()
+  console.log(images.at(-1))
 
   return (
     <>
@@ -19,7 +20,14 @@ const ProductImagesSlider = ({ images }) => {
         className='product-images-slider'>
         {images.map((item, index) => (
           <SwiperSlide key={index}>
-            <img src={item.downloadUrl} alt='product images' />
+            {index === images.length - 1 ?
+              <video controls>
+                <source src={item.downloadUrl}
+                  type="video/mp4" />
+              </video>
+              :
+              <img src={item.downloadUrl} alt='product images' />
+            }
           </SwiperSlide>
         ))}
       </Swiper>
@@ -32,7 +40,14 @@ const ProductImagesSlider = ({ images }) => {
         {images.map((item, index) => (
           <SwiperSlide key={index}>
             <div className='product-images-slider-thumbs-wrapper'>
-              <img src={item.downloadUrl} alt='product images' />
+              {index === images.length - 1 ?
+                <video muted>
+                  <source src={item.downloadUrl}
+                    type="video/mp4" />
+                </video>
+                :
+                <img src={item.downloadUrl} alt='product images' />
+              }
             </div>
           </SwiperSlide>
         ))}

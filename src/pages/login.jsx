@@ -103,7 +103,7 @@ export default function Login() {
                 onClick={handleSubmit}
                 type='primary'
                 margin='0 1rem 0 0'>
-                Sign Up, FREE!
+                Sign In, FREE!
               </BtnComp>
               <BtnComp
                 onClick={handleLoginWithGoogle}
