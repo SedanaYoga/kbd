@@ -117,7 +117,10 @@ export default function Puppy() {
                     type='secondary'
                     borad='pill'
                     padding='10px 30px'
-                    margin='0 1rem 0 0'>
+                    margin='0 1rem 0 0'
+                    href='https://wa.me/6281335751212'
+                    target='_blank'
+                  >
                     <span className={styles.mainRightButtonsWa}>
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>

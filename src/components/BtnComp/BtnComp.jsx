@@ -3,7 +3,7 @@ import styles from './BtnComp.module.scss'
 
 const BtnComp = React.forwardRef(
   (
-    { onClick, href, children, style, type, margin, fontSize, padding, borad },
+    { onClick, href, target, rel, children, style, type, margin, fontSize, padding, borad },
     ref,
   ) => {
     let btnCl = `btn`
@@ -27,6 +27,8 @@ const BtnComp = React.forwardRef(
         onClick={onClick}
         ref={ref}
         className={btnCl}
+        target={target}
+        rel={rel}
         style={{
           padding,
           fontSize,
@@ -46,6 +48,8 @@ export default BtnComp
 BtnComp.displayName = 'BtnComp'
 
 BtnComp.defaultProps = {
+  target: '_self',
+  rel: 'noreferrer noopener',
   type: 'primary',
   margin: '0',
   padding: '10px 14px',

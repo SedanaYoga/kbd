@@ -18,6 +18,8 @@ import { notifHandler } from '../helper/errorHelper'
 
 export default function Login() {
   const router = useRouter()
+  const nextRedirect = router.query.nextRedirect
+
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
 
@@ -27,7 +29,11 @@ export default function Login() {
   })
 
   useEffect(() => {
-    if (user) router.replace('/')
+    if (nextRedirect) {
+      router.replace(`/book/${nextRedirect}`)
+    } else {
+      if (user) router.replace('/')
+    }
   }, [])
 
   const handleChange = (name, value) => {
@@ -45,7 +51,11 @@ export default function Login() {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
       dispatch(login(result))
-      router.push('/')
+      if (nextRedirect) {
+        router.replace(`/book/${nextRedirect}`)
+      } else {
+        router.push('/')
+      }
     }
   }
 
