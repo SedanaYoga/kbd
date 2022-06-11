@@ -17,6 +17,9 @@ import { useEffect } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
+import hero1 from '../../public/images/hero-images/1.png'
+import hero2 from '../../public/images/hero-images/2.png'
+import hero3 from '../../public/images/hero-images/3.png'
 
 export default function Home() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
@@ -27,7 +30,7 @@ export default function Home() {
       dispatch(getPuppiesFb())
       dispatch(getPricingFb())
     }
-  }, [])
+  })
 
   return (
     <>
@@ -63,7 +66,8 @@ export default function Home() {
                           }}
                           type='primary'
                           padding='.6rem 3rem'
-                          borad='pill'>
+                          borad='pill'
+                        >
                           Meet our Best Puppies!
                         </BtnComp>
                       </Link>
@@ -73,13 +77,13 @@ export default function Home() {
                 <Col className='col-lg-7 d-flex flex-row align-items-center justify-content-start'>
                   <div className={styles.heroImage}>
                     <div>
-                      <img src='/images/hero-images/1.png' alt='hero-1' />
+                      <Image src={hero1} alt='hero-1' />
                     </div>
                     <div>
-                      <img src='/images/hero-images/2.png' alt='hero-2' />
+                      <Image src={hero2} alt='hero-2' />
                     </div>
                     <div>
-                      <img src='/images/hero-images/3.png' alt='hero-3' />
+                      <Image src={hero3} alt='hero-3' />
                     </div>
                   </div>
                 </Col>
@@ -105,9 +109,11 @@ export default function Home() {
                   <SliderComp className={styles.sliderContainer}>
                     {[...Array(4).keys()].map((key) => (
                       <div key={key} className={styles.sliderImage}>
-                        <img
+                        <Image
                           src={`/images/meet-dogs/${key + 1}.png`}
                           alt={`dogs-${key + 1}`}
+                          width={500}
+                          height={600}
                         />
                       </div>
                     ))}
@@ -136,19 +142,34 @@ export default function Home() {
               <h1>Why Us?</h1>
               <Row lg={3} md={1}>
                 <Col className={styles.whyUsCard}>
-                  <img src='/images/why-us/best-breed.png' alt='best-breed' />
+                  <Image
+                    src='/images/why-us/best-breed.png'
+                    alt='best-breed'
+                    width={275}
+                    height={275}
+                  />
                   <h2>
                     <span>Best</span> Breed
                   </h2>
                 </Col>
                 <Col className={styles.whyUsCard}>
-                  <img src='/images/why-us/stambum.png' alt='stambum' />
+                  <Image
+                    src='/images/why-us/stambum.png'
+                    alt='stambum'
+                    width={275}
+                    height={275}
+                  />
                   <h2>
                     <span>Stambum</span> Certificate
                   </h2>
                 </Col>
                 <Col className={styles.whyUsCard}>
-                  <img src='/images/why-us/vaccinated.png' alt='vaccinated' />
+                  <Image
+                    src='/images/why-us/vaccinated.png'
+                    alt='vaccinated'
+                    width={275}
+                    height={275}
+                  />
                   <h2>
                     Complete <span>Vaccine</span>
                   </h2>
@@ -165,7 +186,12 @@ export default function Home() {
                   <div key={id} className={styles.testiSliderCard}>
                     <h5>{`"${comment}"`}</h5>
                     <div className={styles.testiSliderCardBottom}>
-                      <img src={imgUrl} alt={`testi - ${name}`} />
+                      <Image
+                        width={50}
+                        height={50}
+                        src={imgUrl}
+                        alt={`testi - ${name}`}
+                      />
                       <p>{`${name}, ${year}`}</p>
                     </div>
                   </div>

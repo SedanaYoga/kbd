@@ -42,14 +42,15 @@ export const InputPuppies = (props) => {
         dob: newDob,  
         imgUrl: [
           newUrl, newUrl, newUrl, newUrl, newUrl
-        ], 
+        ],
         breedQuality: newQuality,
         color: newColor,
-        sex: newSex });
-  
-      props.onHide()
-      // inputDisplayId()
-      console.log('Pup Added')
+        sex: newSex
+      });
+
+    props.onHide()
+    // inputDisplayId()
+    console.log('Pup Added')
 
       if (!file) {
         alert("Please upload an image first!");
@@ -266,3 +267,169 @@ export const InputPuppies = (props) => {
     )
   
   }
+  const videoChangeHandler = async (event) => {
+    await uploadVideo(event.target.files[0])
+    notifHandler(dispatch, 'Your video is successfully uploaded!', 'success')
+  }
+
+  return (
+    <>
+
+      <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Add Puppies
+          </Modal.Title>
+
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Label className='inline'>
+              Quality :
+            </Form.Label>
+            <div key={`inline-radio`} className="mb-3">
+              <Form.Check
+                inline
+                label="normal"
+                name="group3"
+                type="radio"
+                value="1"
+                id={`inline-radio-1`}
+                onChange={inputQuality}
+              />
+              <Form.Check
+                inline
+                name="group3"
+                label="premium"
+                type="radio"
+                value="2"
+                id={`inline-radio-2`}
+                onChange={inputQuality}
+              />
+              <Form.Check
+                inline
+                name="group3"
+                label="champion"
+                type="radio"
+                value="3"
+                id={`inline-radio-3`}
+                onChange={inputQuality}
+              />
+            </div>
+          </Form>
+          <Form>
+            <Form.Label className='inline'>
+              Color :
+            </Form.Label>
+            <div key={`inline-radio`} className="mb-3">
+              <Form.Check
+                inline
+                name="group1"
+                label="Brown"
+                type="radio"
+                value="1"
+                id={`inline-radio-1`}
+                onChange={inputColor}
+              />
+              <Form.Check
+                inline
+                name="group1"
+                label="Black"
+                type="radio"
+                value="2"
+                id={`inline-radio-2`}
+                onChange={inputColor}
+              />
+              <Form.Check
+                inline
+                name="group1"
+                label="White"
+                type="radio"
+                value="3"
+                id={`inline-radio-3`}
+                onChange={inputColor}
+              />
+              <Form.Check
+                inline
+                name="group1"
+                label="Bridle"
+                type="radio"
+                value="4"
+                id={`inline-radio-4`}
+                onChange={inputColor}
+              />
+            </div>
+          </Form>
+          <Form>
+            <Form.Label className='inline'>
+              Sex :
+            </Form.Label>
+            <div key={`inline-radio`} className="mb-3">
+              <Form.Check
+                inline
+                name="group2"
+                label="Male"
+                type="radio"
+                value="true"
+                id={`inline-radio-1`}
+                onChange={inputSex}
+              />
+              <Form.Check
+                inline
+                name="group2"
+                label="Female"
+                type="radio"
+                value="false"
+                id={`inline-radio-2`}
+                onChange={inputSex}
+              />
+            </div>
+          </Form>
+          <Form className='w-100'>
+            <Form.Group className='w-100 d-flex justify-content-between mb-3'>
+              <label>
+                Date of Birth : {' '}
+                <input
+                  className='form-control '
+                  type='date'
+                  name='dob'
+                  onChange={inputDate}
+                />
+              </label>
+            </Form.Group>
+          </Form>
+
+          <InputGroup className="mb-3">
+            <FormControl
+              placeholder="Image Url"
+              aria-label="Image Url"
+              aria-describedby="basic-addon1"
+              onChange={(event) => { setNewUrl(event.target.value) }}
+            />
+          </InputGroup>
+
+          <InputGroup className='mb-3'>
+            <label>
+              Upload Puppy Video:
+              <input
+                className='form-control'
+                type='file'
+                onChange={videoChangeHandler}
+              />
+            </label>
+          </InputGroup>
+
+          {videoToPlay &&
+            <ReactPlayer url={videoToPlay.downloadUrl} playing={true} controls={true} height='500px' width='280px' />
+          }
+
+        </Modal.Body>
+        <Modal.Body>
+          <Button onClick={createPuppies}>Add Puppies</Button>
+        </Modal.Body>
+      </Modal>
+      <SuccessAddPup show={modalSuccess} onHide={() => setSuccess(false)} />
+    </>
+  )
+
+}

@@ -6,22 +6,8 @@ import {
 } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 
-const NotifComp = ({ type }) => {
-  const { isShown, notif } = useSelector((state) => state.notif)
-  let ntCl = ''
-  switch (type) {
-    case 'success':
-      ntCl = `${styles.nt} ${styles.success}`
-      break
-    case 'error':
-      ntCl = `${styles.nt} ${styles.error}`
-      break
-    case 'warning':
-      ntCl = `${styles.nt} ${styles.warning}`
-      break
-    default:
-      break
-  }
+const NotifComp = () => {
+  const { isShown, notif, type } = useSelector((state) => state.notif)
   return (
     <div className={`${styles.nt} ${isShown ? styles.active : ''}`}>
       <div className={styles.ntLeft}>
@@ -34,7 +20,7 @@ const NotifComp = ({ type }) => {
         )}
       </div>
       <div className={styles.ntRight}>
-        <h4>Error</h4>
+        <h4>{type === 'success' ? 'Success' : type === 'error' ? 'Error' : 'Warning'}</h4>
         <p>{notif}</p>
       </div>
     </div>
@@ -42,6 +28,3 @@ const NotifComp = ({ type }) => {
 }
 
 export default NotifComp
-NotifComp.defaultProps = {
-  type: 'error',
-}

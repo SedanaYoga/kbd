@@ -40,7 +40,7 @@ export default function Login() {
     // login with email and password
     const result = await loginWithEmailAndPassword(input.email, input.password)
     if (result.error) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
@@ -52,7 +52,7 @@ export default function Login() {
   const handleLoginWithGoogle = async () => {
     const result = await signUpInWithGoogle()
     if (result.hasOwnProperty('error')) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       dispatch(login(result))
       router.push('/')

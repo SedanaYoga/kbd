@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   isShown: false,
   notif: null,
+  type: 'error'
 }
 
 export const notifSlice = createSlice({
@@ -10,8 +11,9 @@ export const notifSlice = createSlice({
   initialState,
   reducers: {
     showNotif: (state, action) => {
-      state.notif = action.payload
+      state.notif = action.payload.message
       state.isShown = true
+      state.type = action.payload.type
     },
     clearNotif: (state) => {
       state.isShown = false

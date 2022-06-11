@@ -20,11 +20,13 @@
     "react-bootstrap": "^2.3.1",
     "react-dom": "18.1.0",
     "react-icons": "^4.3.1",
+    "react-player": "^2.10.1",
     "react-redux": "^8.0.1",
     "react-slick": "^0.29.0",
     "react-table": "^7.7.0",
     "slick-carousel": "^1.8.1",
-    "swiper": "^8.1.4"
+    "swiper": "^8.1.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "8.15.0",
