@@ -67,15 +67,18 @@ export const setGoogleDataToFirestore = async (regInput) => {
     const biodata = await getBiodata(email)
     console.log(biodata)
     if (!biodata) {
+
       const googleDataToFirestore = {
         isAdmin: false,
         createdAt: new Date(creationTime),
         lastLoginAt: new Date(lastSignInTime),
-        imgUrl,
+        imgUrl: { downloadUrl: imgUrl, fileNameOnUpload: '' },
         uid,
         email,
       }
-      await addDoc(usersCollectionRef, googleDataToFirestore)
+      const userWithIdRef = doc(db, "users", `${+new Date()}_${email}`)
+      await setDoc(userWithIdRef, googleDataToFirestore)
+
       return {
         email,
         uid,

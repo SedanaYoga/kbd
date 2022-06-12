@@ -5,16 +5,39 @@ import UserLayout from '../../components/Layouts/UserLayout'
 import BtnComp from '../../components/BtnComp/BtnComp'
 import BiodataComp from '../../components/BiodataComp/BiodataComp'
 import BookingsComp from '../../components/BookingsComp/BookingsComp'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getBiodata, updateBiodata } from '../../firebase/firebase.utils'
+import { parseCookies } from 'nookies'
+import { useRouter } from 'next/router'
 
 const ProfilePage = () => {
   const [showBooking, setShowBooking] = useState(false)
+  const { email, regInput } = parseCookies()
+  const router = useRouter()
+
+  const [userBiodata, setUserBiodata] = useState(null)
+
+  const getBiodataHandler = async (email) => {
+    const result = await getBiodata(email)
+    setUserBiodata(result)
+  }
+
+  useEffect(() => {
+    getBiodataHandler(email)
+    if (regInput) router.replace('/data-capture')
+  }, [])
+
   const openBiodata = () => {
     setShowBooking(false)
   }
   const openBookings = () => {
     setShowBooking(true)
   }
+
+  const updateProfileHandler = async () => {
+    console.log('Hello')
+  }
+
   return (
     <div>
       <Head>
@@ -45,7 +68,14 @@ const ProfilePage = () => {
                 Bookings
               </BtnComp>
             </div>
-            {showBooking ? <BookingsComp /> : <BiodataComp />}
+            {showBooking ? <BookingsComp /> : <BiodataComp
+              profileData={userBiodata && userBiodata}
+              onSubmit={updateProfileHandler}
+            // onUploadPic={onUploadPic}
+            // onDeletePic={onDeletePic}
+            // setBiodataToParent={biodataInputHandler}
+            // deletePrevImage={deletePrevImage}
+            />}
           </div>
         </Container>
       </section>

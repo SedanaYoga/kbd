@@ -80,7 +80,7 @@ export default function Register(ctx) {
 
       if (!biodata) setGoogleDataToFirestore(result)
 
-      router.push('/data-capture')
+      router.push(`/data-capture?imgDownloadUrl=${result.imgUrl}`)
     }
   }
 
@@ -114,19 +114,19 @@ export default function Register(ctx) {
             <div className='d-flex flex-column justify-content-center gap-3 mb-4'>
               <InputComp
                 label='Email'
-                setNameValue={handleChange}
+                getNameValue={handleChange}
                 name='email'
                 type='email'
               />
               <InputComp
                 label='Password'
-                setNameValue={handleChange}
+                getNameValue={handleChange}
                 name='password'
                 type='password'
               />
               <InputComp
                 label='Confirm Password'
-                setNameValue={handleChange}
+                getNameValue={handleChange}
                 name='confirmPassword'
                 type='password'
               />
