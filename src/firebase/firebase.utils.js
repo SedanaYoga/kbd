@@ -15,10 +15,10 @@ import {
   deleteDoc,
   collection,
   where,
+  setDoc
 } from 'firebase/firestore'
 import { timeStampToDateString } from '../helper/dateHelper'
 import { uploadBytes, getDownloadURL, ref, deleteObject } from 'firebase/storage'
-import { v4 } from 'uuid'
 import { fileNameToExtension } from '../helper/textHelper'
 
 const puppiesCollectionRef = collection(db, 'puppies')
@@ -35,6 +35,18 @@ export const signUpInWithGoogle = async () => {
     console.log(result)
     // Return email, uid, and token to be consumed by Redux
     let { creationTime, lastSignInTime } = result.user.metadata
+
+    const biodata = await getBiodata(result.user.email)
+
+    if (!biodata)
+      setGoogleDataToFirestore({
+        email: result.user.email,
+        uid: result.user.uid,
+        token: result.user.stsTokenManager.accessToken,
+        imgUrl: result.user.photoURL,
+        creationTime,
+        lastSignInTime,
+      })
     return {
       email: result.user.email,
       uid: result.user.uid,
@@ -49,26 +61,26 @@ export const signUpInWithGoogle = async () => {
   }
 }
 
-export const setGoogleDataToFirestore = async (regInput, userInput) => {
-  const { email: emailUserInput, password, ...userInputRest } = userInput
+export const setGoogleDataToFirestore = async (regInput) => {
   const { uid, imgUrl, email, token, creationTime, lastSignInTime } = regInput
   try {
-    const googleDataToFirestore = {
-      isAdmin: false,
-      createdAt: new Date(creationTime),
-      lastLoginAt: new Date(lastSignInTime),
-      imgUrl,
-      uid,
-      email,
-      ...userInputRest,
-    }
-    await addDoc(usersCollectionRef, googleDataToFirestore)
-    return {
-      email,
-      uid,
-      token,
-      firstName: userInputRest.firstName,
-      lastName: userInputRest.lastName,
+    const biodata = await getBiodata(email)
+    console.log(biodata)
+    if (!biodata) {
+      const googleDataToFirestore = {
+        isAdmin: false,
+        createdAt: new Date(creationTime),
+        lastLoginAt: new Date(lastSignInTime),
+        imgUrl,
+        uid,
+        email,
+      }
+      await addDoc(usersCollectionRef, googleDataToFirestore)
+      return {
+        email,
+        uid,
+        token,
+      }
     }
   } catch (err) {
     console.log(err.message)
@@ -110,14 +122,17 @@ export const signUpWithEmailAndPassword = async (userData) => {
     )
     const { confirmPassword, password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
-    await addDoc(usersCollectionRef, {
+
+    const userWithIdRef = doc(db, "users", `${+new Date()}_${userData.email}`)
+    const objectToUpload = {
       ...userToFirestore,
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
       imgUrl: userToFirestore.imgUrl ? userToFirestore.imgUrl : { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
       uid: user.user.uid,
-    })
+    }
+    await setDoc(userWithIdRef, objectToUpload)
     console.log(user)
     return {
       email: user.user.email,
@@ -125,6 +140,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
       token: user.user.stsTokenManager.accessToken,
       firstName: userData.firstName,
       lastName: userData.lastName,
+      phoneNumber: user.user.phoneNumber,
     }
   } catch (err) {
     console.log(err.message)
@@ -136,11 +152,11 @@ export const loginWithEmailAndPassword = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password)
 
-    console.log(user)
     return {
       email: user.user.email,
       uid: user.user.uid,
       token: user.user.stsTokenManager.accessToken,
+      phoneNumber: user.user.phoneNumber,
     }
   } catch (err) {
     console.log(err.message)
@@ -238,12 +254,37 @@ export const getUserActiveBook = async (email) => {
 }
 
 export const setLastLoginAt = async (email) => {
-  const userRef = query(collection(db, 'users'), where('email', '==', email))
+  const userRef = query(usersCollectionRef, where('email', '==', email))
   const findUsers = await getDocs(userRef)
   findUsers.forEach(async (user) => {
     const getUserRef = doc(db, 'users', user.id)
     await updateDoc(getUserRef, {
       lastLoginAt: new Date(),
+    })
+  })
+}
+
+export const getBiodata = async (email) => {
+  const userRef = query(usersCollectionRef, where('email', '==', email))
+  const findUsers = await getDocs(userRef);
+  const data = null
+  findUsers.forEach((doc) => {
+    data = doc.data()
+  });
+  return data
+}
+
+export const updateBiodata = async (biodata) => {
+  const userRef = query(usersCollectionRef, where('email', '==', biodata.email))
+  const findUsers = await getDocs(userRef)
+  findUsers.forEach(async (user) => {
+    const getUserRef = doc(db, 'users', user.id)
+    await updateDoc(getUserRef, {
+      firstName: biodata.firstName,
+      lastName: biodata.lastName,
+      phoneNumber: biodata.phoneNumber,
+      address: biodata.address,
+      imgUrl: biodata.imgUrl
     })
   })
 }

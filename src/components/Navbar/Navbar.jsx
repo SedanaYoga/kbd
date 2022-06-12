@@ -6,33 +6,54 @@ import { capitalizeFirst } from '../../helper/textHelper'
 import BtnComp from '../BtnComp/BtnComp'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, login } from '../../redux/slices/userSlice'
+import { logout, login, setUserState } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
+import { clearRegInput } from '../../redux/slices/registerSlice'
+import nookies, { setCookie } from 'nookies'
+import {
+  getBiodata,
+} from '../../firebase/firebase.utils'
+import { setRegInput } from '../../redux/slices/registerSlice'
 
 const menu = {
   main: ['home', 'about us', 'browse', 'dashboard'],
   auth: ['log in', 'register'],
 }
-const NavBar = () => {
+const NavBar = (ctx) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const currentPath = router.pathname.split('/')[1]
   const { user } = useSelector((state) => state.user)
   const [showDropdown, setShowDropdown] = useState(false)
+  const cookies = nookies.get(ctx)
+
+  const checkGoogleBiodata = async (email, result) => {
+    const biodata = await getBiodata(email)
+
+    const dataCaptureLogic = biodata?.phoneNumber ? true : false
+    setCookie(undefined, 'email', email)
+    dispatch(setUserState({email: email}))
+
+    if (!dataCaptureLogic) {
+      setCookie(undefined, 'regInput', email)
+      dispatch(setRegInput({email: email}))
+    } else {
+      dispatch(setUserState(result))
+      dispatch(login())
+    }
+  }
 
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
       if (!user) {
         dispatch(logout())
       } else {
-        dispatch(
-          login({
-            email: user.email,
-            token: await user.getIdToken(),
-            uid: user.uid,
-          }),
-        )
+        checkGoogleBiodata(user.email, {
+          email: user.email,
+          token: await user.getIdToken(),
+          uid: user.uid,
+        })
       }
     })
   }, [])
@@ -50,7 +71,9 @@ const NavBar = () => {
   const logoutHandler = async () => {
     await signOut(auth)
     dispatch(logout())
+    dispatch(clearRegInput())
     setShowDropdown(false)
+    router.push('/')
   }
 
   return (

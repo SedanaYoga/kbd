@@ -5,14 +5,19 @@ import UserLayout from '../components/Layouts/UserLayout'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-import { signUpInWithGoogle } from '../firebase/firebase.utils'
+import { getBiodata, signUpInWithGoogle } from '../firebase/firebase.utils'
 import { GoogleIcon } from '../helper/authHelper'
-import { clearRegInput, setRegInput } from '../redux/slices/registerSlice'
+import { setRegInput } from '../redux/slices/registerSlice'
 import BtnComp from '../components/BtnComp/BtnComp'
 import InputComp from '../components/InputComp/InputComp'
 import { notifHandler } from '../helper/errorHelper'
+import {
+  setGoogleDataToFirestore,
+  signUpWithEmailAndPassword,
+} from '../firebase/firebase.utils'
+import nookies, { setCookie } from 'nookies'
 
-export default function Register() {
+export default function Register(ctx) {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
@@ -21,9 +26,10 @@ export default function Register() {
     password: '',
     confirmPassword: '',
   })
+  const cookies = nookies.get(ctx)
 
   useEffect(() => {
-    dispatch(clearRegInput())
+    if (cookies.regInput) router.replace('/data-capture')
     if (user) router.replace('/')
   }, [])
 
@@ -31,13 +37,25 @@ export default function Register() {
     setInput({ ...input, [name]: value })
   }
 
-  const submitHandler = () => {
-    if (input.password !== input.confirmPassword) {
-      return notifHandler(dispatch, 'Password does not match', 'error')
-    }
+  const submitHandler = async () => {
+    if (!input.email || !input.password || !input.confirmPassword) {
+      notifHandler(dispatch, 'Please fullfill all required register form')
+    } else {
+      if (input.password !== input.confirmPassword) {
+        notifHandler(dispatch, 'Password does not match')
+      } else {
+        dispatch(setRegInput(input.email))
 
-    if (input.email === '' || input.password === '' || input.confirmPassword === '') {
-      return notifHandler(dispatch, "Fields can't be empty", 'warning')
+        const result = await signUpWithEmailAndPassword(input)
+
+        if (result.error) {
+          notifHandler(dispatch, result.error)
+        } else {
+          setCookie(undefined, 'regInput', input.email)
+          dispatch(setRegInput(result.email))
+          router.push('/data-capture')
+        }
+      }
     }
 
     dispatch(setRegInput(input))
@@ -47,17 +65,22 @@ export default function Register() {
   const signUpWithGoogleHandler = async () => {
     // Sign Up First
     const result = await signUpInWithGoogle()
+
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
       notifHandler(dispatch, result.error, 'error')
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password
-      dispatch(setRegInput(result))
-      router.push({
-        pathname: '/data-capture',
-        query: { msg: 'googleSignUp' },
-      })
+
+      const biodata = await getBiodata(result.email)
+
+      setCookie(undefined, 'regInput', result.email)
+      dispatch(setRegInput(result.email))
+
+      if (!biodata) setGoogleDataToFirestore(result)
+
+      router.push('/data-capture')
     }
   }
 
@@ -80,7 +103,8 @@ export default function Register() {
               <Link href='/login'>
                 <span
                   className='d-inline text-decoration-none text-button fw-semibold'
-                  role='button'>
+                  role='button'
+                >
                   Log in
                 </span>
               </Link>
@@ -113,13 +137,15 @@ export default function Register() {
                 borad='pill'
                 onClick={submitHandler}
                 type='primary'
-                margin='0 1rem 0 0'>
+                margin='0 1rem 0 0'
+              >
                 Sign Up, FREE!
               </BtnComp>
               <BtnComp
                 onClick={signUpWithGoogleHandler}
                 borad='pill'
-                type='secondary'>
+                type='secondary'
+              >
                 <GoogleIcon /> Sign Up with Google
               </BtnComp>
             </div>

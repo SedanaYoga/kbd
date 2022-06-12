@@ -3,26 +3,34 @@ import { setCookie } from 'nookies'
 
 const initialState = {
   isLoading: false,
-  user: null,
+  user: {
+    email: '',
+    token: '',
+    uid: '',
+  },
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login: (state, action) => {
+    setUserState: (state, action) => {
       state.user = action.payload
-      setCookie(undefined, 'token', action.payload.token, { path: '/' })
-      setCookie(undefined, 'uid', action.payload.uid, { path: '/' })
+    },
+    login: (state) => {
+        setCookie(undefined, 'token', state.user.token, { path: '/' })
+        setCookie(undefined, 'uid', state.user.uid, { path: '/' })
     },
     logout: (state) => {
       state.user = null
       setCookie(undefined, 'token', '', { path: '/' })
       setCookie(undefined, 'uid', '', { path: '/' })
+      setCookie(undefined, 'regInput', '', { path: '/' })
+      setCookie(undefined, 'email', '', { path: '/' })
     },
   },
 })
 
-export const { login, logout } = userSlice.actions
+export const { login, logout, setUserState } = userSlice.actions
 
 export default userSlice.reducer

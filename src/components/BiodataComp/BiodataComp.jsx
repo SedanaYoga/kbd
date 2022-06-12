@@ -5,12 +5,12 @@ import { useState } from 'react'
 
 const BiodataComp = ({
   type,
-  setBiodata,
+  setBiodataToParent,
   onUploadPic,
   onDeletePic,
   onSubmit,
   profileImg,
-  deletePrevImage
+  deletePrevImage,
 }) => {
   const [biodataInput, setBiodataInput] = useState({
     imgUrl: profileImg ? profileImg : '',
@@ -29,10 +29,15 @@ const BiodataComp = ({
         setPreviewImage(URL.createObjectURL(value))
       }
       deletePrevImage()
+      const newBiodataInput = { ...biodataInput, [name]: value }
+      setBiodataToParent(newBiodataInput, isPicUploaded)
+      setBiodataInput(newBiodataInput)
+    } else {
+      const { imgUrl, ...biodataInputWithoutImgUrl } = biodataInput
+      const newBiodataInput = { ...biodataInputWithoutImgUrl, [name]: value }
+      setBiodataToParent(newBiodataInput, isPicUploaded)
+      setBiodataInput(newBiodataInput)
     }
-    const newBiodataInput = { ...biodataInput, [name]: value }
-    setBiodata(newBiodataInput, isPicUploaded)
-    setBiodataInput(newBiodataInput)
   }
 
   const submitHandler = () => {
@@ -54,11 +59,7 @@ const BiodataComp = ({
         <div className={styles.biodataPicLeft}>
           <img
             src={
-              typeof biodataInput.imgUrl === 'object'
-                ? previewImage
-                : biodataInput.imgUrl === ''
-                  ? '/images/default-user.png'
-                  : ''
+              previewImage ? previewImage : '/images/default-user.png'
             }
             alt='biodata-photo'
           />
@@ -75,7 +76,11 @@ const BiodataComp = ({
         </div>
         <div className={styles.biodataPicRight}>
           <h3>Profile Picture</h3>
-          <p>{isPicUploaded ? 'This will be displayed on your profile' : 'Please Upload before submitting!'}</p>
+          <p>
+            {isPicUploaded
+              ? 'This will be displayed on your profile'
+              : 'Please Upload before submitting!'}
+          </p>
           <div className={styles.biodataPicRightButtons}>
             <BtnComp
               type='secondary'
@@ -130,7 +135,7 @@ const BiodataComp = ({
         borad='pill'
         padding='0.5rem 4rem'
       >
-        {type === 'data-capture' ? 'Register' : 'Update'}
+        {type === 'data-capture' ? 'Confirm' : 'Update'}
       </BtnComp>
     </div>
   )
