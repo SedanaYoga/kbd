@@ -15,10 +15,10 @@ import {
   deleteDoc,
   collection,
   where,
+  setDoc
 } from 'firebase/firestore'
 import { timeStampToDateString } from '../helper/dateHelper'
 import { uploadBytes, getDownloadURL, ref, deleteObject } from 'firebase/storage'
-import { v4 } from 'uuid'
 import { fileNameToExtension } from '../helper/textHelper'
 
 const puppiesCollectionRef = collection(db, 'puppies')
@@ -38,7 +38,7 @@ export const signUpInWithGoogle = async () => {
 
     const biodata = await getBiodata(result.user.email)
 
-    if(!biodata)
+    if (!biodata)
       setGoogleDataToFirestore({
         email: result.user.email,
         uid: result.user.uid,
@@ -66,7 +66,7 @@ export const setGoogleDataToFirestore = async (regInput) => {
   try {
     const biodata = await getBiodata(email)
     console.log(biodata)
-    if(!biodata) {
+    if (!biodata) {
       const googleDataToFirestore = {
         isAdmin: false,
         createdAt: new Date(creationTime),
@@ -122,14 +122,17 @@ export const signUpWithEmailAndPassword = async (userData) => {
     )
     const { confirmPassword, password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
-    await addDoc(usersCollectionRef, {
+
+    const userWithIdRef = doc(db, "users", `${+new Date()}_${userData.email}`)
+    const objectToUpload = {
       ...userToFirestore,
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
       imgUrl: userToFirestore.imgUrl ? userToFirestore.imgUrl : { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
       uid: user.user.uid,
-    })
+    }
+    await setDoc(userWithIdRef, objectToUpload)
     console.log(user)
     return {
       email: user.user.email,
@@ -281,6 +284,7 @@ export const updateBiodata = async (biodata) => {
       lastName: biodata.lastName,
       phoneNumber: biodata.phoneNumber,
       address: biodata.address,
+      imgUrl: biodata.imgUrl
     })
   })
 }

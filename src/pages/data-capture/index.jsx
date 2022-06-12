@@ -10,6 +10,8 @@ import {
   setGoogleDataToFirestore,
   signUpWithEmailAndPassword,
   updateBiodata,
+  uploadFiles,
+  deleteFiles
 } from '../../firebase/firebase.utils'
 import { useDispatch } from 'react-redux'
 import { logout, setUserState } from '../../redux/slices/userSlice'
@@ -37,11 +39,14 @@ const DataCapturePage = (ctx) => {
   const biodataInputHandler = (biodata, isPicUploaded) => {
     if (
       userInput.imgUrl &&
-      !isPicUploaded &&
       userInput.imgUrl.hasOwnProperty('downloadUrl')
     ) {
-      const { imgUrl, ...biodataWithoutImgUrl } = biodata
-      setUserInput({ ...userInput, ...biodataWithoutImgUrl })
+      if (isPicUploaded) {
+        setUserInput({ ...userInput, ...biodata })
+      } else {
+        const { imgUrl, ...biodataWithoutImgUrl } = biodata
+        setUserInput({ ...userInput, ...biodataWithoutImgUrl })
+      }
     } else {
       setUserInput({ ...userInput, ...biodata })
     }
@@ -52,9 +57,9 @@ const DataCapturePage = (ctx) => {
 
     const formComplete =
       userInput.firstName &&
-      userInput.lastName &&
-      userInput.phoneNumber &&
-      userInput.address
+        userInput.lastName &&
+        userInput.phoneNumber &&
+        userInput.address
         ? true
         : false
 
@@ -143,7 +148,7 @@ const DataCapturePage = (ctx) => {
               onSubmit={onAuthSubmitHandler}
               onUploadPic={onUploadPic}
               onDeletePic={onDeletePic}
-              setBiodata={biodataInputHandler}
+              setBiodataToParent={biodataInputHandler}
               profileImg={regInput?.imgUrl}
               deletePrevImage={deletePrevImage}
             />

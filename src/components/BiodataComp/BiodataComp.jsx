@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 const BiodataComp = ({
   type,
-  setBiodata,
+  setBiodataToParent,
   onUploadPic,
   onDeletePic,
   onSubmit,
@@ -29,10 +29,15 @@ const BiodataComp = ({
         setPreviewImage(URL.createObjectURL(value))
       }
       deletePrevImage()
+      const newBiodataInput = { ...biodataInput, [name]: value }
+      setBiodataToParent(newBiodataInput, isPicUploaded)
+      setBiodataInput(newBiodataInput)
+    } else {
+      const { imgUrl, ...biodataInputWithoutImgUrl } = biodataInput
+      const newBiodataInput = { ...biodataInputWithoutImgUrl, [name]: value }
+      setBiodataToParent(newBiodataInput, isPicUploaded)
+      setBiodataInput(newBiodataInput)
     }
-    const newBiodataInput = { ...biodataInput, [name]: value }
-    setBiodata(newBiodataInput, isPicUploaded)
-    setBiodataInput(newBiodataInput)
   }
 
   const submitHandler = () => {
@@ -54,11 +59,7 @@ const BiodataComp = ({
         <div className={styles.biodataPicLeft}>
           <img
             src={
-              typeof biodataInput.imgUrl === 'object'
-                ? previewImage
-                : biodataInput.imgUrl === ''
-                ? '/images/default-user.png'
-                : ''
+              previewImage ? previewImage : '/images/default-user.png'
             }
             alt='biodata-photo'
           />
