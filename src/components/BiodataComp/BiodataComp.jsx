@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import styles from './BiodataComp.module.scss'
 import BtnComp from '../BtnComp/BtnComp'
 import InputComp from '../InputComp/InputComp'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const BiodataComp = ({
   type,
@@ -11,7 +13,11 @@ const BiodataComp = ({
   onSubmit,
   profileImg,
   deletePrevImage,
+  profileData
 }) => {
+  const router = useRouter()
+  const { imgDownloadUrl } = router.query
+
   const [biodataInput, setBiodataInput] = useState({
     imgUrl: profileImg ? profileImg : '',
     firstName: '',
@@ -30,12 +36,12 @@ const BiodataComp = ({
       }
       deletePrevImage()
       const newBiodataInput = { ...biodataInput, [name]: value }
-      setBiodataToParent(newBiodataInput, isPicUploaded)
+      setBiodataToParent && setBiodataToParent(newBiodataInput, isPicUploaded)
       setBiodataInput(newBiodataInput)
     } else {
       const { imgUrl, ...biodataInputWithoutImgUrl } = biodataInput
       const newBiodataInput = { ...biodataInputWithoutImgUrl, [name]: value }
-      setBiodataToParent(newBiodataInput, isPicUploaded)
+      setBiodataToParent && setBiodataToParent(newBiodataInput, isPicUploaded)
       setBiodataInput(newBiodataInput)
     }
   }
@@ -52,6 +58,20 @@ const BiodataComp = ({
     onDeletePic()
     setBiodataInput({ ...biodataInput, imgUrl: '' })
   }
+
+  useEffect(() => {
+    if (imgDownloadUrl) setPreviewImage(imgDownloadUrl)
+    if (profileData) {
+      setBiodataInput({
+        imgUrl: profileData.imgUrl,
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        phoneNumber: profileData.phoneNumber,
+        address: profileData.address
+      })
+      setPreviewImage(profileData.imgUrl.downloadUrl)
+    }
+  }, [profileData])
 
   return (
     <div className={styles.biodata}>
@@ -104,26 +124,30 @@ const BiodataComp = ({
         <div className={styles.biodataDataName}>
           <InputComp
             type='text'
-            setNameValue={handleChange}
+            getNameValue={handleChange}
+            valueFromParent={biodataInput.firstName}
             name='firstName'
             label='First Name'
           />
           <InputComp
             type='text'
-            setNameValue={handleChange}
+            getNameValue={handleChange}
+            valueFromParent={biodataInput.lastName}
             name='lastName'
             label='Last Name'
           />
         </div>
         <InputComp
           type='text'
-          setNameValue={handleChange}
+          getNameValue={handleChange}
+          valueFromParent={biodataInput.phoneNumber}
           name='phoneNumber'
           label='Phone Number'
         />
         <InputComp
           type='text'
-          setNameValue={handleChange}
+          getNameValue={handleChange}
+          valueFromParent={biodataInput.address}
           name='address'
           label='Address'
         />

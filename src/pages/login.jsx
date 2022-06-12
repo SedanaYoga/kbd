@@ -4,13 +4,14 @@ import Link from 'next/link'
 import UserLayout from '../components/Layouts/UserLayout'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login, setUserState } from '../redux/slices/userSlice'
+import { login, logout, setUserState } from '../redux/slices/userSlice'
 import {
   loginWithEmailAndPassword,
   setLastLoginAt,
   signUpInWithGoogle,
   getBiodata,
 } from '../firebase/firebase.utils'
+import { auth } from '../firebase/firebase.init'
 import { useRouter } from 'next/router'
 import { GoogleIcon } from '../helper/authHelper'
 import InputComp from '../components/InputComp/InputComp'
@@ -18,6 +19,7 @@ import BtnComp from '../components/BtnComp/BtnComp'
 import { notifHandler } from '../helper/errorHelper'
 import { setRegInput } from '../redux/slices/registerSlice'
 import nookies, { setCookie } from 'nookies'
+import { onIdTokenChanged } from 'firebase/auth'
 
 export default function Login(ctx) {
   const router = useRouter()
@@ -56,7 +58,7 @@ export default function Login(ctx) {
     if (!dataCaptureLogic) {
       setCookie(undefined, 'regInput', email)
       dispatch(setRegInput(email))
-      router.push('/data-capture')
+      router.push(`/data-capture${result.imgUrl ? `?imgDownloadUrl=${result.imgUrl}` : ''}`)
     } else {
       dispatch(setUserState(result))
       dispatch(login())
@@ -82,15 +84,23 @@ export default function Login(ctx) {
 
   const handleLoginWithGoogle = async () => {
     const result = await signUpInWithGoogle()
-    console.log('result')
-    console.log(result)
     if (result.hasOwnProperty('error')) {
       notifHandler(dispatch, result.error, 'error')
     } else {
       await setLastLoginAt(result.email)
-      checkBiodata(result.email, {
-        email: result.email,
-        uid: result.uid,
+
+      return onIdTokenChanged(auth, async (user) => {
+        if (!user) {
+          dispatch(logout())
+        } else {
+          const token = await user.getIdToken()
+          checkBiodata(result.email, {
+            email: result.email,
+            token,
+            uid: result.uid,
+            imgUrl: result.imgUrl
+          })
+        }
       })
     }
   }
@@ -122,13 +132,13 @@ export default function Login(ctx) {
             <div className='d-flex flex-column justify-content-center gap-3 mb-4'>
               <InputComp
                 label='Email'
-                setNameValue={handleChange}
+                getNameValue={handleChange}
                 name='email'
                 type='email'
               />
               <InputComp
                 label='Password'
-                setNameValue={handleChange}
+                getNameValue={handleChange}
                 name='password'
                 type='password'
               />

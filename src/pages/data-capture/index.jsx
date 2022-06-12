@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import {
-  setGoogleDataToFirestore,
-  signUpWithEmailAndPassword,
   updateBiodata,
   uploadFiles,
   deleteFiles
@@ -17,10 +15,11 @@ import { useDispatch } from 'react-redux'
 import { logout, setUserState } from '../../redux/slices/userSlice'
 import { clearRegInput, setRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
-import nookies, { setCookie } from 'nookies'
+import nookies from 'nookies'
 
 const DataCapturePage = (ctx) => {
   const router = useRouter()
+  const { imgDownloadUrl } = router.query
   const dispatch = useDispatch()
   const cookies = nookies.get(ctx)
 
@@ -119,13 +118,13 @@ const DataCapturePage = (ctx) => {
     if (cookies.regInput && !userInput.email) {
       dispatch(setRegInput({ email: cookies.regInput }))
       dispatch(setUserState({ email: cookies.regInput }))
-      setUserInput({ email: cookies.regInput })
+      setUserInput({ email: cookies.regInput, imgUrl: { downloadUrl: imgDownloadUrl ? imgDownloadUrl : '', fileNameOnUpload: '' } })
     }
 
     if (!cookies.regInput) {
       router.replace('/')
     }
-  }, [])
+  }, [imgDownloadUrl])
 
   return (
     <div>

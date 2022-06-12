@@ -10,7 +10,7 @@ import { logout, login, setUserState } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
 import { clearRegInput } from '../../redux/slices/registerSlice'
-import nookies, { setCookie } from 'nookies'
+import { setCookie } from 'nookies'
 import {
   getBiodata,
 } from '../../firebase/firebase.utils'
@@ -20,24 +20,23 @@ const menu = {
   main: ['home', 'about us', 'browse', 'dashboard'],
   auth: ['log in', 'register'],
 }
-const NavBar = (ctx) => {
+const NavBar = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const currentPath = router.pathname.split('/')[1]
   const { user } = useSelector((state) => state.user)
   const [showDropdown, setShowDropdown] = useState(false)
-  const cookies = nookies.get(ctx)
 
   const checkGoogleBiodata = async (email, result) => {
     const biodata = await getBiodata(email)
 
     const dataCaptureLogic = biodata?.phoneNumber ? true : false
     setCookie(undefined, 'email', email)
-    dispatch(setUserState({email: email}))
+    dispatch(setUserState({ email: email }))
 
     if (!dataCaptureLogic) {
       setCookie(undefined, 'regInput', email)
-      dispatch(setRegInput({email: email}))
+      dispatch(setRegInput({ email: email }))
     } else {
       dispatch(setUserState(result))
       dispatch(login())
@@ -49,9 +48,11 @@ const NavBar = (ctx) => {
       if (!user) {
         dispatch(logout())
       } else {
-        checkGoogleBiodata(user.email, {
+        const token = await user.getIdToken()
+        console.log(token)
+        await checkGoogleBiodata(user.email, {
           email: user.email,
-          token: await user.getIdToken(),
+          token,
           uid: user.uid,
         })
       }
@@ -93,16 +94,14 @@ const NavBar = (ctx) => {
               {menu.main.map((mainMenu, index) => (
                 <Link
                   key={index}
-                  href={`/${
-                    mainMenu === 'home' ? '' : mainMenu.replace(' ', '')
-                  }`}>
-                  <a
-                    className={`${
-                      currentPath ===
-                      `${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
-                        ? styles.active
-                        : ''
+                  href={`/${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')
                     }`}>
+                  <a
+                    className={`${currentPath ===
+                      `${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
+                      ? styles.active
+                      : ''
+                      }`}>
                     {mainMenu}
                   </a>
                 </Link>
@@ -116,9 +115,8 @@ const NavBar = (ctx) => {
                     href={`/${authMenu.replace(' ', '')}`}
                     passHref>
                     <BtnComp
-                      type={`${
-                        authMenu === 'register' ? 'primary' : 'secondary'
-                      }`}
+                      type={`${authMenu === 'register' ? 'primary' : 'secondary'
+                        }`}
                       margin='0 0 0 1rem'
                       padding='0.5rem 1rem'>
                       {capitalizeFirst(authMenu)}
@@ -136,9 +134,8 @@ const NavBar = (ctx) => {
                     </p>
                   </div>
                   <div
-                    className={`${showDropdown ? styles.dropdownShown : ''} ${
-                      styles.authMenuToggle
-                    }`}>
+                    className={`${showDropdown ? styles.dropdownShown : ''} ${styles.authMenuToggle
+                      }`}>
                     <div>
                       <Link href={`/profile/${user.uid}`}>
                         <a>Profile</a>
