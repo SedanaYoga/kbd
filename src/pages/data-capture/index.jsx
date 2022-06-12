@@ -15,17 +15,17 @@ import { useDispatch } from 'react-redux'
 import { logout, setUserState } from '../../redux/slices/userSlice'
 import { clearRegInput, setRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
-import nookies, {setCookie} from 'nookies'
+import nookies, { setCookie } from 'nookies'
 
 const DataCapturePage = (ctx) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const cookies = nookies.get(ctx)
-  
+
   const {
     regInput: { inputUser: regInput },
   } = useSelector((state) => state)
-  
+
   const [userInput, setUserInput] = useState({
     email: regInput?.email,
     firstName: '',
@@ -34,33 +34,89 @@ const DataCapturePage = (ctx) => {
     address: '',
   })
 
-  const biodataInputHandler = (biodata) => {
-    setUserInput({ ...userInput, ...biodata })
+  const biodataInputHandler = (biodata, isPicUploaded) => {
+    if (
+      userInput.imgUrl &&
+      !isPicUploaded &&
+      userInput.imgUrl.hasOwnProperty('downloadUrl')
+    ) {
+      const { imgUrl, ...biodataWithoutImgUrl } = biodata
+      setUserInput({ ...userInput, ...biodataWithoutImgUrl })
+    } else {
+      setUserInput({ ...userInput, ...biodata })
+    }
   }
 
-  const useAuthSubmitHandler = async () => {
+  const onAuthSubmitHandler = async () => {
     console.log(userInput)
 
-    const formComplete = (userInput.firstName && userInput.lastName && userInput.phoneNumber && userInput.address) ? true : false
+    const formComplete =
+      userInput.firstName &&
+      userInput.lastName &&
+      userInput.phoneNumber &&
+      userInput.address
+        ? true
+        : false
 
     if (!formComplete) {
-      notifHandler(dispatch, "Please fullfill all required data form")
+      notifHandler(dispatch, 'Please fullfill all required data form')
     } else {
       updateBiodata(userInput)
       dispatch(clearRegInput())
-      
+
       dispatch(logout())
       router.push('/login')
     }
   }
 
-  useEffect(() => {
-    if(cookies.regInput && !userInput.email) {
-      dispatch(setRegInput({email: cookies.regInput}))
-      dispatch(setUserState({email: cookies.regInput}))
-      setUserInput({email: cookies.regInput})
+  const onUploadPic = async () => {
+    if (!userInput.imgUrl) {
+      notifHandler(
+        dispatch,
+        'No image is selected, please select first!',
+        'error'
+      )
+    } else {
+      const uploadResult = await uploadFiles(
+        userInput.imgUrl,
+        'profilePic',
+        userInput.email
+      )
+      const userInputWithDownloadedUrl = { ...userInput, imgUrl: uploadResult }
+      setUserInput(userInputWithDownloadedUrl)
+      notifHandler(
+        dispatch,
+        'Your profile picture has successfully uploaded!',
+        'success'
+      )
     }
-    
+  }
+
+  const deletePrevImage = async () => {
+    if (userInput.imgUrl) {
+      if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+        await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+      }
+    }
+  }
+
+  const onDeletePic = async () => {
+    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
+    }
+    setUserInput({
+      ...userInput,
+      imgUrl: { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
+    })
+  }
+
+  useEffect(() => {
+    if (cookies.regInput && !userInput.email) {
+      dispatch(setRegInput({ email: cookies.regInput }))
+      dispatch(setUserState({ email: cookies.regInput }))
+      setUserInput({ email: cookies.regInput })
+    }
+
     if (!cookies.regInput) {
       router.replace('/')
     }
@@ -84,9 +140,12 @@ const DataCapturePage = (ctx) => {
             </h1>
             <BiodataComp
               type='data-capture'
-              onSubmit={useAuthSubmitHandler}
+              onSubmit={onAuthSubmitHandler}
+              onUploadPic={onUploadPic}
+              onDeletePic={onDeletePic}
               setBiodata={biodataInputHandler}
               profileImg={regInput?.imgUrl}
+              deletePrevImage={deletePrevImage}
             />
           </div>
         </Container>

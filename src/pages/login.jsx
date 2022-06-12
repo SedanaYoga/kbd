@@ -21,6 +21,8 @@ import nookies, { setCookie } from 'nookies'
 
 export default function Login(ctx) {
   const router = useRouter()
+  const nextRedirect = router.query.nextRedirect
+
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
   const {
@@ -69,7 +71,7 @@ export default function Login(ctx) {
     const result = await loginWithEmailAndPassword(input.email, input.password)
 
     if (result.error) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       // Code for logging lastLoginAt to the firestore
       await setLastLoginAt(result.email)
@@ -83,7 +85,7 @@ export default function Login(ctx) {
     console.log('result')
     console.log(result)
     if (result.hasOwnProperty('error')) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       await setLastLoginAt(result.email)
       checkBiodata(result.email, {
@@ -108,7 +110,8 @@ export default function Login(ctx) {
               <Link href='/register'>
                 <span
                   className='d-inline text-decoration-none text-button fw-semibold'
-                  role='button'>
+                  role='button'
+                >
                   Register
                 </span>
               </Link>
@@ -136,13 +139,15 @@ export default function Login(ctx) {
                 borad='pill'
                 onClick={handleSubmit}
                 type='primary'
-                margin='0 1rem 0 0'>
+                margin='0 1rem 0 0'
+              >
                 Login
               </BtnComp>
               <BtnComp
                 onClick={handleLoginWithGoogle}
                 borad='pill'
-                type='secondary'>
+                type='secondary'
+              >
                 <GoogleIcon /> Login With Google
               </BtnComp>
             </div>

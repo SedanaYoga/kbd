@@ -54,7 +54,7 @@ export const getServerSideProps = async (ctx) => {
     }
   } catch (err) {
     console.log(err.message)
-    ctx.res.writeHead(302, { Location: '/login' })
+    ctx.res.writeHead(302, { Location: `/login?nextRedirect=${id}` })
     ctx.res.end()
     return { props: {} }
   }
@@ -137,10 +137,10 @@ const Book = ({ puppy, pricing }) => {
                             style={{
                               paddingLeft: '0px',
                             }}>{`${camelToNormalUpperCase(
-                            price.id,
-                          )}: ${capitalizeFirst(
-                            puppy[priceRelatedData[index]],
-                          )}`}</td>
+                              price.id,
+                            )}: ${capitalizeFirst(
+                              puppy[priceRelatedData[index]],
+                            )}`}</td>
                           <td className='text-end pe-0'>
                             {strToCurrency(
                               price[puppy[priceRelatedData[index]]],

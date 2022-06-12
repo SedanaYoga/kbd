@@ -38,10 +38,9 @@ export default function Register(ctx) {
   }
 
   const submitHandler = async () => {
-    if( !input.email || !input.password || !input.confirmPassword ) {
+    if (!input.email || !input.password || !input.confirmPassword) {
       notifHandler(dispatch, 'Please fullfill all required register form')
-    }
-    else {
+    } else {
       if (input.password !== input.confirmPassword) {
         notifHandler(dispatch, 'Password does not match')
       } else {
@@ -58,6 +57,9 @@ export default function Register(ctx) {
         }
       }
     }
+
+    dispatch(setRegInput(input))
+    router.push('/data-capture')
   }
 
   const signUpWithGoogleHandler = async () => {
@@ -66,17 +68,17 @@ export default function Register(ctx) {
 
     // Check if there is any error
     if (result.hasOwnProperty('error')) {
-      notifHandler(dispatch, result.error)
+      notifHandler(dispatch, result.error, 'error')
     } else {
       // If not, set Register Input in Redux with Email from the result
       // can ignore password
 
       const biodata = await getBiodata(result.email)
-      
+
       setCookie(undefined, 'regInput', result.email)
       dispatch(setRegInput(result.email))
-      
-      if(!biodata) setGoogleDataToFirestore(result)
+
+      if (!biodata) setGoogleDataToFirestore(result)
 
       router.push('/data-capture')
     }
@@ -101,7 +103,8 @@ export default function Register(ctx) {
               <Link href='/login'>
                 <span
                   className='d-inline text-decoration-none text-button fw-semibold'
-                  role='button'>
+                  role='button'
+                >
                   Log in
                 </span>
               </Link>
@@ -134,13 +137,15 @@ export default function Register(ctx) {
                 borad='pill'
                 onClick={submitHandler}
                 type='primary'
-                margin='0 1rem 0 0'>
+                margin='0 1rem 0 0'
+              >
                 Sign Up, FREE!
               </BtnComp>
               <BtnComp
                 onClick={signUpWithGoogleHandler}
                 borad='pill'
-                type='secondary'>
+                type='secondary'
+              >
                 <GoogleIcon /> Sign Up with Google
               </BtnComp>
             </div>
