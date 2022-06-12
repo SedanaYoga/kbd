@@ -52,8 +52,6 @@ const DataCapturePage = (ctx) => {
   }
 
   const onAuthSubmitHandler = async () => {
-    console.log(userInput)
-
     const formComplete =
       userInput.firstName &&
         userInput.lastName &&

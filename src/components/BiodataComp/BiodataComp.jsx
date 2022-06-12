@@ -31,9 +31,7 @@ const BiodataComp = ({
   const handleChange = async (name, value) => {
     if (name === 'imgUrl') {
       setIsPicUploaded(false)
-      if (value) {
-        setPreviewImage(URL.createObjectURL(value))
-      }
+      setPreviewImage(URL.createObjectURL(value))
       deletePrevImage()
       const newBiodataInput = { ...biodataInput, [name]: value }
       setBiodataToParent && setBiodataToParent(newBiodataInput, isPicUploaded)
@@ -54,6 +52,7 @@ const BiodataComp = ({
     onUploadPic()
     setIsPicUploaded(true)
   }
+
   const deletePicHandler = () => {
     onDeletePic()
     setBiodataInput({ ...biodataInput, imgUrl: '' })
@@ -62,7 +61,7 @@ const BiodataComp = ({
 
   useEffect(() => {
     if (imgDownloadUrl) setPreviewImage(imgDownloadUrl)
-    if (profileData) {
+    if (profileData && !previewImage) {
       setBiodataInput({
         imgUrl: profileData.imgUrl,
         firstName: profileData.firstName,
