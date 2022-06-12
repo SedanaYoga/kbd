@@ -136,7 +136,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
       uid: user.user.uid,
     }
     await setDoc(userWithIdRef, objectToUpload)
-    console.log(user)
+    // console.log(user)
     return {
       email: user.user.email,
       uid: user.user.uid,

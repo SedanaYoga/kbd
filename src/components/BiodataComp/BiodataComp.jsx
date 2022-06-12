@@ -57,6 +57,7 @@ const BiodataComp = ({
   const deletePicHandler = () => {
     onDeletePic()
     setBiodataInput({ ...biodataInput, imgUrl: '' })
+    setPreviewImage('')
   }
 
   useEffect(() => {
