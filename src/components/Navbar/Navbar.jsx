@@ -49,7 +49,6 @@ const NavBar = () => {
         dispatch(logout())
       } else {
         const token = await user.getIdToken()
-        console.log(token)
         await checkGoogleBiodata(user.email, {
           email: user.email,
           token,

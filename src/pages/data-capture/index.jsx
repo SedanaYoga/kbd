@@ -52,8 +52,6 @@ const DataCapturePage = (ctx) => {
   }
 
   const onAuthSubmitHandler = async () => {
-    console.log(userInput)
-
     const formComplete =
       userInput.firstName &&
         userInput.lastName &&
@@ -98,14 +96,14 @@ const DataCapturePage = (ctx) => {
 
   const deletePrevImage = async () => {
     if (userInput.imgUrl) {
-      if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      if (userInput.imgUrl.hasOwnProperty('fileNameOnUpload') && userInput.imgUrl.fileNameOnUpload !== '') {
         await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
       }
     }
   }
 
   const onDeletePic = async () => {
-    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+    if (userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
       await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
     }
     setUserInput({

@@ -117,11 +117,11 @@ export const InputPuppies = ({ updatePuppy, show, onHide }) => {
   const inputQuality = (e) => {
     const value = e.target.value
     const newValue = () => {
-      if (value === '1') {
+      if (value === '3') {
         return 'normal'
       } else if (value === '2') {
         return 'premium'
-      } else if (value === '3') {
+      } else if (value === '1') {
         return 'champion'
       }
     }

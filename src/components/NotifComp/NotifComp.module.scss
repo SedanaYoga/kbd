@@ -31,8 +31,15 @@
       background: black;
       border-radius: 2px;
     }
+    &Close {
+      position: absolute;
+      right: -25.8rem;
+      top: -.5rem;
+      cursor: pointer;
+    }
   }
   &Right {
+    position: relative;
     @include centerFlexColumn;
     align-items: flex-start;
     h4,

@@ -136,7 +136,7 @@ export const signUpWithEmailAndPassword = async (userData) => {
       uid: user.user.uid,
     }
     await setDoc(userWithIdRef, objectToUpload)
-    console.log(user)
+    // console.log(user)
     return {
       email: user.user.email,
       uid: user.user.uid,
@@ -267,8 +267,8 @@ export const setLastLoginAt = async (email) => {
   })
 }
 
-export const getBiodata = async (email) => {
-  const userRef = query(usersCollectionRef, where('email', '==', email))
+export const getBiodata = async (queryData, type = 'data-capture') => {
+  const userRef = type === 'profile' ? query(usersCollectionRef, where('uid', '==', queryData)) : query(usersCollectionRef, where('email', '==', queryData))
   const findUsers = await getDocs(userRef);
   const data = null
   findUsers.forEach((doc) => {

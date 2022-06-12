@@ -22,7 +22,7 @@ const ProductImagesSlider = ({ images }) => {
         {images.map((item, index) => (
           <SwiperSlide key={index}>
             {index === images.length - 1 && fileNameToExtension(item.fileNameOnUpload).extension === 'mp4' ?
-              <video controls autoPlay={true}>
+              <video controls>
                 <source src={item.downloadUrl}
                   type="video/mp4" />
               </video>
