@@ -7,6 +7,7 @@ import { InputUser } from './component/InputUser.component'
 import { collection, getDocs } from 'firebase/firestore'
 import { Admin } from './admin.component'
 import { db } from "../../firebase/firebase.init"
+import BtnComp from '../BtnComp/BtnComp'
 
 export const Users = () => {
   const [users, setUsers] = useState([])
@@ -44,9 +45,11 @@ export const Users = () => {
 
   return (
     <>
-      <Button variant='dark' size='lg' className={styles.createUserBtn} onClick={() => setForm(true)}>
-        +Add User
-      </Button>
+      <BtnComp style={{
+        position: 'absolute',
+        top: '15vh',
+        right: '25vw'
+      }} type='primary' onClick={() => setForm(true)}>+ Add User</BtnComp>
       <InputUser show={inputform} onHide={() => setForm(false)} />
       <Admin />
       <Container>

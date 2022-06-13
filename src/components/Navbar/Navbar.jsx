@@ -18,7 +18,7 @@ import {
 import { setRegInput } from '../../redux/slices/registerSlice'
 
 const menu = {
-  main: ['home', 'about us', 'browse', 'dashboard'],
+  main: ['home', 'about us', 'browse'],
   auth: ['log in', 'register'],
 }
 const NavBar = () => {
@@ -27,6 +27,7 @@ const NavBar = () => {
   const currentPath = router.pathname.split('/')[1]
   const { user } = useSelector((state) => state.user)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const checkGoogleBiodata = useCallback(async (email, result) => {
     const biodata = await getBiodata(email)
@@ -34,6 +35,10 @@ const NavBar = () => {
     const dataCaptureLogic = biodata?.phoneNumber ? true : false
     setCookie(undefined, 'email', email)
     dispatch(setUserState({ email: email }))
+
+    if (biodata.isAdmin) {
+      setIsAdmin(true)
+    } else setIsAdmin(false)
 
     if (!dataCaptureLogic) {
       setCookie(undefined, 'regInput', email)
@@ -136,6 +141,13 @@ const NavBar = () => {
                   <div
                     className={`${showDropdown ? styles.dropdownShown : ''} ${styles.authMenuToggle
                       }`}>
+                    {isAdmin &&
+                      <div>
+                        <Link href='/dashboard'>
+                          <a>Dashboard</a>
+                        </Link>
+                      </div>
+                    }
                     <div>
                       <Link href={`/profile/${user.uid}`}>
                         <a>Profile</a>

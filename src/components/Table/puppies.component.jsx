@@ -6,6 +6,7 @@ import styles from './component/Table.module.scss'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/firebase.init'
 import { InputPuppies } from './component/InputPuppies.component'
+import BtnComp from '../BtnComp/BtnComp'
 
 export const Puppies = () => {
   const puppiesCollectionRef = collection(db, 'puppies')
@@ -44,13 +45,11 @@ export const Puppies = () => {
 
   return (
     <>
-      <Button
-        variant='dark'
-        size='lg'
-        className={styles.createUserBtn}
-        onClick={() => setForm(true)}>
-        +Add Puppies
-      </Button>
+      <BtnComp style={{
+        position: 'absolute',
+        top: '15vh',
+        right: '25vw'
+      }} type='primary' onClick={() => setForm(true)}>+ Add Puppy</BtnComp>
       <InputPuppies updatePuppy={updatePuppyHandler} show={inputform} onHide={() => setForm(false)} />
       <Container>
         <div className={`${styles.tableTitle}`}>
