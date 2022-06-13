@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import styles from './Navbar.module.scss'
 import { capitalizeFirst } from '../../helper/textHelper'
 import BtnComp from '../BtnComp/BtnComp'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, login, setUserState } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
@@ -20,29 +21,28 @@ const menu = {
   main: ['home', 'about us', 'browse', 'dashboard'],
   auth: ['log in', 'register'],
 }
-const NavBar = (ctx) => {
+const NavBar = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const currentPath = router.pathname.split('/')[1]
   const { user } = useSelector((state) => state.user)
   const [showDropdown, setShowDropdown] = useState(false)
-  const cookies = nookies.get(ctx)
 
-  const checkGoogleBiodata = async (email, result) => {
+  const checkGoogleBiodata = useCallback(async (email, result) => {
     const biodata = await getBiodata(email)
 
     const dataCaptureLogic = biodata?.phoneNumber ? true : false
     setCookie(undefined, 'email', email)
-    dispatch(setUserState({email: email}))
+    dispatch(setUserState({ email: email }))
 
     if (!dataCaptureLogic) {
       setCookie(undefined, 'regInput', email)
-      dispatch(setRegInput({email: email}))
+      dispatch(setRegInput({ email: email }))
     } else {
       dispatch(setUserState(result))
       dispatch(login())
     }
-  }
+  }, [dispatch])
 
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
@@ -56,7 +56,7 @@ const NavBar = (ctx) => {
         })
       }
     })
-  }, [])
+  }, [checkGoogleBiodata, dispatch])
 
   useEffect(() => {
     const handle = setInterval(async () => {
@@ -81,7 +81,7 @@ const NavBar = (ctx) => {
       <Container>
         <Link href='/'>
           <a className={`nav-brand ${styles.navBar__brand}`}>
-            <img role='button' src='/images/logo.png' alt='logo' />
+            <Image role='button' src='/images/logo.png' alt='logo' width={40} height={40} />
           </a>
         </Link>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
@@ -93,16 +93,14 @@ const NavBar = (ctx) => {
               {menu.main.map((mainMenu, index) => (
                 <Link
                   key={index}
-                  href={`/${
-                    mainMenu === 'home' ? '' : mainMenu.replace(' ', '')
-                  }`}>
-                  <a
-                    className={`${
-                      currentPath ===
-                      `${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
-                        ? styles.active
-                        : ''
+                  href={`/${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')
                     }`}>
+                  <a
+                    className={`${currentPath ===
+                      `${mainMenu === 'home' ? '' : mainMenu.replace(' ', '')}`
+                      ? styles.active
+                      : ''
+                      }`}>
                     {mainMenu}
                   </a>
                 </Link>
@@ -116,9 +114,8 @@ const NavBar = (ctx) => {
                     href={`/${authMenu.replace(' ', '')}`}
                     passHref>
                     <BtnComp
-                      type={`${
-                        authMenu === 'register' ? 'primary' : 'secondary'
-                      }`}
+                      type={`${authMenu === 'register' ? 'primary' : 'secondary'
+                        }`}
                       margin='0 0 0 1rem'
                       padding='0.5rem 1rem'>
                       {capitalizeFirst(authMenu)}
@@ -136,9 +133,8 @@ const NavBar = (ctx) => {
                     </p>
                   </div>
                   <div
-                    className={`${showDropdown ? styles.dropdownShown : ''} ${
-                      styles.authMenuToggle
-                    }`}>
+                    className={`${showDropdown ? styles.dropdownShown : ''} ${styles.authMenuToggle
+                      }`}>
                     <div>
                       <Link href={`/profile/${user.uid}`}>
                         <a>Profile</a>

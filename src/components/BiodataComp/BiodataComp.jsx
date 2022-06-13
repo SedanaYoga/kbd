@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import styles from './BiodataComp.module.scss'
 import BtnComp from '../BtnComp/BtnComp'
 import InputComp from '../InputComp/InputComp'
@@ -57,11 +58,13 @@ const BiodataComp = ({
     <div className={styles.biodata}>
       <div className={styles.biodataPic}>
         <div className={styles.biodataPicLeft}>
-          <img
+          <Image
             src={
               previewImage ? previewImage : '/images/default-user.png'
             }
             alt='biodata-photo'
+            width={120}
+            height={120}
           />
           <input
             type='file'

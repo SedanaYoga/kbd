@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import {
-  setGoogleDataToFirestore,
-  signUpWithEmailAndPassword,
   updateBiodata,
   uploadFiles,
   deleteFiles
@@ -125,7 +123,7 @@ const DataCapturePage = (ctx) => {
     if (!cookies.regInput) {
       router.replace('/')
     }
-  }, [])
+  }, [cookies.regInput, dispatch, router, userInput.email])
 
   return (
     <div>

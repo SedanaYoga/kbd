@@ -21,7 +21,6 @@ import nookies, { setCookie } from 'nookies'
 
 export default function Login(ctx) {
   const router = useRouter()
-  const nextRedirect = router.query.nextRedirect
 
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
@@ -42,7 +41,7 @@ export default function Login(ctx) {
     }
     if (cookies.regInput) router.replace('/data-capture')
     if (user) router.replace('/')
-  }, [])
+  }, [cookies.regInput, router, user, dispatch])
 
   const handleChange = (name, value) => {
     setInput({ ...input, [name]: value })

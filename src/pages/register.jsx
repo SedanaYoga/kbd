@@ -31,7 +31,7 @@ export default function Register(ctx) {
   useEffect(() => {
     if (cookies.regInput) router.replace('/data-capture')
     if (user) router.replace('/')
-  }, [])
+  }, [cookies.regInput, router, user])
 
   const handleChange = (name, value) => {
     setInput({ ...input, [name]: value })

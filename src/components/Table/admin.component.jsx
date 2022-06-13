@@ -29,7 +29,7 @@ export const Admin = () => {
     }
 
     getUsers()
-  }, [])
+  }, [usersCollectionRef])
 
   const columns = useMemo(() => AdminColumn, [])
   const data = useMemo(() => users, [users])

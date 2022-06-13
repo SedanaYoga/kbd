@@ -25,7 +25,6 @@ export const Puppies = () => {
   }
   useEffect(() => {
     getPuppies()
-    console.log(puppies)
   }, [])
 
   const updatePuppyHandler = (puppyObject) => {

@@ -8,26 +8,8 @@ import { collection, getDocs } from 'firebase/firestore'
 import { Admin } from './admin.component'
 import { db } from "../../firebase/firebase.init"
 
-export const Users = () => {
-  const [users, setUsers] = useState([])
-  const usersCollectionRef = collection(db, 'users')
+export const Users = ({ users }) => {
   const [inputform, setForm] = useState(false);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectionRef);
-      const transformData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-      const newTransformdata = transformData.map((data) => ({
-        ...data,
-        createdAt: data.createdAt.toDate().toString().slice(0, 25),
-        lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25)
-      }));
-      setUsers(newTransformdata);
-    }
-
-    getUsers()
-  }, []);
-
 
   const columns = useMemo(() => Column, [])
   const data = useMemo(() => users, [users])

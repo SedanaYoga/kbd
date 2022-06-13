@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { Container } from 'react-bootstrap'
 import UserLayout from '../../components/Layouts/UserLayout'
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
@@ -23,7 +24,7 @@ export default function Browse() {
     if (query.msg === 'bookSuccess') {
       setShowModal(true)
     }
-  }, [])
+  }, [query.msg])
 
   return (
     <>
@@ -47,10 +48,10 @@ export default function Browse() {
           >
             <div className={styles.modalBody}>
               <h1>Your book has successfully recorded!</h1>
-              <img src='/images/check.png' alt='check' />
+              <Image src='/images/check.png' alt='check' width={121} height={121} />
               <h3>Thank You</h3>
               <p>For Trusting Us</p>
-              <img src='/images/logo.png' alt='logo' className={styles.logo} />
+              <Image src='/images/logo.png' alt='logo' width={60} height={60} className={styles.logo} />
             </div>
           </Modal>
           <Container className='full-with-footer'>
