@@ -28,10 +28,10 @@ const PuppyCard = React.forwardRef(
           </div>
           <div className={styles.medal}>
             {breedQuality === 'normal'
-              ? '🥇'
+              ? '🥉'
               : breedQuality === 'premium'
                 ? '🥈'
-                : '🥉'}
+                : '🥇'}
           </div>
         </div>
       </a>

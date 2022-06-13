@@ -13,8 +13,10 @@ import nookies from 'nookies'
 import { auth, db } from '../../firebase/firebaseAdmin.init'
 import { dateTimeToISO, timeStampToDateString } from '../../helper/dateHelper'
 import moment from 'moment'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addBookedData } from '../../firebase/firebase.utils'
+import { notifHandler } from '../../helper/errorHelper'
+
 
 export const getServerSideProps = async (ctx) => {
   const { id } = ctx.params
@@ -22,7 +24,7 @@ export const getServerSideProps = async (ctx) => {
     // Parse cookies
     const cookies = nookies.get(ctx)
 
-    if(cookies.regInput) ctx.res.writeHead(302, { Location: '/data-capture' })
+    if (cookies.regInput) ctx.res.writeHead(302, { Location: '/data-capture' })
 
     const token = await auth.verifyIdToken(cookies.token)
 
@@ -62,6 +64,7 @@ export const getServerSideProps = async (ctx) => {
 
 const Book = ({ puppy, pricing }) => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const { id: puppyId } = router.query
   const priceRelatedData = ['breedQuality', 'color']
   const user = useSelector((state) => state.user.user)
@@ -95,8 +98,11 @@ const Book = ({ puppy, pricing }) => {
       status: 'pending',
       puppyId,
       requesterEmail: user.email,
+      imgUrl: puppy.imgUrl[0]
     }
+    notifHandler(dispatch, 'Booking in progress...', 'warning')
     await addBookedData(valueToSubmit)
+    notifHandler(dispatch, 'Successfully adding your book', 'success')
     router.push({
       pathname: '/browse',
       query: { msg: 'bookSuccess' },

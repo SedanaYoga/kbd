@@ -99,14 +99,16 @@ export const addUserFromDashboard = async (userData) => {
     )
     const { password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
-    await addDoc(usersCollectionRef, {
+    const userWithIdRef = doc(db, "users", `${+new Date()}_${userData.email}`)
+    const objectToUpload = {
+      ...userToFirestore,
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
-      imgUrl: '/images/default-user.jpg',
+      imgUrl: userToFirestore.imgUrl ? userToFirestore.imgUrl : { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
       uid: user.user.uid,
-      ...userToFirestore,
-    })
+    }
+    await setDoc(userWithIdRef, objectToUpload)
     return {
       message: 'user successfully created',
     }
@@ -222,7 +224,9 @@ export const deletePuppyData = async (puppyId) => {
 
 export const addBookedData = async (bookedData) => {
   try {
-    await addDoc(bookedCollectionRef, bookedData)
+    const bookWithIdRef = doc(db, "booked", `${bookedData.puppyId}_${bookedData.requesterEmail}`)
+    await setDoc(bookWithIdRef, bookedData)
+    // await addDoc(bookedCollectionRef, bookedData)
   } catch (err) {
     console.log(err.message)
   }
@@ -244,13 +248,11 @@ export const getUserActiveBook = async (email) => {
   try {
     const bookedQuery = query(
       bookedCollectionRef,
-      where('requester_email', '==', email),
+      where('requesterEmail', '==', email),
     )
     const bookedDocs = await getDocs(bookedQuery)
-    if (bookedDocs) {
-      const bookedDoc = bookedDocs.docs[0]
-      return bookedDoc.data()
-    }
+    const result = bookedDocs.docs.map(doc => doc.data())
+    return result
   } catch (err) {
     console.log(err.message)
   }

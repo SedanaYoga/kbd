@@ -31,7 +31,7 @@ export const camelToNormalUpperCase = (str) => {
 }
 
 export const setBreedIcon = (breed) => {
-  return breed === 'normal' ? '🥇' : breed === 'premium' ? '🥈' : '🥉'
+  return breed === 'normal' ? '🥉' : breed === 'premium' ? '🥈' : '🥇'
 }
 
 export const strToCurrency = (string) => {
@@ -61,4 +61,11 @@ export const fileNameToExtension = (str) => {
   const indexOfExtension = str.search(extension)
   const fileName = str.slice(0, indexOfExtension - 1)
   return { fileName, extension }
+}
+
+export const bookIdToPuppyIdAndEmail = (str) => {
+  const arr = str.split('_')
+  const puppyId = arr.slice(0, 2).join('_')
+  const requesterEmail = arr.at(-1)
+  return { puppyId, requesterEmail }
 }

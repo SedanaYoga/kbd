@@ -12,7 +12,7 @@ export const getPuppiesFb = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const puppies = await getPuppiesData()
-      return puppies
+      return puppies.filter(pup => pup.bookedStatus !== 'sold')
     } catch (error) {
       console.log(error.message)
       return thunkAPI.rejectWithValue('Something went wrong...')

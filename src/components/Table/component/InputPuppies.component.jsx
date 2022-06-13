@@ -107,7 +107,7 @@ export const InputPuppies = ({ updatePuppy, show, onHide }) => {
       } else if (value === '3') {
         return 'white'
       } else if (value === '4') {
-        return 'briddle'
+        return 'bridle'
       }
     }
 
@@ -117,11 +117,11 @@ export const InputPuppies = ({ updatePuppy, show, onHide }) => {
   const inputQuality = (e) => {
     const value = e.target.value
     const newValue = () => {
-      if (value === '3') {
+      if (value === '1') {
         return 'normal'
       } else if (value === '2') {
         return 'premium'
-      } else if (value === '1') {
+      } else if (value === '3') {
         return 'champion'
       }
     }
@@ -136,7 +136,7 @@ export const InputPuppies = ({ updatePuppy, show, onHide }) => {
 
   return (
     <>
-      <Modal show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered >
+      <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             Add Puppies

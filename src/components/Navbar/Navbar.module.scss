@@ -89,6 +89,7 @@
       }
       &.dropdownShown {
         display: block;
+        z-index: 2000;
       }
     }
   }

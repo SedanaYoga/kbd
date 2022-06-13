@@ -15,13 +15,19 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { getPuppiesFb } from '../../redux/slices/puppiesSlice'
 import { getPricingFb } from '../../redux/slices/pricingSlice'
+import { getPuppyData, getUserActiveBook } from '../../firebase/firebase.utils'
 
 export default function Puppy() {
   const router = useRouter()
   const { id } = router.query
-  const { puppies } = useSelector((state) => state.puppies)
+  const { puppies: { puppies }, user: { user: { email } } } = useSelector((state) => state)
+
   const [puppy, setPuppy] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isApproved, setIsApproved] = useState(false)
+  const [isSold, setIsSold] = useState(false)
+
+  const [isActiveBooked, setIsActiveBooked] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -39,9 +45,24 @@ export default function Puppy() {
     }
   }, [puppies, id, dispatch])
 
+  const checkPuppyStatus = useCallback(async (email) => {
+    // Check If Puppy has been booked by current User
+    const activeBook = await getUserActiveBook(email)
+    const puppyIdOnly = activeBook.map(({ puppyId }) => puppyId)
+    if (puppyIdOnly.includes(id)) {
+      setIsActiveBooked(true)
+    } else setIsActiveBooked(false)
+
+    // Check if its already approved by another user
+    const puppyData = await getPuppyData(id)
+    puppyData?.bookedStatus === 'approved' ? setIsApproved(true) : setIsApproved(false)
+    puppyData?.bookedStatus === 'sold' ? setIsSold(true) : setIsSold(false)
+  }, [id])
+
   useEffect(() => {
     getPuppy()
-  }, [getPuppy])
+    checkPuppyStatus(email)
+  }, [getPuppy, checkPuppyStatus, email])
 
   return (
     <>
@@ -125,11 +146,24 @@ export default function Puppy() {
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>
                   </BtnComp>
-                  <Link href={`/book/${id}`}>
-                    <BtnComp borad='pill' padding='10px 60px'>
-                      Book this Pupppy
-                    </BtnComp>
-                  </Link>
+                  {!isActiveBooked && !isApproved && !isSold ?
+                    <Link href={`/book/${id}`}>
+                      <BtnComp borad='pill' padding='10px 60px'>
+                        Book this Pupppy
+                      </BtnComp>
+                    </Link> : isSold ?
+                      <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
+                        Sorry, the puppy has sold
+                      </BtnComp>
+                      : isActiveBooked ?
+                        <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
+                          You&apos;ve booked this
+                        </BtnComp>
+                        : isApproved &&
+                        <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
+                          Opps, this puppy has been booked but not sold yet
+                        </BtnComp>
+                  }
                 </div>
               </Col>
             </Row>

@@ -67,6 +67,7 @@ export default function Login(ctx) {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    notifHandler(dispatch, 'Logging in...', 'warning')
 
     // login with email and password
     const result = await loginWithEmailAndPassword(input.email, input.password)
@@ -78,6 +79,7 @@ export default function Login(ctx) {
       await setLastLoginAt(result.email)
 
       checkBiodata(input.email, result)
+      notifHandler(dispatch, `Logged as ${input.email}`, 'success')
     }
   }
 
