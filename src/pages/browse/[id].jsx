@@ -20,7 +20,7 @@ import { getPuppyData, getUserActiveBook } from '../../firebase/firebase.utils'
 export default function Puppy() {
   const router = useRouter()
   const { id } = router.query
-  const { puppies: { puppies }, user: { user: { email } } } = useSelector((state) => state)
+  const { puppies: { puppies }, user: { user } } = useSelector((state) => state)
 
   const [puppy, setPuppy] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -47,11 +47,13 @@ export default function Puppy() {
 
   const checkPuppyStatus = useCallback(async (email) => {
     // Check If Puppy has been booked by current User
-    const activeBook = await getUserActiveBook(email)
-    const puppyIdOnly = activeBook.map(({ puppyId }) => puppyId)
-    if (puppyIdOnly.includes(id)) {
-      setIsActiveBooked(true)
-    } else setIsActiveBooked(false)
+    if (email) {
+      const activeBook = await getUserActiveBook(email)
+      const puppyIdOnly = activeBook.map(({ puppyId }) => puppyId)
+      if (puppyIdOnly.includes(id)) {
+        setIsActiveBooked(true)
+      } else setIsActiveBooked(false)
+    }
 
     // Check if its already approved by another user
     const puppyData = await getPuppyData(id)
@@ -61,8 +63,8 @@ export default function Puppy() {
 
   useEffect(() => {
     getPuppy()
-    checkPuppyStatus(email)
-  }, [getPuppy, checkPuppyStatus, email])
+    checkPuppyStatus(user?.email)
+  }, [getPuppy, checkPuppyStatus, user])
 
   return (
     <>
