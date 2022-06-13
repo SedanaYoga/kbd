@@ -25,6 +25,7 @@ export default function Puppy() {
   const [puppy, setPuppy] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isActiveBooked, setIsActiveBooked] = useState(false)
+  const [isApproved, setIsApproved] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -45,11 +46,13 @@ export default function Puppy() {
   const checkIfBooked = useCallback(async (email) => {
     if (email) {
       const result = await getUserActiveBook(email)
-      if (result.includes(id)) {
+      const puppyIdOnly = result.map(({ puppyId }) => puppyId)
+      if (puppyIdOnly.includes(id)) {
         setIsActiveBooked(true)
       } else setIsActiveBooked(false)
     }
-  }, [email])
+    puppy?.bookedStatus === 'approved' ? setIsApproved(true) : setIsApproved(false)
+  }, [email, isApproved])
 
   useEffect(() => {
     getPuppy()
@@ -138,15 +141,19 @@ export default function Puppy() {
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>
                   </BtnComp>
-                  {!isActiveBooked ?
+                  {!isActiveBooked && !isApproved ?
                     <Link href={`/book/${id}`}>
                       <BtnComp borad='pill' padding='10px 60px'>
                         Book this Pupppy
                       </BtnComp>
-                    </Link> :
-                    <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
-                      You've booked this
-                    </BtnComp>
+                    </Link> : isApproved ?
+                      <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
+                        Opps, this puppy has been booked but not sold yet
+                      </BtnComp>
+                      :
+                      <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
+                        You've booked this
+                      </BtnComp>
                   }
                 </div>
               </Col>

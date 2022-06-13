@@ -251,7 +251,7 @@ export const getUserActiveBook = async (email) => {
       where('requesterEmail', '==', email),
     )
     const bookedDocs = await getDocs(bookedQuery)
-    const result = bookedDocs.docs.map(doc => doc.data().puppyId)
+    const result = bookedDocs.docs.map(doc => doc.data())
     return result
   } catch (err) {
     console.log(err.message)

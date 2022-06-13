@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { doc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { query, where, doc, deleteDoc, updateDoc, collection } from 'firebase/firestore'
 import { db } from '../../../firebase/firebase.init'
 import * as MdIcons from 'react-icons/md'
 import * as FiIcons from 'react-icons/fi'

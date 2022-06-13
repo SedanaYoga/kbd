@@ -98,6 +98,7 @@ const Book = ({ puppy, pricing }) => {
       status: 'pending',
       puppyId,
       requesterEmail: user.email,
+      imgUrl: puppy.imgUrl[0]
     }
     notifHandler(dispatch, 'Booking in progress...', 'warning')
     await addBookedData(valueToSubmit)
