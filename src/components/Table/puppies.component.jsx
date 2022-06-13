@@ -25,8 +25,7 @@ export const Puppies = () => {
   }
   useEffect(() => {
     getPuppies()
-    console.log(puppies)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updatePuppyHandler = (puppyObject) => {
     setPuppies([...puppies, puppyObject])

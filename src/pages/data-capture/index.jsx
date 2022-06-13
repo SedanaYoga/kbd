@@ -122,7 +122,7 @@ const DataCapturePage = (ctx) => {
     if (!cookies.regInput) {
       router.replace('/')
     }
-  }, [imgDownloadUrl])
+  }, [cookies.regInput, dispatch, router, userInput.email])
 
   return (
     <div>

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { Col, Container, Row } from 'react-bootstrap'
 import UserLayout from '../../components/Layouts/UserLayout'
 import styles from '../../styles/pages/AboutUs.module.scss'
@@ -31,7 +32,7 @@ export default function AboutUs() {
           <section className={styles.kennel}>
             <Row xs={2} bsPrefix='row g-0'>
               <Col className={styles.kennelImage}>
-                <img src='/images/bg/back-4.png' alt='A Loving Kennel Image' />
+                <Image src='/images/bg/back-4.png' alt='A Loving Kennel Image' layout='fill' />
               </Col>
               <Col className={styles.kennelInfo}>
                 <h1>

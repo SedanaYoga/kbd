@@ -267,7 +267,7 @@ export const InputPuppies = ({ updatePuppy, show, onHide }) => {
             </label>
             {file && <div className='mt-3 d-flex flex-row gap-2'>
               {Array.from(file).map(imgObj => (
-                <Image className='rounded' key={imgObj.name} src={URL.createObjectURL(imgObj)} width='100px' height='100px' />
+                <Image className='rounded' alt='Puppy Image File' key={imgObj.name} src={URL.createObjectURL(imgObj)} width='100px' height='100px' />
               )
               )}
             </div>}

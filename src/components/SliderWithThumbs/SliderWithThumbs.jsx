@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Thumbs } from 'swiper'
 import { useState } from 'react'
@@ -27,7 +28,7 @@ const ProductImagesSlider = ({ images }) => {
                   type="video/mp4" />
               </video>
               :
-              <img src={item.downloadUrl} alt='product images' />
+              <Image src={item.downloadUrl} alt='product images' layout='fill' />
             }
           </SwiperSlide>
         ))}
@@ -47,7 +48,7 @@ const ProductImagesSlider = ({ images }) => {
                     type="video/mp4" />
                 </video>
                 :
-                <img src={item.downloadUrl} alt='product images' />
+                <Image src={item.downloadUrl} alt='product images' layout='fill' />
               }
             </div>
           </SwiperSlide>

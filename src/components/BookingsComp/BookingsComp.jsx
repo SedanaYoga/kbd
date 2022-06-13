@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Table } from 'react-bootstrap'
 import styles from './BookingComp.module.scss'
 
@@ -18,11 +19,14 @@ const BookingsComp = () => {
           <tr className={styles.bookingRow}>
             <td>
               <div className={styles.bookingRowPuppy}>
-                <img
+                <Image
                   src='/images/kin-browse/1.png'
                   className={styles.bookingRowPuppyImage}
+                  alt='booked puppy'
+                  width={48}
+                  height={48}
                 />
-                <p>PC06042022F</p>
+                <p className='ms-3'>PC06042022F</p>
               </div>
             </td>
             <td>Premium</td>

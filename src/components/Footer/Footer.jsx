@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { Container, Row, Col } from 'react-bootstrap'
 import styles from './Footer.module.scss'
 
@@ -34,10 +35,12 @@ const Footer = () => {
           </Col>
           <Col className={styles.footerContainerRight}>
             <h5>Find us at</h5>
-            <img
+            <Image
               src='/images/example-map.png'
               alt='map-example'
               className={styles.dummyMap}
+              width={300}
+              height={170}
             />
           </Col>
         </Row>

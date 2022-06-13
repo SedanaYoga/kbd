@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import styles from './Navbar.module.scss'
 import { capitalizeFirst } from '../../helper/textHelper'
 import BtnComp from '../BtnComp/BtnComp'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, login, setUserState } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
@@ -27,7 +28,7 @@ const NavBar = () => {
   const { user } = useSelector((state) => state.user)
   const [showDropdown, setShowDropdown] = useState(false)
 
-  const checkGoogleBiodata = async (email, result) => {
+  const checkGoogleBiodata = useCallback(async (email, result) => {
     const biodata = await getBiodata(email)
 
     const dataCaptureLogic = biodata?.phoneNumber ? true : false
@@ -41,7 +42,7 @@ const NavBar = () => {
       dispatch(setUserState(result))
       dispatch(login())
     }
-  }
+  }, [dispatch])
 
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
@@ -56,7 +57,7 @@ const NavBar = () => {
         })
       }
     })
-  }, [])
+  }, [checkGoogleBiodata, dispatch])
 
   useEffect(() => {
     const handle = setInterval(async () => {
@@ -81,7 +82,7 @@ const NavBar = () => {
       <Container>
         <Link href='/'>
           <a className={`nav-brand ${styles.navBar__brand}`}>
-            <img role='button' src='/images/logo.png' alt='logo' />
+            <Image role='button' src='/images/logo.png' alt='logo' width={40} height={40} />
           </a>
         </Link>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />

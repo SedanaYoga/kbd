@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react"
+import React, { useState, useMemo, useEffect, useCallback } from "react"
 import { useTable } from "react-table/dist/react-table.development"
 import styles from './component/Table.module.scss'
 import { Button, Container, Table } from "react-bootstrap"
@@ -13,20 +13,20 @@ export const Users = () => {
   const usersCollectionRef = collection(db, 'users')
   const [inputform, setForm] = useState(false);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectionRef);
-      const transformData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-      const newTransformdata = transformData.map((data) => ({
-        ...data,
-        createdAt: data.createdAt.toDate().toString().slice(0, 25),
-        lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25)
-      }));
-      setUsers(newTransformdata);
-    }
+  const getUsers = useCallback(async () => {
+    const data = await getDocs(usersCollectionRef);
+    const transformData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    const newTransformdata = transformData.map((data) => ({
+      ...data,
+      createdAt: data.createdAt.toDate().toString().slice(0, 25),
+      lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25)
+    }));
+    setUsers(newTransformdata);
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
     getUsers()
-  }, []);
+  }, [getUsers]);
 
 
   const columns = useMemo(() => Column, [])
@@ -86,6 +86,5 @@ export const Users = () => {
         </Table>
       </Container>
     </>
-
   )
 }

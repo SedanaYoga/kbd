@@ -37,7 +37,7 @@ export default function Puppy() {
       const puppyData = puppies.find((p) => p.id === id)
       setPuppy(puppyData)
     }
-  }, [puppies, puppy, id])
+  }, [puppies, id, dispatch])
 
   useEffect(() => {
     getPuppy()

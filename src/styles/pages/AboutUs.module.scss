@@ -58,9 +58,8 @@
     padding-top: calc(100vh - 58px);
     z-index: -1;
     &Image {
-      img {
-        width: 100%;
-      }
+      position: relative;
+      height: 830px;
     }
     &Info {
       background: $inputColor;
