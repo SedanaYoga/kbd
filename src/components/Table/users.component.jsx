@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react"
+import React, { useState, useMemo, useEffect, useCallback } from "react"
 import { useTable } from "react-table/dist/react-table.development"
 import styles from './component/Table.module.scss'
 import { Button, Container, Table } from "react-bootstrap"
@@ -8,8 +8,26 @@ import { collection, getDocs } from 'firebase/firestore'
 import { Admin } from './admin.component'
 import { db } from "../../firebase/firebase.init"
 
-export const Users = ({ users }) => {
+export const Users = () => {
+  const [users, setUsers] = useState([])
+  const usersCollectionRef = collection(db, 'users')
   const [inputform, setForm] = useState(false);
+
+  const getUsers = useCallback(async () => {
+    const data = await getDocs(usersCollectionRef);
+    const transformData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    const newTransformdata = transformData.map((data) => ({
+      ...data,
+      createdAt: data.createdAt.toDate().toString().slice(0, 25),
+      lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25)
+    }));
+    setUsers(newTransformdata);
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    getUsers()
+  }, [getUsers]);
+
 
   const columns = useMemo(() => Column, [])
   const data = useMemo(() => users, [users])
@@ -68,6 +86,5 @@ export const Users = ({ users }) => {
         </Table>
       </Container>
     </>
-
   )
 }

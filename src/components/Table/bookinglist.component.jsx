@@ -26,7 +26,7 @@ export const Booking = () => {
     }
 
     getBooking()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const columns = useMemo(() => BookingColumn, [])
   const data = useMemo(() => booking, [booking])

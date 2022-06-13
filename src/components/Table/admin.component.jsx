@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTable } from 'react-table/dist/react-table.development'
 import { AdminColumn } from './component/TableData.component'
 import Table from 'react-bootstrap/Table'
@@ -11,25 +11,24 @@ export const Admin = () => {
   const [users, setUsers] = useState([])
   const usersCollectionRef = collection(db, 'users')
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const queryData = query(usersCollectionRef, where('isAdmin', '==', true))
-      const data = await getDocs(queryData)
-      const transformData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }))
-      const newTransformdata = transformData.map((data) => ({
-        ...data,
-        createdAt: data.createdAt.toDate().toString().slice(0, 25),
-        lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25),
-      }))
-      setUsers(newTransformdata)
-      // console.log(newTransformdata)
-    }
+  const getUsers = useCallback(async () => {
+    const queryData = query(usersCollectionRef, where('isAdmin', '==', true))
+    const data = await getDocs(queryData)
+    const transformData = data.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }))
+    const newTransformdata = transformData.map((data) => ({
+      ...data,
+      createdAt: data.createdAt.toDate().toString().slice(0, 25),
+      lastLoginAt: data.lastLoginAt.toDate().toString().slice(0, 25),
+    }))
+    setUsers(newTransformdata)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
     getUsers()
-  }, [usersCollectionRef])
+  }, [getUsers])
 
   const columns = useMemo(() => AdminColumn, [])
   const data = useMemo(() => users, [users])
