@@ -16,11 +16,11 @@ const BookingsComp = () => {
   const getBookedDataByEmail = useCallback(async (email) => {
     const result = await getUserActiveBook(email)
     setBookedPuppy(result)
-  }, [email])
+  }, [])
 
   useEffect(() => {
     getBookedDataByEmail(email)
-  }, [getBookedDataByEmail])
+  }, [getBookedDataByEmail, email])
 
   return (
     <div className={styles.booking}>

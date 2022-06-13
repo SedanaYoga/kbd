@@ -12,6 +12,7 @@ import {
   Button,
   Form,
 } from 'react-bootstrap'
+import { bookIdToPuppyIdAndEmail } from '../../../helper/textHelper'
 
 export const AdminColumn = [
   {
@@ -93,8 +94,18 @@ export const Column = [
   },
 ]
 
+const updatePuppyStatus = async (bookId, bookedStatus) => {
+  const { puppyId } = bookIdToPuppyIdAndEmail(bookId)
+  // Find puppy with puppyId
+  const puppyDoc = doc(db, 'puppies', puppyId)
+  await updateDoc(puppyDoc, { bookedStatus })
+}
+
 const updateCancel = async (row) => {
   const id = row.id
+
+  await updatePuppyStatus(id, 'available')
+
   const userDoc = doc(db, 'booked', id)
 
   const newField = { status: 'canceled' }
@@ -105,6 +116,10 @@ const updateCancel = async (row) => {
 
 const updateApprove = async (row) => {
   const id = row.id
+
+  await updatePuppyStatus(id, 'approved')
+
+  // Update puppy bookedStatus to approved
   const userDoc = doc(db, 'booked', id)
 
   const newField = { status: 'approved' }
@@ -115,7 +130,9 @@ const updateApprove = async (row) => {
 
 const updatePending = async (row) => {
   const id = row.id
+  await updatePuppyStatus(id, 'available')
   const userDoc = doc(db, 'booked', id)
+
 
   const newField = { status: 'pending' }
   await updateDoc(userDoc, newField)
@@ -125,6 +142,7 @@ const updatePending = async (row) => {
 
 const updateDecline = async (row) => {
   const id = row.id
+  await updatePuppyStatus(id, 'available')
   const userDoc = doc(db, 'booked', id)
 
   const newField = { status: 'declined' }
@@ -135,7 +153,11 @@ const updateDecline = async (row) => {
 
 const updateSold = async (row) => {
   const id = row.id
+
+  await updatePuppyStatus(id, 'sold')
+
   const userDoc = doc(db, 'booked', id)
+
 
   const newField = { status: 'sold' }
   await updateDoc(userDoc, newField)
