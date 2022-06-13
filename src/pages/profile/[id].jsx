@@ -6,7 +6,12 @@ import BtnComp from '../../components/BtnComp/BtnComp'
 import BiodataComp from '../../components/BiodataComp/BiodataComp'
 import BookingsComp from '../../components/BookingsComp/BookingsComp'
 import { useEffect, useState } from 'react'
-import { getBiodata, updateBiodata, uploadFiles, deleteFiles } from '../../firebase/firebase.utils'
+import {
+  getBiodata,
+  updateBiodata,
+  uploadFiles,
+  deleteFiles,
+} from '../../firebase/firebase.utils'
 import { parseCookies } from 'nookies'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
@@ -29,7 +34,7 @@ const ProfilePage = () => {
   useEffect(() => {
     getBiodataHandler(id)
     if (regInput) router.replace('/data-capture')
-  }, [])
+  }, [id, regInput, router])
 
   const openBiodata = () => {
     setShowBooking(false)
@@ -41,9 +46,9 @@ const ProfilePage = () => {
   const updateProfileHandler = async () => {
     const formComplete =
       userBiodata.firstName &&
-        userBiodata.lastName &&
-        userBiodata.phoneNumber &&
-        userBiodata.address
+      userBiodata.lastName &&
+      userBiodata.phoneNumber &&
+      userBiodata.address
         ? true
         : false
 
@@ -60,20 +65,23 @@ const ProfilePage = () => {
       notifHandler(
         dispatch,
         'No image is selected, please select first!',
-        'error'
+        'error',
       )
     } else {
       const uploadResult = await uploadFiles(
         userBiodata.imgUrl,
         'profilePic',
-        userBiodata.email
+        userBiodata.email,
       )
-      const userInputWithDownloadedUrl = { ...userBiodata, imgUrl: uploadResult }
+      const userInputWithDownloadedUrl = {
+        ...userBiodata,
+        imgUrl: uploadResult,
+      }
       setUserBiodata(userInputWithDownloadedUrl)
       notifHandler(
         dispatch,
         'Your profile picture has successfully uploaded!',
-        'success'
+        'success',
       )
     }
   }
@@ -104,12 +112,14 @@ const ProfilePage = () => {
 
   const deletePrevImage = async () => {
     if (userBiodata.imgUrl) {
-      if (userBiodata.imgUrl.hasOwnProperty('fileNameOnUpload') && userBiodata.imgUrl.fileNameOnUpload !== '') {
+      if (
+        userBiodata.imgUrl.hasOwnProperty('fileNameOnUpload') &&
+        userBiodata.imgUrl.fileNameOnUpload !== ''
+      ) {
         await deleteFiles(userBiodata.imgUrl.fileNameOnUpload, 'profilePic')
       }
     }
   }
-
 
   return (
     <div>
@@ -134,21 +144,26 @@ const ProfilePage = () => {
                 onClick={openBiodata}
                 type='link'
                 padding='0 1rem'
-                borad='none'>
+                borad='none'
+              >
                 Biodata
               </BtnComp>
               <BtnComp onClick={openBookings} type='link' padding='0 1rem'>
                 Bookings
               </BtnComp>
             </div>
-            {showBooking ? <BookingsComp /> : <BiodataComp
-              profileData={userBiodata && userBiodata}
-              onSubmit={updateProfileHandler}
-              onUploadPic={onUploadPic}
-              onDeletePic={onDeletePic}
-              setBiodataToParent={biodataInputHandler}
-              deletePrevImage={deletePrevImage}
-            />}
+            {showBooking ? (
+              <BookingsComp />
+            ) : (
+              <BiodataComp
+                profileData={userBiodata && userBiodata}
+                onSubmit={updateProfileHandler}
+                onUploadPic={onUploadPic}
+                onDeletePic={onDeletePic}
+                setBiodataToParent={biodataInputHandler}
+                deletePrevImage={deletePrevImage}
+              />
+            )}
           </div>
         </Container>
       </section>

@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import {
   updateBiodata,
   uploadFiles,
-  deleteFiles
+  deleteFiles,
 } from '../../firebase/firebase.utils'
 import { useDispatch } from 'react-redux'
 import { logout, setUserState } from '../../redux/slices/userSlice'
@@ -36,10 +36,7 @@ const DataCapturePage = (ctx) => {
   })
 
   const biodataInputHandler = (biodata, isPicUploaded) => {
-    if (
-      userInput.imgUrl &&
-      userInput.imgUrl.hasOwnProperty('downloadUrl')
-    ) {
+    if (userInput.imgUrl && userInput.imgUrl.hasOwnProperty('downloadUrl')) {
       if (isPicUploaded) {
         setUserInput({ ...userInput, ...biodata })
       } else {
@@ -54,9 +51,9 @@ const DataCapturePage = (ctx) => {
   const onAuthSubmitHandler = async () => {
     const formComplete =
       userInput.firstName &&
-        userInput.lastName &&
-        userInput.phoneNumber &&
-        userInput.address
+      userInput.lastName &&
+      userInput.phoneNumber &&
+      userInput.address
         ? true
         : false
 
@@ -76,27 +73,30 @@ const DataCapturePage = (ctx) => {
       notifHandler(
         dispatch,
         'No image is selected, please select first!',
-        'error'
+        'error',
       )
     } else {
       const uploadResult = await uploadFiles(
         userInput.imgUrl,
         'profilePic',
-        userInput.email
+        userInput.email,
       )
       const userInputWithDownloadedUrl = { ...userInput, imgUrl: uploadResult }
       setUserInput(userInputWithDownloadedUrl)
       notifHandler(
         dispatch,
         'Your profile picture has successfully uploaded!',
-        'success'
+        'success',
       )
     }
   }
 
   const deletePrevImage = async () => {
     if (userInput.imgUrl) {
-      if (userInput.imgUrl.hasOwnProperty('fileNameOnUpload') && userInput.imgUrl.fileNameOnUpload !== '') {
+      if (
+        userInput.imgUrl.hasOwnProperty('fileNameOnUpload') &&
+        userInput.imgUrl.fileNameOnUpload !== ''
+      ) {
         await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
       }
     }
@@ -116,13 +116,19 @@ const DataCapturePage = (ctx) => {
     if (cookies.regInput && !userInput.email) {
       dispatch(setRegInput({ email: cookies.regInput }))
       dispatch(setUserState({ email: cookies.regInput }))
-      setUserInput({ email: cookies.regInput, imgUrl: { downloadUrl: imgDownloadUrl ? imgDownloadUrl : '', fileNameOnUpload: '' } })
+      setUserInput({
+        email: cookies.regInput,
+        imgUrl: {
+          downloadUrl: imgDownloadUrl ? imgDownloadUrl : '',
+          fileNameOnUpload: '',
+        },
+      })
     }
 
     if (!cookies.regInput) {
       router.replace('/')
     }
-  }, [cookies.regInput, dispatch, router, userInput.email])
+  }, [cookies.regInput, dispatch, router, userInput.email, imgDownloadUrl])
 
   return (
     <div>

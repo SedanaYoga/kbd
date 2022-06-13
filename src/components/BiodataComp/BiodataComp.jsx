@@ -2,7 +2,7 @@ import Image from 'next/image'
 import styles from './BiodataComp.module.scss'
 import BtnComp from '../BtnComp/BtnComp'
 import InputComp from '../InputComp/InputComp'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 const BiodataComp = ({
@@ -13,7 +13,7 @@ const BiodataComp = ({
   onSubmit,
   profileImg,
   deletePrevImage,
-  profileData
+  profileData,
 }) => {
   const router = useRouter()
   const { imgDownloadUrl } = router.query
@@ -67,20 +67,18 @@ const BiodataComp = ({
         firstName: profileData.firstName,
         lastName: profileData.lastName,
         phoneNumber: profileData.phoneNumber,
-        address: profileData.address
+        address: profileData.address,
       })
       setPreviewImage(profileData.imgUrl.downloadUrl)
     }
-  }, [profileData])
+  }, [profileData, imgDownloadUrl, previewImage])
 
   return (
     <div className={styles.biodata}>
       <div className={styles.biodataPic}>
         <div className={styles.biodataPicLeft}>
           <Image
-            src={
-              previewImage ? previewImage : '/images/default-user.png'
-            }
+            src={previewImage ? previewImage : '/images/default-user.png'}
             alt='biodata-photo'
             width={120}
             height={120}
