@@ -18,6 +18,7 @@ export default function AboutUs() {
       <div className={styles.aboutus}>
         <Container>
           <section className={styles.hero}>
+            <Image className={styles.heroBackground} src='/images/bg/back-3.png' alt='hero-background' layout='fill' objectFit='cover' objectPosition='top' />
             <div className={styles.heroContent}>
               <p>Woof...</p>
               <h1>
