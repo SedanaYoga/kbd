@@ -5,16 +5,112 @@ import UserLayout from '../../components/Layouts/UserLayout'
 import BtnComp from '../../components/BtnComp/BtnComp'
 import BiodataComp from '../../components/BiodataComp/BiodataComp'
 import BookingsComp from '../../components/BookingsComp/BookingsComp'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getBiodata, updateBiodata, uploadFiles, deleteFiles } from '../../firebase/firebase.utils'
+import { parseCookies } from 'nookies'
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { notifHandler } from '../../helper/errorHelper'
 
 const ProfilePage = () => {
   const [showBooking, setShowBooking] = useState(false)
+  const { regInput } = parseCookies()
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const { id } = router.query
+
+  const [userBiodata, setUserBiodata] = useState(null)
+
+  const getBiodataHandler = async (id) => {
+    const result = await getBiodata(id, 'profile')
+    setUserBiodata(result)
+  }
+
+  useEffect(() => {
+    getBiodataHandler(id)
+    if (regInput) router.replace('/data-capture')
+  }, [])
+
   const openBiodata = () => {
     setShowBooking(false)
   }
   const openBookings = () => {
     setShowBooking(true)
   }
+
+  const updateProfileHandler = async () => {
+    const formComplete =
+      userBiodata.firstName &&
+        userBiodata.lastName &&
+        userBiodata.phoneNumber &&
+        userBiodata.address
+        ? true
+        : false
+
+    if (!formComplete) {
+      notifHandler(dispatch, 'Please fullfill all required data form')
+    } else {
+      notifHandler(dispatch, 'Updating...', 'warning')
+      await updateBiodata(userBiodata)
+      notifHandler(dispatch, 'Profile is successfully updated!', 'success')
+    }
+  }
+  const onUploadPic = async () => {
+    if (!userBiodata.imgUrl) {
+      notifHandler(
+        dispatch,
+        'No image is selected, please select first!',
+        'error'
+      )
+    } else {
+      const uploadResult = await uploadFiles(
+        userBiodata.imgUrl,
+        'profilePic',
+        userBiodata.email
+      )
+      const userInputWithDownloadedUrl = { ...userBiodata, imgUrl: uploadResult }
+      setUserBiodata(userInputWithDownloadedUrl)
+      notifHandler(
+        dispatch,
+        'Your profile picture has successfully uploaded!',
+        'success'
+      )
+    }
+  }
+  const onDeletePic = async () => {
+    if (userBiodata.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      await deleteFiles(userBiodata.imgUrl.fileNameOnUpload, 'profilePic')
+    }
+    setUserBiodata({
+      ...userBiodata,
+      imgUrl: { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
+    })
+  }
+  const biodataInputHandler = (biodata, isPicUploaded) => {
+    if (
+      userBiodata.imgUrl &&
+      userBiodata.imgUrl.hasOwnProperty('downloadUrl')
+    ) {
+      if (isPicUploaded) {
+        setUserBiodata({ ...userBiodata, ...biodata })
+      } else {
+        const { imgUrl, ...biodataWithoutImgUrl } = biodata
+        setUserBiodata({ ...userBiodata, ...biodataWithoutImgUrl })
+      }
+    } else {
+      setUserBiodata({ ...userBiodata, ...biodata })
+    }
+  }
+
+  const deletePrevImage = async () => {
+    if (userBiodata.imgUrl) {
+      if (userBiodata.imgUrl.hasOwnProperty('fileNameOnUpload') && userBiodata.imgUrl.fileNameOnUpload !== '') {
+        await deleteFiles(userBiodata.imgUrl.fileNameOnUpload, 'profilePic')
+      }
+    }
+  }
+
+
   return (
     <div>
       <Head>
@@ -45,7 +141,14 @@ const ProfilePage = () => {
                 Bookings
               </BtnComp>
             </div>
-            {showBooking ? <BookingsComp /> : <BiodataComp />}
+            {showBooking ? <BookingsComp /> : <BiodataComp
+              profileData={userBiodata && userBiodata}
+              onSubmit={updateProfileHandler}
+              onUploadPic={onUploadPic}
+              onDeletePic={onDeletePic}
+              setBiodataToParent={biodataInputHandler}
+              deletePrevImage={deletePrevImage}
+            />}
           </div>
         </Container>
       </section>

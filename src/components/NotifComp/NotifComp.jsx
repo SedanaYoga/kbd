@@ -3,11 +3,14 @@ import {
   BsExclamationCircleFill,
   BsFillXCircleFill,
   BsCheckCircleFill,
+  BsX
 } from 'react-icons/bs'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { clearNotif } from '../../redux/slices/notifSlice'
 
 const NotifComp = () => {
   const { isShown, notif, type } = useSelector((state) => state.notif)
+  const dispatch = useDispatch()
   return (
     <div className={`${styles.nt} ${isShown ? styles.active : ''}`}>
       <div className={styles.ntLeft}>
@@ -18,6 +21,9 @@ const NotifComp = () => {
         ) : (
           <BsExclamationCircleFill size='2rem' color='gold' />
         )}
+        <div className={styles.ntLeftClose} onClick={() => dispatch(clearNotif())}>
+          <BsX size='1.5rem' />
+        </div>
       </div>
       <div className={styles.ntRight}>
         <h4>{type === 'success' ? 'Success' : type === 'error' ? 'Error' : 'Warning'}</h4>

@@ -11,7 +11,7 @@ import { logout, login, setUserState } from '../../redux/slices/userSlice'
 import { onIdTokenChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase.init'
 import { clearRegInput } from '../../redux/slices/registerSlice'
-import nookies, { setCookie } from 'nookies'
+import { setCookie } from 'nookies'
 import {
   getBiodata,
 } from '../../firebase/firebase.utils'
@@ -49,9 +49,10 @@ const NavBar = () => {
       if (!user) {
         dispatch(logout())
       } else {
-        checkGoogleBiodata(user.email, {
+        const token = await user.getIdToken()
+        await checkGoogleBiodata(user.email, {
           email: user.email,
-          token: await user.getIdToken(),
+          token,
           uid: user.uid,
         })
       }

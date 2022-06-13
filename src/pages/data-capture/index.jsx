@@ -15,10 +15,11 @@ import { useDispatch } from 'react-redux'
 import { logout, setUserState } from '../../redux/slices/userSlice'
 import { clearRegInput, setRegInput } from '../../redux/slices/registerSlice'
 import { notifHandler } from '../../helper/errorHelper'
-import nookies, { setCookie } from 'nookies'
+import nookies from 'nookies'
 
 const DataCapturePage = (ctx) => {
   const router = useRouter()
+  const { imgDownloadUrl } = router.query
   const dispatch = useDispatch()
   const cookies = nookies.get(ctx)
 
@@ -51,8 +52,6 @@ const DataCapturePage = (ctx) => {
   }
 
   const onAuthSubmitHandler = async () => {
-    console.log(userInput)
-
     const formComplete =
       userInput.firstName &&
         userInput.lastName &&
@@ -97,14 +96,14 @@ const DataCapturePage = (ctx) => {
 
   const deletePrevImage = async () => {
     if (userInput.imgUrl) {
-      if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+      if (userInput.imgUrl.hasOwnProperty('fileNameOnUpload') && userInput.imgUrl.fileNameOnUpload !== '') {
         await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
       }
     }
   }
 
   const onDeletePic = async () => {
-    if (typeof userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
+    if (userInput.imgUrl.hasOwnProperty('fileNameOnUpload')) {
       await deleteFiles(userInput.imgUrl.fileNameOnUpload, 'profilePic')
     }
     setUserInput({
@@ -117,7 +116,7 @@ const DataCapturePage = (ctx) => {
     if (cookies.regInput && !userInput.email) {
       dispatch(setRegInput({ email: cookies.regInput }))
       dispatch(setUserState({ email: cookies.regInput }))
-      setUserInput({ email: cookies.regInput })
+      setUserInput({ email: cookies.regInput, imgUrl: { downloadUrl: imgDownloadUrl ? imgDownloadUrl : '', fileNameOnUpload: '' } })
     }
 
     if (!cookies.regInput) {
