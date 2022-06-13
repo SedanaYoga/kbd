@@ -31,7 +31,7 @@ export const camelToNormalUpperCase = (str) => {
 }
 
 export const setBreedIcon = (breed) => {
-  return breed === 'normal' ? '🥇' : breed === 'premium' ? '🥈' : '🥉'
+  return breed === 'normal' ? '🥉' : breed === 'premium' ? '🥈' : '🥇'
 }
 
 export const strToCurrency = (string) => {

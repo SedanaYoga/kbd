@@ -99,14 +99,16 @@ export const addUserFromDashboard = async (userData) => {
     )
     const { password, ...userToFirestore } = userData
     let { creationTime, lastSignInTime } = user.user.metadata
-    await addDoc(usersCollectionRef, {
+    const userWithIdRef = doc(db, "users", `${+new Date()}_${userData.email}`)
+    const objectToUpload = {
+      ...userToFirestore,
       isAdmin: false,
       createdAt: new Date(creationTime),
       lastLoginAt: new Date(lastSignInTime),
-      imgUrl: '/images/default-user.jpg',
+      imgUrl: userToFirestore.imgUrl ? userToFirestore.imgUrl : { downloadUrl: '/images/default-user.jpg', fileNameOnUpload: '' },
       uid: user.user.uid,
-      ...userToFirestore,
-    })
+    }
+    await setDoc(userWithIdRef, objectToUpload)
     return {
       message: 'user successfully created',
     }
