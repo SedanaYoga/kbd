@@ -7,7 +7,6 @@ import { fileNameToExtension } from '../../helper/textHelper'
 
 const ProductImagesSlider = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState()
-  console.log(images.at(-1))
 
   return (
     <>

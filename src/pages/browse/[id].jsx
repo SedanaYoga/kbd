@@ -15,13 +15,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { getPuppiesFb } from '../../redux/slices/puppiesSlice'
 import { getPricingFb } from '../../redux/slices/pricingSlice'
+import { getUserActiveBook } from '../../firebase/firebase.utils'
 
 export default function Puppy() {
   const router = useRouter()
   const { id } = router.query
-  const { puppies } = useSelector((state) => state.puppies)
+  const { puppies: { puppies }, user: { user: { email } } } = useSelector((state) => state)
+
   const [puppy, setPuppy] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isActiveBooked, setIsActiveBooked] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -39,9 +42,19 @@ export default function Puppy() {
     }
   }, [puppies, id, dispatch])
 
+  const checkIfBooked = useCallback(async (email) => {
+    if (email) {
+      const result = await getUserActiveBook(email)
+      if (result.includes(id)) {
+        setIsActiveBooked(true)
+      } else setIsActiveBooked(false)
+    }
+  }, [email])
+
   useEffect(() => {
     getPuppy()
-  }, [getPuppy])
+    checkIfBooked(email)
+  }, [getPuppy, checkIfBooked])
 
   return (
     <>
@@ -125,11 +138,16 @@ export default function Puppy() {
                       <WaIcon /> <span>Contact Kennel</span>
                     </span>
                   </BtnComp>
-                  <Link href={`/book/${id}`}>
-                    <BtnComp borad='pill' padding='10px 60px'>
-                      Book this Pupppy
+                  {!isActiveBooked ?
+                    <Link href={`/book/${id}`}>
+                      <BtnComp borad='pill' padding='10px 60px'>
+                        Book this Pupppy
+                      </BtnComp>
+                    </Link> :
+                    <BtnComp type='link' style={{ cursor: 'not-allowed' }} padding='10px'>
+                      You've booked this
                     </BtnComp>
-                  </Link>
+                  }
                 </div>
               </Col>
             </Row>

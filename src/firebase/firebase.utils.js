@@ -224,7 +224,9 @@ export const deletePuppyData = async (puppyId) => {
 
 export const addBookedData = async (bookedData) => {
   try {
-    await addDoc(bookedCollectionRef, bookedData)
+    const bookWithIdRef = doc(db, "booked", `${bookedData.puppyId}_${bookedData.requesterEmail}`)
+    await setDoc(bookWithIdRef, bookedData)
+    // await addDoc(bookedCollectionRef, bookedData)
   } catch (err) {
     console.log(err.message)
   }
@@ -246,13 +248,11 @@ export const getUserActiveBook = async (email) => {
   try {
     const bookedQuery = query(
       bookedCollectionRef,
-      where('requester_email', '==', email),
+      where('requesterEmail', '==', email),
     )
     const bookedDocs = await getDocs(bookedQuery)
-    if (bookedDocs) {
-      const bookedDoc = bookedDocs.docs[0]
-      return bookedDoc.data()
-    }
+    const result = bookedDocs.docs.map(doc => doc.data().puppyId)
+    return result
   } catch (err) {
     console.log(err.message)
   }
