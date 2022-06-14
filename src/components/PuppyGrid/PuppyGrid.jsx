@@ -8,7 +8,7 @@ const PuppyList = ({ puppies, endSlice = puppies.length }) => {
     <div className={styles.puppyGrid}>
       <Row xs={2} md={3} lg={4} className={styles.cardContainer}>
         {puppies?.slice(0, endSlice).map((puppy) => (
-          <Col key={puppy.id}>
+          <Col className={styles.gridCol} key={puppy.id}>
             <Link href={`/browse/${puppy.id}`}>
               <PuppyCard {...puppy} />
             </Link>
