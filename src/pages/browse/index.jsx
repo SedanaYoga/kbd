@@ -44,7 +44,7 @@ export default function Browse() {
       )
       setFilteredPuppies(puppiesShown)
     }
-  }, [query.msg, puppies, pagination.currentPage])
+  }, [query.msg, puppies, pagination.currentPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const setPageAndShownPuppies = (page) => {
     setPagination({ ...pagination, currentPage: page })
