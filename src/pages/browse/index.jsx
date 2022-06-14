@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import useGetPuppies from '../../hooks/useGetPuppies'
 import FilterComp from '../../components/FilterComp/FilterComp'
+import PaginationComp from '../../components/PaginationComp/PaginationComp'
+import { getMaxPages, getPuppiesByPage } from '../../helper/pageHelper'
 
 export default function Browse() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
@@ -18,6 +20,11 @@ export default function Browse() {
   const router = useRouter()
   const query = router.query
   const [filteredPuppies, setFilteredPuppies] = useState([])
+  const puppiesToDisplay = 8
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    maxPages: 0,
+  })
 
   useGetPuppies(puppies)
 
@@ -26,13 +33,46 @@ export default function Browse() {
       setShowModal(true)
     }
     if (puppies) {
-      setFilteredPuppies(puppies)
+      setPagination({
+        ...pagination,
+        maxPages: getMaxPages(puppies, puppiesToDisplay),
+      })
+      const puppiesShown = getPuppiesByPage(
+        puppies,
+        pagination.currentPage,
+        puppiesToDisplay,
+      )
+      setFilteredPuppies(puppiesShown)
     }
-  }, [query.msg, puppies])
+  }, [query.msg, puppies, pagination.currentPage])
+
+  const setPageAndShownPuppies = (page) => {
+    setPagination({ ...pagination, currentPage: page })
+    setFilteredPuppies(
+      getPuppiesByPage(
+        filteredPuppies,
+        pagination.currentPage,
+        puppiesToDisplay,
+      ),
+    )
+  }
 
   const filterHandler = (sex, color, quality) => {
-    const newPuppies = puppies.filter(pup => sex === '' ? pup : pup.sex === sex).filter(pup => color === '' ? pup : pup.color === color).filter(pup => quality === '' ? pup : pup.breedQuality === quality)
-    setFilteredPuppies(newPuppies)
+    const newPuppies = puppies
+      .filter((pup) => (sex === '' ? pup : pup.sex === sex))
+      .filter((pup) => (color === '' ? pup : pup.color === color))
+      .filter((pup) => (quality === '' ? pup : pup.breedQuality === quality))
+
+    setPagination({
+      currentPage: 1,
+      maxPages: getMaxPages(newPuppies, puppiesToDisplay),
+    })
+    const puppiesShown = getPuppiesByPage(
+      newPuppies,
+      pagination.currentPage,
+      puppiesToDisplay,
+    )
+    setFilteredPuppies(puppiesShown)
   }
 
   return (
@@ -57,10 +97,21 @@ export default function Browse() {
           >
             <div className={styles.modalBody}>
               <h1>Your book has successfully recorded!</h1>
-              <Image src='/images/check.png' alt='check' width={121} height={121} />
+              <Image
+                src='/images/check.png'
+                alt='check'
+                width={121}
+                height={121}
+              />
               <h3>Thank You</h3>
               <p>For Trusting Us</p>
-              <Image src='/images/logo.png' alt='logo' width={60} height={60} className={styles.logo} />
+              <Image
+                src='/images/logo.png'
+                alt='logo'
+                width={60}
+                height={60}
+                className={styles.logo}
+              />
             </div>
           </Modal>
           <Container className='full-with-footer'>
@@ -74,6 +125,11 @@ export default function Browse() {
               </div>
             </section>
           </Container>
+          <PaginationComp
+            currentPage={pagination.currentPage}
+            maxPages={pagination.maxPages}
+            setPageAndShownPuppies={setPageAndShownPuppies}
+          />
         </div>
       )}
     </>

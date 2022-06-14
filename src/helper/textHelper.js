@@ -69,3 +69,17 @@ export const bookIdToPuppyIdAndEmail = (str) => {
   const requesterEmail = arr.at(-1)
   return { puppyId, requesterEmail }
 }
+
+export const pageNumberToShow = (currentPage, maxPages) => {
+  if (maxPages === 2 && currentPage === 1) {
+    return [currentPage, maxPages]
+  } else if (maxPages === 2 && currentPage === maxPages) {
+    return [maxPages - 1, maxPages]
+  } else if (currentPage === 1) {
+    return [currentPage, currentPage + 1, currentPage + 2]
+  } else if (currentPage === maxPages) {
+    return [maxPages - 2, maxPages - 1, maxPages]
+  } else {
+    return [currentPage - 1, currentPage, currentPage + 1]
+  }
+}
