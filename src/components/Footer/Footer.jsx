@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import { Container, Row, Col } from 'react-bootstrap'
 import styles from './Footer.module.scss'
 
@@ -19,7 +18,8 @@ const Footer = () => {
                 <a
                   href='https://www.facebook.com/coksedana'
                   target='_blank'
-                  rel='noreferrer'>
+                  rel='noreferrer'
+                >
                   <FacebookIcon /> Facebook
                 </a>
               </li>
@@ -27,7 +27,8 @@ const Footer = () => {
                 <a
                   href='https://www.instagram.com/cok_yoga'
                   target='_blank'
-                  rel='noreferrer'>
+                  rel='noreferrer'
+                >
                   <InstagramIcon /> Instagram
                 </a>
               </li>
@@ -35,7 +36,9 @@ const Footer = () => {
           </Col>
           <Col className={styles.footerContainerRight}>
             <h5>Find us at</h5>
-            <p>Jl. Nusantara, Pengotan, Kec. Bangli, Kabupaten Bangli, Bali 80614</p>
+            <p>
+              Jl. Nusantara, Pengotan, Kec. Bangli, Kabupaten Bangli, Bali 80614
+            </p>
           </Col>
         </Row>
       </Container>
@@ -50,7 +53,8 @@ function FacebookIcon() {
       height='28'
       viewBox='0 0 28 28'
       fill='none'
-      xmlns='http://www.w3.org/2000/svg'>
+      xmlns='http://www.w3.org/2000/svg'
+    >
       <circle cx='14' cy='14' r='12.25' fill='url(#paint0_linear_250_1543)' />
       <path
         d='M18.562 17.7464L19.1061 14.2888H15.7021V12.0461C15.7021 11.1 16.1767 10.1772 17.7014 10.1772H19.25V7.23362C19.25 7.23362 17.8452 7 16.5027 7C13.698 7 11.8665 8.65632 11.8665 11.6536V14.2888H8.75V17.7464H11.8665V26.1052C12.4921 26.201 13.1322 26.25 13.7843 26.25C14.4363 26.25 15.0764 26.201 15.7021 26.1052V17.7464H18.562Z'
@@ -63,7 +67,8 @@ function FacebookIcon() {
           y1='1.75'
           x2='14'
           y2='26.1773'
-          gradientUnits='userSpaceOnUse'>
+          gradientUnits='userSpaceOnUse'
+        >
           <stop stopColor='#18ACFE' />
           <stop offset='1' stopColor='#0163E0' />
         </linearGradient>
@@ -79,7 +84,8 @@ function InstagramIcon() {
       height='28'
       viewBox='0 0 28 28'
       fill='none'
-      xmlns='http://www.w3.org/2000/svg'>
+      xmlns='http://www.w3.org/2000/svg'
+    >
       <rect
         x='1.75'
         y='1.75'
@@ -127,7 +133,8 @@ function InstagramIcon() {
           cy='0'
           r='1'
           gradientUnits='userSpaceOnUse'
-          gradientTransform='translate(10.5 20.125) rotate(-55.3758) scale(22.3297)'>
+          gradientTransform='translate(10.5 20.125) rotate(-55.3758) scale(22.3297)'
+        >
           <stop stopColor='#B13589' />
           <stop offset='0.79309' stopColor='#C62F94' />
           <stop offset='1' stopColor='#8A3AC8' />
@@ -138,7 +145,8 @@ function InstagramIcon() {
           cy='0'
           r='1'
           gradientUnits='userSpaceOnUse'
-          gradientTransform='translate(9.625 27.125) rotate(-65.1363) scale(19.77)'>
+          gradientTransform='translate(9.625 27.125) rotate(-65.1363) scale(19.77)'
+        >
           <stop stopColor='#E0E8B7' />
           <stop offset='0.444662' stopColor='#FB8A2E' />
           <stop offset='0.71474' stopColor='#E2425C' />
@@ -150,7 +158,8 @@ function InstagramIcon() {
           cy='0'
           r='1'
           gradientUnits='userSpaceOnUse'
-          gradientTransform='translate(0.437501 2.625) rotate(-8.1301) scale(34.0295 7.27856)'>
+          gradientTransform='translate(0.437501 2.625) rotate(-8.1301) scale(34.0295 7.27856)'
+        >
           <stop offset='0.156701' stopColor='#406ADC' />
           <stop offset='0.467799' stopColor='#6A45BE' />
           <stop offset='1' stopColor='#6A45BE' stopOpacity='0' />
