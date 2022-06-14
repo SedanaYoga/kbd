@@ -10,8 +10,8 @@ const PuppyCard = React.forwardRef(
     return (
       <a href={href} onClick={onClick} ref={ref}>
         <div className={styles.card}>
-          <div className={styles.cardImg}>
-            <Image src={imgUrl[0].downloadUrl} alt={`puppies ${id}`} layout='fill' />
+          <div className={styles.cardImgWrapper}>
+            <Image className={styles.cardImg} src={imgUrl[0].downloadUrl} alt={`puppies ${id}`} layout='fill' />
           </div>
           <div className={styles.cardTag}>
             <div className={styles.cardTagSex}>
