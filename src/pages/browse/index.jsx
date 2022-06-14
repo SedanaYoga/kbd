@@ -4,19 +4,20 @@ import { Container } from 'react-bootstrap'
 import UserLayout from '../../components/Layouts/UserLayout'
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 import styles from '../../styles/pages/Browse.module.scss'
-import { BsChevronDown } from 'react-icons/bs'
 import PuppyGrid from '../../components/PuppyGrid/PuppyGrid'
 import Modal from '../../components/Modal/Modal'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import useGetPuppies from '../../hooks/useGetPuppies'
+import FilterComp from '../../components/FilterComp/FilterComp'
 
 export default function Browse() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
   const [showModal, setShowModal] = useState(false)
   const router = useRouter()
   const query = router.query
+  const [filteredPuppies, setFilteredPuppies] = useState([])
 
   useGetPuppies(puppies)
 
@@ -24,7 +25,15 @@ export default function Browse() {
     if (query.msg === 'bookSuccess') {
       setShowModal(true)
     }
-  }, [query.msg])
+    if (puppies) {
+      setFilteredPuppies(puppies)
+    }
+  }, [query.msg, puppies])
+
+  const filterHandler = (sex, color, quality) => {
+    const newPuppies = puppies.filter(pup => sex === '' ? pup : pup.sex === sex).filter(pup => color === '' ? pup : pup.color === color).filter(pup => quality === '' ? pup : pup.breedQuality === quality)
+    setFilteredPuppies(newPuppies)
+  }
 
   return (
     <>
@@ -58,32 +67,10 @@ export default function Browse() {
             <section className={styles.browse}>
               <h1>All Puppies</h1>
 
-              <div className={styles.browseFilter}>
-                <div className={styles.browseFilterSex}>
-                  <div className={styles.browseFilterSexMale}>Male</div>
-                  <div className={styles.browseFilterSexFemale}>Female</div>
-                </div>
-                <div className={styles.browseFilterAge}>
-                  All Age <BsChevronDown />{' '}
-                </div>
-                <div className={styles.browseFilterColor}>
-                  <div className={styles.browseFilterColorWhite}>
-                    <span></span> White
-                  </div>
-                  <div className={styles.browseFilterColorBlack}>
-                    <span></span> Black
-                  </div>
-                  <div className={styles.browseFilterColorBrown}>
-                    <span></span> Brown
-                  </div>
-                  <div className={styles.browseFilterColorBridle}>
-                    <span></span> Bridle
-                  </div>
-                </div>
-              </div>
+              <FilterComp filterHandler={filterHandler} />
 
               <div className={styles.browsePuppies}>
-                <PuppyGrid puppies={puppies} />
+                <PuppyGrid puppies={filteredPuppies} />
               </div>
             </section>
           </Container>

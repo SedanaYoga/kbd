@@ -1,0 +1,92 @@
+@import '../../styles/global.scss';
+
+.browse {
+  &Clear {
+    @include centerFlexRow;
+    cursor: pointer;
+    p {
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+  }
+  &Filter {
+    margin-top: 3rem;
+    @include centerFlexRow();
+    gap: 10px;
+    &Sex {
+      @include centerFlexRow();
+      background: $inputColor;
+      border-radius: 8px;
+      overflow: hidden;
+      & > div {
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      &Male {
+        border-right: 2px solid $inputBorderColor;
+      }
+    }
+
+    .active {
+      background: $dark1;
+      color: white;
+    }
+
+    &Quality {
+      @include centerFlexRow();
+      background: $inputColor;
+      border-radius: 8px;
+      overflow: hidden;
+      & > div {
+        padding: 5px 10px;
+        cursor: pointer;
+        p {
+          margin-bottom: 0;
+        }
+      }
+      &Champion, &Premium {
+        border-right: 2px solid $inputBorderColor;
+      }
+    }
+    &Color {
+      @include centerFlexRow();
+      gap: 10px;
+      & > div {
+        @include centerFlexRow();
+        padding: 5px 10px;
+        background: $inputColor;
+        border-radius: 8px;
+        cursor: pointer;
+        & > span {
+          width: 20px;
+          height: 20px;
+          border-radius: 10px;
+          margin-right: 5px;
+        }
+      }
+      &White {
+        // background: black !important;
+        color: black;
+        span {
+          background: white;
+        }
+      }
+      &Black {
+        span {
+          background: black;
+        }
+      }
+      &Brown {
+        span {
+          background: $brownDog;
+        }
+      }
+      &Bridle {
+        span {
+          background: $brownDog;
+        }
+      }
+    }
+  }
+
+}
