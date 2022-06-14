@@ -35,13 +35,7 @@ const Footer = () => {
           </Col>
           <Col className={styles.footerContainerRight}>
             <h5>Find us at</h5>
-            <Image
-              src='/images/example-map.png'
-              alt='map-example'
-              className={styles.dummyMap}
-              width={300}
-              height={170}
-            />
+            <p>Jl. Nusantara, Pengotan, Kec. Bangli, Kabupaten Bangli, Bali 80614</p>
           </Col>
         </Row>
       </Container>

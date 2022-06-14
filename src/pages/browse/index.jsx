@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import useGetPuppies from '../../hooks/useGetPuppies'
 import FilterComp from '../../components/FilterComp/FilterComp'
+import PaginationComp from '../../components/PaginationComp/PaginationComp'
 
 export default function Browse() {
   const { isLoading, puppies } = useSelector((state) => state.puppies)
@@ -74,6 +75,7 @@ export default function Browse() {
               </div>
             </section>
           </Container>
+          <PaginationComp />
         </div>
       )}
     </>

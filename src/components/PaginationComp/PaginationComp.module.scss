@@ -1,0 +1,30 @@
+.paginationContainer {
+  font-weight: 600;
+  user-select: none;
+
+  .nextPagination {
+    cursor: pointer;
+  }
+
+  .prevPagination {
+    cursor: pointer;
+  }
+  .pageNumPagination {
+    p {
+      cursor: pointer;
+      color: rgba(black, 0.4);
+    }
+  }
+
+  .activePagination {
+    visibility: visible;
+    .active-number {
+      color: black;
+    }
+  }
+
+  .disablePagination {
+    cursor: not-allowed;
+    visibility: hidden;
+  }
+}
