@@ -23,12 +23,10 @@ import { onIdTokenChanged } from 'firebase/auth'
 
 export default function Login(ctx) {
   const router = useRouter()
+  const { nextRedirect } = router.query
 
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
-  const {
-    regInput: { inputUser: regInput },
-  } = useSelector((state) => state)
   const cookies = nookies.get(ctx)
 
   const [input, setInput] = useState({
@@ -42,8 +40,12 @@ export default function Login(ctx) {
       dispatch(login({ email: cookies.regInput }))
     }
     if (cookies.regInput) router.replace('/data-capture')
-    if (user) router.replace('/')
-  }, [cookies.regInput, router, user, dispatch])
+    if (nextRedirect) {
+      user?.email && router.replace(`/book/${nextRedirect}`)
+    } else {
+      user?.email && router.replace('/')
+    }
+  }, [cookies.regInput, router, user, dispatch, nextRedirect])
 
   const handleChange = (name, value) => {
     setInput({ ...input, [name]: value })
