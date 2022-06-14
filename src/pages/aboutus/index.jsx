@@ -33,7 +33,7 @@ export default function AboutUs() {
           <section className={styles.kennel}>
             <Row xs={2} bsPrefix='row g-0'>
               <Col className={styles.kennelImage}>
-                <Image src='/images/bg/back-4.png' alt='A Loving Kennel Image' layout='fill' />
+                <Image src='/images/bg/back-4.png' alt='A Loving Kennel Image' layout='fill' objectFit='cover' objectPosition='right' />
               </Col>
               <Col className={styles.kennelInfo}>
                 <h1>
