@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
@@ -28,8 +29,11 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
     "eslint": "8.15.0",
     "eslint-config-next": "12.1.6",
+    "jest": "^28.1.1",
     "sass": "^1.51.0"
   }
 }
