@@ -104,8 +104,8 @@ export default function Puppy() {
                       )}
                     </span>
                     <p>{`${diffTwoDateInMonths(
-                      new Date(),
                       puppy?.dob,
+                      new Date(),
                     )} months`}</p>
                   </div>
                 </div>
