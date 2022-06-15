@@ -5,7 +5,8 @@ export const timeStampToDateString = (timestamp) => {
 export const diffTwoDateInMonths = (date1, date2) => {
   const dateOne = new Date(date1)
   const dateTwo = new Date(date2)
-  const diffTime = Math.abs(dateTwo - dateOne)
+  const diffTime = dateTwo - dateOne
+  if(diffTime <=0) return null
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30))
 }
 
