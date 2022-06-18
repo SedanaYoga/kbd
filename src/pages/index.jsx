@@ -77,13 +77,13 @@ export default function Home() {
                 <Col className='col-lg-7 d-flex flex-row align-items-center justify-content-start'>
                   <div className={styles.heroImage}>
                     <div>
-                      <Image src={hero1} alt='hero-1' />
+                      <Image priority={true} src={hero1} alt='hero-1' />
                     </div>
                     <div>
-                      <Image src={hero2} alt='hero-2' />
+                      <Image priority={true} src={hero2} alt='hero-2' />
                     </div>
                     <div>
-                      <Image src={hero3} alt='hero-3' />
+                      <Image priority={true} src={hero3} alt='hero-3' />
                     </div>
                   </div>
                 </Col>
