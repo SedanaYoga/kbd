@@ -18,7 +18,15 @@ export default function AboutUs() {
       <div className={styles.aboutus}>
         <Container>
           <section className={styles.hero}>
-            <Image className={styles.heroBackground} src='/images/bg/back-3.png' alt='hero-background' layout='fill' objectFit='cover' objectPosition='top' />
+            <Image
+              priority={true}
+              className={styles.heroBackground}
+              src='/images/bg/back-3.png'
+              alt='hero-background'
+              layout='fill'
+              objectFit='cover'
+              objectPosition='top'
+            />
             <div className={styles.heroContent}>
               <p>Woof...</p>
               <h1>
@@ -33,7 +41,13 @@ export default function AboutUs() {
           <section className={styles.kennel}>
             <Row xs={2} bsPrefix='row g-0'>
               <Col className={styles.kennelImage}>
-                <Image src='/images/bg/back-4.png' alt='A Loving Kennel Image' layout='fill' objectFit='cover' objectPosition='right' />
+                <Image
+                  src='/images/bg/back-4.png'
+                  alt='A Loving Kennel Image'
+                  layout='fill'
+                  objectFit='cover'
+                  objectPosition='right'
+                />
               </Col>
               <Col className={styles.kennelInfo}>
                 <h1>

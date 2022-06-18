@@ -11,7 +11,14 @@ const PuppyCard = React.forwardRef(
       <a href={href} onClick={onClick} ref={ref}>
         <div className={styles.card}>
           <div className={styles.cardImgWrapper}>
-            <Image className={styles.cardImg} src={imgUrl[0].downloadUrl} alt={`puppies ${id}`} layout='fill' />
+            <Image
+              placeholder='blur'
+              blurDataURL='/images/blur-placeholder.png'
+              className={styles.cardImg}
+              src={imgUrl[0].downloadUrl}
+              alt={`puppies ${id}`}
+              layout='fill'
+            />
           </div>
           <div className={styles.cardTag}>
             <div className={styles.cardTagSex}>
@@ -30,13 +37,13 @@ const PuppyCard = React.forwardRef(
             {breedQuality === 'normal'
               ? '🥉'
               : breedQuality === 'premium'
-                ? '🥈'
-                : '🥇'}
+              ? '🥈'
+              : '🥇'}
           </div>
         </div>
       </a>
     )
-  }
+  },
 )
 
 PuppyCard.displayName = 'PuppyCard'
